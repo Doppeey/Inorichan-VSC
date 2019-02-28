@@ -43,7 +43,7 @@ class InoriChan extends ListenerAdapter {
 
     public static void main(String[] args) throws Exception {
 
-// wat
+
         //Loading config file
         final String configFileName = "testbot.config";
         Properties config = loadConfig(configFileName);
