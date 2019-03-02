@@ -9,14 +9,14 @@ import net.dv8tion.jda.core.managers.GuildController;
 public class StagingAreaEvent extends ListenerAdapter {
 
     private GuildController gc = null;
-    private  Role stagingRole = null;
+    private Role stagingRole = null;
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         if (gc == null) {
             this.gc = new GuildController(event.getGuild());
         }
-        if(stagingRole == null) {
+        if (stagingRole == null) {
             stagingRole = gc.getGuild().getRolesByName("stagingrole", true).get(0);
         }
         giveMemberStagingRole(event);
@@ -25,23 +25,24 @@ public class StagingAreaEvent extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-
-        //VARIABLES
-        if (gc == null) {
-            this.gc = new GuildController(event.getGuild());
-        }
-        if(stagingRole == null) {
-            stagingRole = gc.getGuild().getRolesByName("stagingrole", true).get(0);
-        }
-        final boolean isWelcomeChannel = event.getChannel().getId().equalsIgnoreCase("513551097449807883");
-        final boolean hasAcceptedRules = event.getMessage().getContentRaw().equalsIgnoreCase("accept");
-
-
-        if (isWelcomeChannel) {
-            if(hasAcceptedRules){
-                removeStagingRoleFromUser(event);
+        if (event.getGuild().getId().equalsIgnoreCase("272761734820003841")) {
+            //VARIABLES
+            if (gc == null) {
+                this.gc = new GuildController(event.getGuild());
             }
-            event.getMessage().delete().queue();
+            if (stagingRole == null) {
+                stagingRole = gc.getGuild().getRolesByName("stagingrole", true).get(0);
+            }
+            final boolean isWelcomeChannel = event.getChannel().getId().equalsIgnoreCase("513551097449807883");
+            final boolean hasAcceptedRules = event.getMessage().getContentRaw().equalsIgnoreCase("accept");
+
+
+            if (isWelcomeChannel) {
+                if (hasAcceptedRules) {
+                    removeStagingRoleFromUser(event);
+                }
+                event.getMessage().delete().queue();
+            }
         }
 
     }

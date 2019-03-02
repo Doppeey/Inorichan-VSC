@@ -45,7 +45,7 @@ class InoriChan extends ListenerAdapter {
 
 
         //Loading config file
-        final String configFileName = "testbot.config";
+        final String configFileName = "tjbot.config";
         Properties config = loadConfig(configFileName);
         System.out.println(configFileName.substring(0,configFileName.length()-7)+" config loaded.");
 
@@ -109,6 +109,7 @@ class InoriChan extends ListenerAdapter {
         InoriChan.addCommand(new HighOrLowCommand(waiter));
         //UTILITY COMMANDS
 
+        InoriChan.addCommand(new DefinitionCommand());
         InoriChan.addCommand(new GoogleCommand());
         InoriChan.addCommand(new TopHelpMessages(database));
         InoriChan.addCommand(new QuoteWtfCommand());
