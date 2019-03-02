@@ -192,9 +192,11 @@ public class DefinitionCommand extends Command {
 
 
             } catch (Exception e) {
-              //
+              e.printStackTrace();
             }
         } catch (Exception | Error e) {
+
+            e.printStackTrace();
             event.reply("Oopsie doopise owie wowie the word was not fownd uwu", x -> x.delete().queueAfter(5, TimeUnit.SECONDS));
             event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
 
