@@ -228,7 +228,8 @@ public class GifSequenceWriter extends Command {
         try {
             output = new FileImageOutputStream(new File("./crabrave/done.gif"));
         } catch (IOException e) {
-            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+            e.printStackTrace();
+
 ;
         }
 
@@ -239,7 +240,8 @@ public class GifSequenceWriter extends Command {
         try {
             writer = new GifSequenceWriter(output, firstImage.getType(), 67, true);
         } catch (IOException e) {
-            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+            e.printStackTrace();
+
 ;
         }
 
@@ -247,7 +249,8 @@ public class GifSequenceWriter extends Command {
         try {
             writer.writeToSequence(firstImage);
         } catch (IOException e) {
-            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+            e.printStackTrace();
+
 ;
         }
         for (int i = 0; i < 51; i++) {
@@ -257,7 +260,8 @@ public class GifSequenceWriter extends Command {
                 try {
                     nextImage = ImageIO.read(new File("/crabrave/" + i + ".png"));
                 } catch (IOException e) {
-                    e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+                    e.printStackTrace();
+
 ;
                 }
                 Graphics graphics = null;
@@ -276,7 +280,8 @@ public class GifSequenceWriter extends Command {
                 try {
                     writer.writeToSequence(nextImage);
                 } catch (IOException e) {
-                    e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+                    e.printStackTrace();
+
 ;
                 }
                 System.out.println("Wrote " + i);
@@ -289,7 +294,8 @@ public class GifSequenceWriter extends Command {
         try {
             writer.close();
         } catch (IOException e) {
-            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+            e.printStackTrace();
+
 ;
         }
         try {
@@ -297,7 +303,8 @@ public class GifSequenceWriter extends Command {
                 output.close();
             }
         } catch (IOException e) {
-            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+            e.printStackTrace();
+
 ;
         }
 

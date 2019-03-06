@@ -39,6 +39,7 @@ public class PmReportTest extends ListenerAdapter {
                     final User eventAuthor = event.getAuthor();
                     eventAuthor.openPrivateChannel().complete().sendMessage("Please supply the name and discriminator of the person you'd like to report \nExample: \"JungleMan#1325\"").queue();
 
+
                     waiter.waitForEvent(event.getClass(), who -> eventAuthor.equals(who.getAuthor()), message -> {
 
                         String messageContent = message.getMessage().getContentRaw();
@@ -49,7 +50,6 @@ public class PmReportTest extends ListenerAdapter {
                                     .filter(member -> member.getUser().getDiscriminator().equalsIgnoreCase(messageContent.split("#")[1]))
                                     .forEach(correctMember -> reportedMember[0] = correctMember);
                         }catch (Exception | Error e){
-
                             event.getChannel().sendMessage("Sorry, can't find that user, please contact a moderator for further assistance.").queue();
                             return;
                         }

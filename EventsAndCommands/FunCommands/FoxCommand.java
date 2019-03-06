@@ -30,7 +30,8 @@ public class FoxCommand extends Command {
         try {
             response = Unirest.get("https://randomfox.ca/floof/").asString();
         } catch (Exception e) {
-            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+            e.printStackTrace();
+
 ;
         }
 

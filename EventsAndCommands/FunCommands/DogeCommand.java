@@ -33,7 +33,8 @@ public class DogeCommand extends Command {
         try {
             response = Unirest.get("http://shibe.online/api/shibes?count=1&urls=true").asString();
         } catch (Exception e) {
-          e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+          e.printStackTrace();
+
 ;
         }
 

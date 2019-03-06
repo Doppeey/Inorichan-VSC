@@ -86,14 +86,16 @@ public class TimerCommand extends Command {
                         try {
                             Thread.sleep(finalTime * 1000);
                         } catch (InterruptedException e) {
-                            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+                            e.printStackTrace();
+
 ;
                         }
                     } else if (finalSecondsOrMinutes.equalsIgnoreCase("m")) {
                         try {
                             Thread.sleep(1000 * 60 * finalTime);
                         } catch (InterruptedException e) {
-                            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+                            e.printStackTrace();
+
 ;
                         }
                     }
@@ -104,14 +106,16 @@ public class TimerCommand extends Command {
                         try {
                             Thread.sleep(finalTime * 1000);
                         } catch (InterruptedException f) {
-                            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+                            e.printStackTrace();
+
 ;
                         }
                     } else if (finalSecondsOrMinutes.equalsIgnoreCase("m")) {
                         try {
                             Thread.sleep(1000 * 60 * finalTime);
                         } catch (InterruptedException g) {
-                            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+                            e.printStackTrace();
+
 ;
                         }
                     }
