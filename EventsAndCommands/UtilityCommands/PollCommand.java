@@ -116,7 +116,8 @@ public class PollCommand extends Command {
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
-                e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+                e.printStackTrace();
+
 ;
             }
 

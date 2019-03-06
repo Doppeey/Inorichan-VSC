@@ -45,7 +45,8 @@ public class NpcCommand extends Command {
                     .queryString("cache-control", "no-cache")
                     .asString();
         } catch (UnirestException e) {
-            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+            e.printStackTrace();
+
 ;
         }
 

@@ -24,14 +24,16 @@ public class imgToAsciiEvent extends ListenerAdapter {
                     try {
                         image = ImageIO.read(event.getMessage().getAttachments().get(0).getInputStream());
                     } catch (Exception e) {
-                        e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+                        e.printStackTrace();
+
 ;
                         return;
                     }
                     try {
                         event.getChannel().sendMessage("```\n" + run(image) + "\n```").queue();
                     } catch (Exception e) {
-                        e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+                        e.printStackTrace();
+
 ;
                         event.getChannel().sendMessage("Couldn't convert image").queue();
                     }

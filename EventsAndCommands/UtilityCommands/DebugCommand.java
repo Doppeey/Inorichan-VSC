@@ -34,7 +34,8 @@ public class DebugCommand extends Command {
                 try {
                     robot = new Robot();
                 } catch (AWTException e) {
-                    e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+                    e.printStackTrace();
+
 ;
                 }
                 String fileName = "resources/images/Screenshot.jpg";
@@ -49,14 +50,16 @@ public class DebugCommand extends Command {
                 try {
                     ImageIO.write(screenFullImage, "jpg", new File(fileName));
                 } catch (IOException e) {
-                    e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+                    e.printStackTrace();
+
 ;
                 }
 
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+                    e.printStackTrace();
+
 ;
                 }
                 commandEvent.getChannel().sendFile(new File("resources/images/Screenshot.jpg")).queue();
