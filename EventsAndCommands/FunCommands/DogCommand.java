@@ -36,7 +36,8 @@ public class DogCommand extends Command {
                     .header("cache-control", "no-cache")
                     .asString();
         } catch (UnirestException e) {
-            e.printStackTrace();
+            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+;
         }
 
 
@@ -120,7 +121,8 @@ public class DogCommand extends Command {
                 commandEvent.reply(embed.build());
             } catch (Exception e) {
                 commandEvent.reply("Couldn't find breed");
-                e.printStackTrace();
+                e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+;
 
             }
 
@@ -148,7 +150,8 @@ public class DogCommand extends Command {
                     .queryString("has_breeds", "true")
                     .asString();
         } catch (UnirestException e) {
-            e.printStackTrace();
+            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+;
         }
 
         JSONArray jsonArray = new JSONArray(response.getBody());
