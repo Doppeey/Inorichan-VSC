@@ -32,7 +32,8 @@ public class DeletThisCommand extends Command {
            file = new File(fileName);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+;
             return;
         }
 

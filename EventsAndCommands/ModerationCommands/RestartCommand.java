@@ -25,7 +25,8 @@ public class RestartCommand extends Command {
             desktop.open(file);
             commandEvent.reply("New Instance opened successfully, shutting down this instance now!");
         } catch (IOException e) {
-            e.printStackTrace();
+            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+;
         }
 
 

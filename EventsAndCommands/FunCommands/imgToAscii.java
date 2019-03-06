@@ -31,13 +31,15 @@ public class imgToAscii extends Command {
         try {
             image = ImageIO.read(commandEvent.getMessage().getAttachments().get(0).getInputStream());
         } catch (Exception e) {
-            e.printStackTrace();
+            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+;
             return;
         }
         try {
                     commandEvent.reply("```\n"+run(image)+"\n```");
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+;
                     commandEvent.reply("Couldn't convert image");
                 }
 

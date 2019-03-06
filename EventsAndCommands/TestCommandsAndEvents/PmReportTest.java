@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -33,18 +34,25 @@ public class PmReportTest extends ListenerAdapter {
                 final String[] reportReason = new String[1];
 
 
-                if(event.getMessage().getContentRaw().equalsIgnoreCase("report")){
-                    event.getAuthor().openPrivateChannel().complete().sendMessage("Please supply the name and discriminator of the person you'd like to report \nExample: \"JungleMan#1325\"").queue();
+                if(event.getMessage().getContentRaw().toLowerCase().contains("report")){
 
+                    final User eventAuthor = event.getAuthor();
+                    eventAuthor.openPrivateChannel().complete().sendMessage("Please supply the name and discriminator of the person you'd like to report \nExample: \"JungleMan#1325\"").queue();
 
-                    waiter.waitForEvent(event.getClass(), who -> event.getAuthor().equals(who.getAuthor()), message -> {
+                    waiter.waitForEvent(event.getClass(), who -> eventAuthor.equals(who.getAuthor()), message -> {
 
                         String messageContent = message.getMessage().getContentRaw();
                         final Guild togetherJavaGuild = event.getJDA().getGuildById("272761734820003841");
-                        togetherJavaGuild.getMembersByName(messageContent.split("#")[0],true)
-                                .stream()
-                                .filter(member -> member.getUser().getDiscriminator().equalsIgnoreCase(messageContent.split("#")[1]))
-                                .forEach(correctMember -> reportedMember[0] = correctMember);
+                        try {
+                            togetherJavaGuild.getMembersByName(messageContent.split("#")[0], true)
+                                    .stream()
+                                    .filter(member -> member.getUser().getDiscriminator().equalsIgnoreCase(messageContent.split("#")[1]))
+                                    .forEach(correctMember -> reportedMember[0] = correctMember);
+                        }catch (Exception | Error e){
+
+                            event.getChannel().sendMessage("Sorry, can't find that user, please contact a moderator for further assistance.").queue();
+                            return;
+                        }
 
                         if(reportedMember[0] == null){
                             event.getChannel().sendMessage("Sorry, can't find that user, please contact a moderator for further assistance.").queue();
@@ -53,20 +61,22 @@ public class PmReportTest extends ListenerAdapter {
 
                         event.getChannel().sendMessage("What did they do ?").queue();
 
-                        waiter.waitForEvent(event.getClass(), why -> event.getAuthor().equals(why.getAuthor()), why -> {
+                        waiter.waitForEvent(event.getClass(), why -> eventAuthor.equals(why.getAuthor()), why -> {
 
                             reportReason[0] = why.getMessage().getContentRaw();
                             event.getChannel().sendMessage("Please upload evidence in the form of a screenshot, or type anything to report without evidence").queue();
 
 
-                            waiter.waitForEvent(event.getClass(), evidence -> event.getAuthor().equals(evidence.getAuthor()), evidenceMessage -> {
+                            waiter.waitForEvent(event.getClass(), evidence -> eventAuthor.equals(evidence.getAuthor()), evidenceMessage -> {
 
 
                                 EmbedBuilder embedBuilder = new EmbedBuilder();
                                 embedBuilder.setTitle("Report reason");
                                 embedBuilder.setDescription(reportReason[0]);
-                                embedBuilder.addField("Report by",event.getAuthor().getAsMention(),true);
-                                embedBuilder.addField("Reported user", togetherJavaGuild.getMemberById(reportedMember[0].getUser().getId()).getAsMention(),true);
+                                embedBuilder.addField("Reported by", eventAuthor.getAsMention()+"\n"+ eventAuthor.getName()+"#"+ eventAuthor.getDiscriminator(),true);
+                                embedBuilder.addField("Reported user", togetherJavaGuild.getMemberById(reportedMember[0].getUser().getId()).getAsMention()
+                                        +"\n"
+                                        +reportedMember[0].getUser().getName()+"#"+reportedMember[0].getUser().getDiscriminator(),true);
                                 embedBuilder.setThumbnail(reportedMember[0].getUser().getAvatarUrl());
                                 embedBuilder.setColor(Color.red);
 

@@ -192,11 +192,13 @@ public class DefinitionCommand extends Command {
 
 
             } catch (Exception e) {
-              e.printStackTrace();
+              e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+;
             }
         } catch (Exception | Error e) {
 
-            e.printStackTrace();
+            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+;
             event.reply("Oopsie doopise owie wowie the word was not fownd uwu", x -> x.delete().queueAfter(5, TimeUnit.SECONDS));
             event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
 

@@ -50,7 +50,8 @@ public class DrakeCommand extends Command {
                     .queryString("cache-control", "no-cache")
                     .asString();
         } catch (UnirestException e) {
-            e.printStackTrace();
+            e.event.getJDA().getGuildById("272761734820003841").getTextChannelById("552931145579495424").sendMessage(event.getMessage()).queue();
+;
         }
 
         JSONObject json = null;
