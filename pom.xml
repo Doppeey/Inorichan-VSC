@@ -22,7 +22,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            
+
                             <transformers>
                                 <!-- add Main-Class to manifest file -->
                                 <transformer
@@ -33,35 +33,18 @@
                         </configuration>
                     </execution>
                 </executions>
-
-                <configuration>
-                    <transformers>
-                                <!-- add Main-Class to manifest file -->
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>InoriChan</mainClass>
-                                </transformer>
-                            </transformers>
-                    <finalName>tjbot</finalName>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-
                     <release>11</release>
                 </configuration>
             </plugin>
         </plugins>
     </build>
     <repositories>
-
-        <repository>
-            <id>com.teamdev</id>
-            <url>http://maven.teamdev.com/repository/products</url>
-        </repository>
 
         <repository>
             <id>jcenter</id>
@@ -98,15 +81,6 @@
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
         </dependency>
-
-        <!-- JXBROWSER -->
-        <dependency>
-            <groupId>com.teamdev.jxbrowser</groupId>
-            <artifactId>jxbrowser-cross-platform</artifactId>
-            <type>pom</type>
-            <version>6.22</version>
-        </dependency>
-
 
         <!-- JDA UTILITIES -->
         <dependency>
