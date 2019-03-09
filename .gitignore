@@ -5,6 +5,7 @@ out/
 
 # Maven output
 target/
+dependency-reduced-pom.xml
 
 # Eclipse
 .settings/
