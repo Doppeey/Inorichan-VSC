@@ -13,7 +13,7 @@ import EventsAndCommands.ModerationCommands.PurgeCommand;
 import EventsAndCommands.ModerationCommands.ReportCommand;
 import EventsAndCommands.ModerationCommands.SpamlordCommand;
 import EventsAndCommands.ModerationCommands.WhoIsCommand;
-import EventsAndCommands.TestCommandsAndEvents.PmReportTest;
+import EventsAndCommands.UtilityEvents.ReportByPmEvent;
 import EventsAndCommands.TestCommandsAndEvents.VCJoinByID;
 import EventsAndCommands.UtilityCommands.*;
 import EventsAndCommands.UtilityEvents.BotCatchingEvent;
@@ -80,7 +80,7 @@ class InoriChan extends ListenerAdapter {
 
         //TESTING
 
-        jda.addEventListener(new PmReportTest(waiter));
+        jda.addEventListener(new ReportByPmEvent(waiter));
 
         //ANIMAL COMMANDS
         InoriChan.addCommand(new CatCommand(config));

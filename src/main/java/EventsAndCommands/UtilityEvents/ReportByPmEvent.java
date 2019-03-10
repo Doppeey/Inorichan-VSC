@@ -1,4 +1,4 @@
-package EventsAndCommands.TestCommandsAndEvents;
+package EventsAndCommands.UtilityEvents;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -11,12 +11,12 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
 
-public class PmReportTest extends ListenerAdapter {
+public class ReportByPmEvent extends ListenerAdapter {
 
     private EventWaiter waiter;
 
 
-    public PmReportTest(EventWaiter waiter) {
+    public ReportByPmEvent(EventWaiter waiter) {
         this.waiter = waiter;
 
     }
@@ -86,7 +86,7 @@ public class PmReportTest extends ListenerAdapter {
                                     }
                                 }
 
-                                togetherJavaGuild.getTextChannelById("430845941461811201").sendMessage(embedBuilder.build()).queue();
+                                togetherJavaGuild.getTextChannelById("544565081724289024").sendMessage(embedBuilder.build()).queue();
                                 why.getChannel().sendMessage("Your report has been submitted and will be reviewed by one of our moderators as soon as possible, thank you!").queue();
 
 
