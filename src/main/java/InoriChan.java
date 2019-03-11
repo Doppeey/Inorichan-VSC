@@ -110,6 +110,7 @@ class InoriChan extends ListenerAdapter {
         InoriChan.addCommand(new HighOrLowCommand(waiter));
         //UTILITY COMMANDS
 
+        InoriChan.addCommand(new TranslateCommand());
         InoriChan.addCommand(new DefinitionCommand());
         InoriChan.addCommand(new GoogleCommand());
         InoriChan.addCommand(new TopHelpMessages(database));
