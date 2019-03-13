@@ -48,7 +48,7 @@ class InoriChan extends ListenerAdapter {
         final String configFileName = "tjbot.config";
         Properties config = loadConfig(configFileName);
         System.out.println(configFileName.substring(0,configFileName.length()-7)+" config loaded.");
-// test commit yes e
+
 
 
         //DATABASE
