@@ -6,6 +6,7 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 
 
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.MessageReaction.ReactionEmote;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -26,9 +27,8 @@ public class UnspoilEvent extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
-        final TextChannel testChannel = event.getGuild().getTextChannelById("503642609894424577");
         final String contentRaw = event.getMessage().getContentRaw();
-        final String replyMessage = "I have detected a message with 3 or more spoilers, if you want me to reveal it, react with the magnifying glass";
+        final String replyMessage = "I have detected a message with 3 or more spoilers, react with the magnifying glass to reveal it";
         boolean hasABunchOfSpoilers; 
 
         // Only check the message if it contains at least one spoiler symbol.
@@ -49,14 +49,14 @@ public class UnspoilEvent extends ListenerAdapter {
                 }
 
             }
-            hasABunchOfSpoilers = (howManySpoilerTags / 4) != 3;
+            hasABunchOfSpoilers = (howManySpoilerTags / 4) > 3;
 
 
             if (hasABunchOfSpoilers) {
 
-                testChannel.sendMessage(replyMessage).queue(reply -> {
+                event.getChannel().sendMessage(replyMessage).queue(reply -> {
 
-                    reply.addReaction("🔍").queue(reacted -> {
+                    reply.addReaction("\uD83D\uDD0D").queue(reacted -> {
 
                         waiter.waitForEvent(MessageReactionAddEvent.class,
                                 reaction -> reply.getId().equals(reply.getId())
