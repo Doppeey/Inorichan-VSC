@@ -6,13 +6,11 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 public class AntiScholzEvent extends ListenerAdapter {
 
     private String scholzID = "431542303346262039";
-    private String[] bannedWords = {"opop", "xd", "lmao", "lol", "rofl", "eksd", "dx"};
+    private String[] bannedWords = { "opop", "xd", "lmao", "lol", "rofl", "eksd", "dx" };
     private boolean filterIsOn = false;
-
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-
 
         try {
             if (event.getMember().getRoles().contains(event.getGuild().getRolesByName("Moderator", true).get(0))) {
@@ -30,7 +28,6 @@ public class AntiScholzEvent extends ListenerAdapter {
             // user has no roles
         }
 
-
         if (event.getAuthor().getId().equalsIgnoreCase(scholzID) && filterIsOn) {
 
             for (String s : bannedWords) {
@@ -42,7 +39,6 @@ public class AntiScholzEvent extends ListenerAdapter {
             }
 
         }
-
 
     }
 }

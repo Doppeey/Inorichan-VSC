@@ -1,5 +1,6 @@
 package EventsAndCommands.UtilityCommands;
 
+import EventsAndCommands.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mongodb.client.MongoCollection;
@@ -25,6 +26,7 @@ public class PollCommand extends Command {
         this.polls = database.getCollection("polls");
         this.name = "poll";
         this.help = "Command for starting polls. [usage: question;option;option;option ...] without options a yes or no poll will be created";
+        this.category = Categories.Utility;
 
     }
 

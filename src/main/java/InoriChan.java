@@ -45,7 +45,7 @@ class InoriChan extends ListenerAdapter {
 
 
         //Loading config file
-        final String configFileName = "tjbot.config";
+        final String configFileName = "testbot.config";
         Properties config = loadConfig(configFileName);
         System.out.println(configFileName.substring(0,configFileName.length()-7)+" config loaded.");
 
@@ -124,6 +124,7 @@ class InoriChan extends ListenerAdapter {
         InoriChan.addCommand(new QuoteCommand());
         //FUN COMMANDS
 
+        InoriChan.addCommand(new BubbleSortCommand());
         InoriChan.addCommand(new OoflmaoCommand(database));
         InoriChan.addCommand(new DecryptCommand());
         InoriChan.addCommand(new EncryptCommand());
