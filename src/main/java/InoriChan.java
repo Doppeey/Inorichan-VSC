@@ -20,6 +20,8 @@ import EventsAndCommands.UtilityEvents.BotCatchingEvent;
 import EventsAndCommands.UtilityEvents.HelpMessageCountingEvent;
 import EventsAndCommands.UtilityEvents.PollReactionListener;
 import EventsAndCommands.UtilityEvents.StagingAreaEvent;
+import EventsAndCommands.UtilityEvents.UnspoilEvent;
+
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.mongodb.MongoClient;
@@ -37,38 +39,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-
 class InoriChan extends ListenerAdapter {
-
 
     public static void main(String[] args) throws Exception {
 
-
-        //Loading config file
-        final String configFileName = "testbot.config";
+        // Loading config file
+        final String configFileName = "tjbot.config";
         Properties config = loadConfig(configFileName);
-        System.out.println(configFileName.substring(0,configFileName.length()-7)+" config loaded.");
+        System.out.println(configFileName.substring(0, configFileName.length() - 7) + " config loaded.");
 
-
-
-        //DATABASE
-        MongoClientURI uri = new MongoClientURI(
-                config.getProperty("MONGO_URI"));
+        // DATABASE
+        MongoClientURI uri = new MongoClientURI(config.getProperty("MONGO_URI"));
 
         MongoClient mongoClient = new MongoClient(uri);
         MongoDatabase database = mongoClient.getDatabase("TogetherJava");
-        //DATABASE END
+        // DATABASE END
 
-        String[] desc = {"Generates dank memes", "more to come..."};
-        Permission[] perms = {Permission.MESSAGE_READ, Permission.MESSAGE_WRITE};
+        String[] desc = { "Generates dank memes", "more to come..." };
+        Permission[] perms = { Permission.MESSAGE_READ, Permission.MESSAGE_WRITE };
 
         EventWaiter waiter = new EventWaiter();
         CommandClientBuilder InoriChan = new CommandClientBuilder();
 
-
-
         JDA jda = new JDABuilder(config.getProperty("BOT_TOKEN")).build();
-
 
         jda.addEventListener(waiter);
         InoriChan.setOwnerId(config.getProperty("OWNER_ID"));
@@ -77,23 +70,21 @@ class InoriChan extends ListenerAdapter {
         InoriChan.addCommand(new AboutCommand("\nInformation about the bot: \n", desc, perms));
         GuildController gc = new GuildController(jda.getGuildById("272761734820003841"));
 
-
-        //TESTING
+        // TESTING
 
         jda.addEventListener(new ReportByPmEvent(waiter));
 
-        //ANIMAL COMMANDS
+        // ANIMAL COMMANDS
         InoriChan.addCommand(new CatCommand(config));
         InoriChan.addCommand(new FoxCommand());
         InoriChan.addCommand(new DogeCommand());
         InoriChan.addCommand(new DogCommand(config));
-        //MODERATION COMMANDS
-        //InoriChan.addCommand(new RestartCommand());
+        // MODERATION COMMANDS
         InoriChan.addCommand(new ReportCommand());
         InoriChan.addCommand(new SpamlordCommand());
         InoriChan.addCommand(new PurgeCommand());
         InoriChan.addCommand(new WhoIsCommand());
-        //MEME COMMANDS
+        // MEME COMMANDS
         InoriChan.addCommand(new HurensohnCommand(config));
         InoriChan.addCommand(new DrakeCommand(config));
         InoriChan.addCommand(new DistractedBoyfriendCommand(config));
@@ -104,12 +95,11 @@ class InoriChan extends ListenerAdapter {
         InoriChan.addCommand(new GoodNoodleCommand(config));
         InoriChan.addCommand(new ChangeMyMindCommand(config));
         InoriChan.addCommand(new NpcCommand(config));
-        //GAME COMMANDS
+        // GAME COMMANDS
         InoriChan.addCommand(new RockPaperScissorsCommand());
         InoriChan.addCommand(new HangmanCommand(waiter));
         InoriChan.addCommand(new HighOrLowCommand(waiter));
-        //UTILITY COMMANDS
-
+        // UTILITY COMMANDS
         InoriChan.addCommand(new TranslateCommand());
         InoriChan.addCommand(new DefinitionCommand());
         InoriChan.addCommand(new GoogleCommand());
@@ -122,8 +112,7 @@ class InoriChan extends ListenerAdapter {
         InoriChan.addCommand(new EmoteIdCommand());
         InoriChan.addCommand(new AvatarCommand());
         InoriChan.addCommand(new QuoteCommand());
-        //FUN COMMANDS
-
+        // FUN COMMANDS
         InoriChan.addCommand(new BubbleSortCommand());
         InoriChan.addCommand(new OoflmaoCommand(database));
         InoriChan.addCommand(new DecryptCommand());
@@ -132,9 +121,7 @@ class InoriChan extends ListenerAdapter {
         InoriChan.addCommand(new DeletThisCommand());
         InoriChan.addCommand(new GifSequenceWriter());
 
-
-
-        //HIDDEN COMMANDS
+        // HIDDEN COMMANDS
         InoriChan.addCommand(new VCJoinByID());
         InoriChan.addCommand(new SummonCommand());
         InoriChan.addCommand(new DebugCommand());
@@ -152,13 +139,13 @@ class InoriChan extends ListenerAdapter {
         jda.addEventListener(new AntiScholzEvent());
         jda.addEventListener(new HelpMessageCountingEvent(database));
         jda.addEventListener(new PollReactionListener(database));
-
+        jda.addEventListener(new UnspoilEvent(waiter));
 
     }
 
     private static Properties loadConfig(String fileName) throws Exception {
 
-        //CONFIG
+        // CONFIG
         Properties prop = new Properties();
         InputStream is = null;
         try {
@@ -178,6 +165,5 @@ class InoriChan extends ListenerAdapter {
 
         return prop;
     }
-
 
 }
