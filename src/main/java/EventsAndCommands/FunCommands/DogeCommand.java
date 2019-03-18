@@ -35,8 +35,11 @@ public class DogeCommand extends Command {
         } catch (Exception e) {
           e.printStackTrace();
 
-;
+
         }
+
+
+
 
 
         JSONArray json = new JSONArray(response.getBody());

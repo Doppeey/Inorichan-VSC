@@ -1,0 +1,14 @@
+<configuration>
+ 
+    <appender level="warn" name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <target level="warn">System.out</target>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} %msg%n</pattern>
+        </encoder>
+    </appender>
+ 
+    <root level="warn">
+    
+    </root>
+ 
+</configuration>

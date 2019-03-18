@@ -26,6 +26,7 @@ public class OoflmaoCommand extends Command {
 
 
     MongoCollection oofLmaoCollection;
+
     public OoflmaoCommand(MongoDatabase database) {
 
         this.oofLmaoCollection = database.getCollection("oofsAndLmaos");
@@ -41,71 +42,20 @@ public class OoflmaoCommand extends Command {
 
         List<Document> messageDocumentList = new ArrayList<>();
         oofLmaoCollection.find().into(messageDocumentList);
-        List<String> messageIdStringList = messageDocumentList.stream().map(doc -> doc.getString("id")).collect(toList());
+        Document randomDocument = messageDocumentList.get(new Random().nextInt(messageDocumentList.size()));
 
-
-        getRandomOofOrLmao(commandEvent, messageIdStringList,true);
-
-
-    }
-
-    private void getRandomOofOrLmao(CommandEvent commandEvent, List<String> history, boolean repeat) {
-
-        Runnable runnable = () -> {
-            if(commandEvent.getGuild().getId().equalsIgnoreCase("272761734820003841")) {
-
-                try {
-
-                    String randomId = history.get(new Random().nextInt(history.size()));
-
-
-                    TextChannel ooflmaoChannel = commandEvent.getGuild().getTextChannelById("521647171871703040");
-
-                    final TextChannel[] originChannel = new TextChannel[1];
-                    final boolean[] foundTheChannel = {false};
-
-
-                    commandEvent.getGuild().getTextChannels().forEach(channel -> {
-                        if (!foundTheChannel[0]) {
-                            try {
-                                channel.getMessageById(randomId).complete();
-                                originChannel[0] = channel;
-                                foundTheChannel[0] = true;
-
-
-
-                            } catch (Exception | Error e) {
-                                // go to next
-                            }
-                        }
-
-                    });
-                    originChannel[0].getMessageById(randomId).queue(gotem -> {
-
-                        try {
-                            commandEvent.getChannel().sendMessage(gotem).queue();
-                        } catch (Exception | Error f) {
-
-                        }
-                    });
-
-
-                } catch (Exception | Error e) {
-                    if(repeat){
-                        getRandomOofOrLmao(commandEvent,history,false);
-                    } else {
-                        commandEvent.reply("Could not get message, try again in a few seconds");
-                    }
-
-
-                }
-            } else {
-                commandEvent.reply("This command only works on the Together Java server");
-            }
-        };
-        Thread oofThread = new Thread(runnable);
-        oofThread.start();
-
+        
+        sendRandomOofOrLmao(commandEvent, randomDocument);
 
     }
+
+
+
+
+    private void sendRandomOofOrLmao(CommandEvent commandEvent, Document randomDocument) {
+        commandEvent.getGuild().getTextChannelById(randomDocument.getString("channel"))
+                .getMessageById(randomDocument.getString("id")).queue(message -> commandEvent.reply(message));
+    }
+
+    
 }

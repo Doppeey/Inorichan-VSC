@@ -3,7 +3,7 @@ package EventsAndCommands;
 import com.jagrosh.jdautilities.command.Command;
 
 
-public class Categories {
+public abstract class Categories {
 
     public static Command.Category AnimalPictures = new Command.Category("Animal Pictures");
     public static Command.Category Memes = new Command.Category("Memes");

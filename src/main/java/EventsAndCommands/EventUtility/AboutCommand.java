@@ -56,7 +56,7 @@ public class AboutCommand extends Command {
     protected void execute(CommandEvent event) {
         if (oauthLink == null) {
             try {
-                ApplicationInfo info = event.getJDA().asBot().getApplicationInfo().complete();
+                ApplicationInfo info = event.getJDA().asBot().getApplicationInfo().complete(true);
                 oauthLink = info.isBotPublic() ? info.getInviteUrl(0L, perms) : "";
             } catch (Exception e) {
                 Logger log = LoggerFactory.getLogger("OAuth2");

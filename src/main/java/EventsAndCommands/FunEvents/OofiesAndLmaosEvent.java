@@ -120,7 +120,11 @@ public class OofiesAndLmaosEvent extends ListenerAdapter {
                                 event.getGuild().getTextChannelById(channelID).sendMessage(embed.build()).queue(x -> {
 
                                     x.addReaction(event.getReactionEmote().getEmote()).queue();
-                                    oofsAndLmaosCollection.insertOne(new Document("id", finalMessage.getId()));
+
+                                    Document document = new Document();
+                                    document.append("id",finalMessage.getId());
+                                    document.append("channel",finalMessage.getTextChannel().getId());
+                                    oofsAndLmaosCollection.insertOne(document);
                                 });
 
                                 System.out.println("Added a message [ID: " + message.getId() + "] to the offsAndLmao channel.");

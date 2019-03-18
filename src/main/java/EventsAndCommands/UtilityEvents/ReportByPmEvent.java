@@ -37,7 +37,7 @@ public class ReportByPmEvent extends ListenerAdapter {
                 if(event.getMessage().getContentRaw().toLowerCase().contains("report")){
 
                     final User eventAuthor = event.getAuthor();
-                    eventAuthor.openPrivateChannel().complete().sendMessage("Please supply the name and discriminator of the person you'd like to report \nExample: \"JungleMan#1325\"").queue();
+                    eventAuthor.openPrivateChannel().queue(channel -> channel.sendMessage("Please supply the name and discriminator of the person you'd like to report \nExample: \"JungleMan#1325\"").queue());
 
 
                     waiter.waitForEvent(event.getClass(), who -> eventAuthor.equals(who.getAuthor()), message -> {

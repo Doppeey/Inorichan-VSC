@@ -28,7 +28,7 @@ public class UnspoilEvent extends ListenerAdapter {
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
         final String contentRaw = event.getMessage().getContentRaw();
-        final String replyMessage = "I have detected a message with 3 or more spoilers, react with the magnifying glass to reveal it";
+        final String replyMessage = "I have detected a message with more than 3 spoilers, react with the magnifying glass to reveal it";
         boolean hasABunchOfSpoilers; 
 
         // Only check the message if it contains at least one spoiler symbol.
@@ -39,7 +39,7 @@ public class UnspoilEvent extends ListenerAdapter {
             /*
              * Add one to the spoiler counter, since each spoiler consists out of 4
              * "spoiler symbols", divide the resulting integer by 4. If the result of that
-             * division is at least 3 we can assume that the message has 3 or more spoiler
+             * division is at least 4 we can assume that the message has 4 or more spoiler
              * and offer to un-spoil it
              */
             for (char c : contentRaw.toCharArray()) {

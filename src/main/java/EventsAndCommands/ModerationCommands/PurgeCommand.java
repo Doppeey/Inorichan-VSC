@@ -45,8 +45,8 @@ public class PurgeCommand extends Command {
             }
 
 
-            List<Message> messageList = commandEventChannel.getHistory().retrievePast(howManyMessagesToDelete + 1).complete();
-            deleteMessage.queue((x) -> commandEventChannel.purgeMessages(messageList));
+           commandEventChannel.getHistory().retrievePast(howManyMessagesToDelete + 1).queue(messageList ->deleteMessage.queue((x) -> commandEventChannel.purgeMessages(messageList)));
+
 
             commandEvent.replySuccess(howManyMessagesToDelete + " Message(s) purged!", (x) -> x.delete().queueAfter(2, TimeUnit.SECONDS));
         } else if (message.length == 1) {

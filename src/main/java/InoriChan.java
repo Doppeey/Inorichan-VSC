@@ -27,11 +27,13 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoDatabase;
+
+
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.dv8tion.jda.core.managers.GuildController;
+
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -41,12 +43,15 @@ import java.util.Properties;
 
 class InoriChan extends ListenerAdapter {
 
-    public static void main(String[] args) throws Exception {
 
+    public static void main(String[] args) throws Exception {
+        
         // Loading config file
         final String configFileName = "tjbot.config";
         Properties config = loadConfig(configFileName);
         System.out.println(configFileName.substring(0, configFileName.length() - 7) + " config loaded.");
+      
+
 
         // DATABASE
         MongoClientURI uri = new MongoClientURI(config.getProperty("MONGO_URI"));
@@ -68,7 +73,7 @@ class InoriChan extends ListenerAdapter {
         InoriChan.setEmojis("\uD83D\uDE03", "\uD83D\uDE2E", "\uD83D\uDE26");
         InoriChan.setPrefix(config.getProperty("PREFIX")); // prefix for testbot < , prefix for InoriChan >
         InoriChan.addCommand(new AboutCommand("\nInformation about the bot: \n", desc, perms));
-        GuildController gc = new GuildController(jda.getGuildById("272761734820003841"));
+
 
         // TESTING
 
