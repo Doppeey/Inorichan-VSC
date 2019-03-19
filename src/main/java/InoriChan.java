@@ -90,6 +90,7 @@ class InoriChan extends ListenerAdapter {
         InoriChan.addCommand(new PurgeCommand());
         InoriChan.addCommand(new WhoIsCommand());
         // MEME COMMANDS
+        InoriChan.addCommand(new ScrollOfTruthCommand(config));
         InoriChan.addCommand(new HurensohnCommand(config));
         InoriChan.addCommand(new DrakeCommand(config));
         InoriChan.addCommand(new DistractedBoyfriendCommand(config));
@@ -105,6 +106,7 @@ class InoriChan extends ListenerAdapter {
         InoriChan.addCommand(new HangmanCommand(waiter));
         InoriChan.addCommand(new HighOrLowCommand(waiter));
         // UTILITY COMMANDS
+        InoriChan.addCommand(new unsplashCommand(config,waiter));
         InoriChan.addCommand(new TranslateCommand());
         InoriChan.addCommand(new DefinitionCommand());
         InoriChan.addCommand(new GoogleCommand());

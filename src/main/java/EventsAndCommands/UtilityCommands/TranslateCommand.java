@@ -53,7 +53,6 @@ public class TranslateCommand extends Command {
             event.reply(translation);
 
         } catch (Exception e) {
-            e.printStackTrace();
             event.reply("Could not get response", msg -> msg.delete().queueAfter(3, TimeUnit.SECONDS));
         }
     }
