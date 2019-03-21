@@ -53,9 +53,8 @@ public class OofiesAndLmaosEvent extends ListenerAdapter {
             return;
         }
 
-
-        if (!eventChannel.getId().equalsIgnoreCase("521647171871703040")) { // Don't react to reactions in the broadcast channel
-
+        // Don't react to reactions in the broadcast channel
+        if (!eventChannel.getId().equalsIgnoreCase("521647171871703040") && !eventChannel.getId().equalsIgnoreCase("361222066789154826")) { 
 
             try {
                 if (event.getReactionEmote().getId().equalsIgnoreCase(lmaoID) || event.getReactionEmote().getId().equalsIgnoreCase(oofID)) {
