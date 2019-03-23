@@ -64,7 +64,7 @@ public class OoflmaoCommand extends Command {
                             message.getContentRaw() + "\n \n [[Jump to message]](" + message.getJumpUrl() + ")  ");
                     embed.appendDescription(
                             "Creation time:  " + creationTime.toLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE)
-                                    + "\n[Quoted by " + commandEvent.getMember().getAsMention() + "]");
+                                   );
                     embed.setColor(Color.BLUE);
 
                     try {
@@ -77,7 +77,7 @@ public class OoflmaoCommand extends Command {
                     }
                     embed.setAuthor(member.getEffectiveName(), null, message.getAuthor().getEffectiveAvatarUrl());
 
-                    commandEvent.reply(embed.build(), success -> commandEvent.getMessage().delete().queue());
+                    commandEvent.reply(embed.build());
 
                 });
     }
