@@ -31,21 +31,29 @@ public class TopHelpMessages extends Command {
 
         int amountOfHelpers = 10;
 
-        try {
-            amountOfHelpers = Integer.parseInt(commandEvent.getArgs());
-        } catch (Exception e) {
-            commandEvent.getChannel().sendMessage("Couldn't get parameters, defaulting to 10").queue();
-        }
-        if (amountOfHelpers > 15) {
-            amountOfHelpers = 15;
-            commandEvent.getChannel().sendMessage("Max amount is 15, setting parameter to 15...").queue();
-        }
+        boolean hasRequestedOwnCount = commandEvent.getArgs().toLowerCase().contains("me");
 
+        if (hasRequestedOwnCount == false) {
+            try {
+                amountOfHelpers = Integer.parseInt(commandEvent.getArgs());
+            } catch (Exception e) {
+                commandEvent.getChannel().sendMessage("Showing the top 10..").queue();
+            }
+            if (amountOfHelpers > 15) {
+                amountOfHelpers = 15;
+                commandEvent.getChannel().sendMessage("Max amount is 15, setting parameter to 15...").queue();
+            }
+        } else {
+            Document doc = new Document();
+            doc.put("_id", commandEvent.getMember().getUser().getId());
+            Document userDoc = (Document) helpMessages.find(doc).first();
+            commandEvent.reply("Your message count in help channels is: " + userDoc.get("messageCount"));
+            return;
+        }
 
         ArrayList<Document> topHelpMessages = new ArrayList<>();
 
         helpMessages.find().sort(orderBy(descending("messageCount"))).into(topHelpMessages);
-
 
         StringBuilder topList = new StringBuilder();
 
@@ -55,13 +63,8 @@ public class TopHelpMessages extends Command {
 
             if (member != null) {
 
-                topList.append(member.getUser().getName())
-                        .append("#")
-                        .append(member.getUser().getDiscriminator())
-                        .append(" - ")
-                        .append(topHelpMessages.get(i).get("messageCount"))
-                        .append("\n");
-
+                topList.append(member.getUser().getName()).append("#").append(member.getUser().getDiscriminator())
+                        .append(" - ").append(topHelpMessages.get(i).get("messageCount")).append("\n");
 
             }
 
@@ -71,9 +74,7 @@ public class TopHelpMessages extends Command {
         embedBuilder.setColor(Color.blue);
         embedBuilder.addField("Top messagecount in help channels", topList.toString(), false);
 
-
         commandEvent.getChannel().sendMessage(embedBuilder.build()).queue();
-
 
     }
 }
