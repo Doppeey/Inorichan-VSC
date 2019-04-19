@@ -26,6 +26,12 @@ public abstract class MemberParser {
             // nothing to do
         }
 
+
+        // Return the member that called the event if no args are given
+        if (args.isBlank()) {
+            return commandEvent.getMember();
+        }
+        
         // Try by mention
         if (!message.getMentionedMembers().isEmpty()) {
             return message.getMentionedMembers().get(0);
