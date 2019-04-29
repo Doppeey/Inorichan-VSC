@@ -5,7 +5,10 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 
 /**
- * Command
+ * This class provides the base structure of a chatevent that might be handled. 
+ * To implement a new ChatEventHandler it is sufficient to just inherit from this 
+ * Class and override {@see ChatEventHandler#trigger(GuildMessageReceivedEvent)}
+ * and {@see ChatEventHandler#receiveCommand(GuildMessageReceivedEvent)}.
  */
 public abstract class ChatEventHandler {
 
@@ -20,8 +23,8 @@ public abstract class ChatEventHandler {
     public abstract void receiveCommand(GuildMessageReceivedEvent event);
 
     /**
-     * Determines if an event would trigger the command. If the given event evaluates to true, {@see ChatEventHandler#receiveCommand(GuildMessageReceivedEvent)}
-     * gets called.
+     * Determines if an event would trigger the command. If the given event evaluates to true, 
+     * {@see ChatEventHandler#receiveCommand(GuildMessageReceivedEvent)} gets called.
      * @param event The event that might trigger the command.
      * @return true if the the command is triggered, false if not.
      */
