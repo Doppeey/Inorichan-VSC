@@ -1,8 +1,19 @@
 package EventsAndCommands;
 
-import java.util.*;
+import java.io.DataInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import EventsAndCommands.FunEvents.GoodBotEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -13,7 +24,7 @@ public class ChatEventDistributor extends ListenerAdapter{
 
     private static ChatEventDistributor instance = null;
 
-    private List<ChatEventHandler> eventHandlers;
+    private Set<ChatEventHandler> eventHandlers;
 
     public static ChatEventDistributor getInstance(){
         if(instance == null){
@@ -23,7 +34,7 @@ public class ChatEventDistributor extends ListenerAdapter{
     }
 
     private ChatEventDistributor(){
-        eventHandlers = new ArrayList<>();
+        eventHandlers = new HashSet<>();
     }
 
     @Override
@@ -40,5 +51,7 @@ public class ChatEventDistributor extends ListenerAdapter{
     public void unregisterChatEventHandler(ChatEventHandler handler){
         eventHandlers.remove(handler);
     }
+
+    
 
 }

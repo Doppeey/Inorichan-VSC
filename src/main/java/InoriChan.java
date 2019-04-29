@@ -1,3 +1,4 @@
+import EventsAndCommands.ChatEventDistributor;
 import EventsAndCommands.EventUtility.AboutCommand;
 import EventsAndCommands.FunCommands.*;
 import EventsAndCommands.FunCommands.DeAndEncryptor.DecryptCommand;
@@ -28,7 +29,6 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoDatabase;
 
-
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.Permission;
@@ -40,6 +40,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
+import EventsAndCommands.*;
 
 class InoriChan extends ListenerAdapter {
 
@@ -73,6 +75,12 @@ class InoriChan extends ListenerAdapter {
         inoriChan.setEmojis("\uD83D\uDE03", "\uD83D\uDE2E", "\uD83D\uDE26");
         inoriChan.setPrefix(config.getProperty("PREFIX")); // prefix for testbot < , prefix for InoriChan >
         inoriChan.addCommand(new AboutCommand("\nInformation about the bot: \n", desc, perms));
+
+
+        ChatEventDistributor.getInstance().load(ChatEventHandler.class, InoriChan.class.getPackage());
+
+
+
 
 
         // TESTING
@@ -139,7 +147,7 @@ class InoriChan extends ListenerAdapter {
         jda.addEventListener(new AnimationEvent());
         jda.addEventListener(new imgToAsciiEvent());
         jda.addEventListener(new LemonSqueezyEvent());
-        jda.addEventListener(new GoodBotEvent());
+        // jda.addEventListener(new GoodBotEvent());
         jda.addEventListener(new AiTalkEvent(config));
         jda.addEventListener(new VoiceChannelJoinNotifyEvent());
         jda.addEventListener(new OofiesAndLmaosEvent(database));
