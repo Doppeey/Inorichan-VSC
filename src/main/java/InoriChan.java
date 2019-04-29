@@ -64,15 +64,15 @@ class InoriChan extends ListenerAdapter {
         Permission[] perms = { Permission.MESSAGE_READ, Permission.MESSAGE_WRITE };
 
         EventWaiter waiter = new EventWaiter();
-        CommandClientBuilder InoriChan = new CommandClientBuilder();
+        CommandClientBuilder inoriChan = new CommandClientBuilder();
 
         JDA jda = new JDABuilder(config.getProperty("BOT_TOKEN")).build();
 
         jda.addEventListener(waiter);
-        InoriChan.setOwnerId(config.getProperty("OWNER_ID"));
-        InoriChan.setEmojis("\uD83D\uDE03", "\uD83D\uDE2E", "\uD83D\uDE26");
-        InoriChan.setPrefix(config.getProperty("PREFIX")); // prefix for testbot < , prefix for InoriChan >
-        InoriChan.addCommand(new AboutCommand("\nInformation about the bot: \n", desc, perms));
+        inoriChan.setOwnerId(config.getProperty("OWNER_ID"));
+        inoriChan.setEmojis("\uD83D\uDE03", "\uD83D\uDE2E", "\uD83D\uDE26");
+        inoriChan.setPrefix(config.getProperty("PREFIX")); // prefix for testbot < , prefix for InoriChan >
+        inoriChan.addCommand(new AboutCommand("\nInformation about the bot: \n", desc, perms));
 
 
         // TESTING
@@ -80,62 +80,62 @@ class InoriChan extends ListenerAdapter {
         jda.addEventListener(new ReportByPmEvent(waiter));
 
         // ANIMAL COMMANDS
-        InoriChan.addCommand(new CatCommand(config));
-        InoriChan.addCommand(new FoxCommand());
-        InoriChan.addCommand(new DogeCommand());
-        InoriChan.addCommand(new DogCommand(config));
+        inoriChan.addCommand(new CatCommand(config));
+        inoriChan.addCommand(new FoxCommand());
+        inoriChan.addCommand(new DogeCommand());
+        inoriChan.addCommand(new DogCommand(config));
         // MODERATION COMMANDS
-        InoriChan.addCommand(new ReportCommand());
-        InoriChan.addCommand(new SpamlordCommand());
-        InoriChan.addCommand(new PurgeCommand());
-        InoriChan.addCommand(new WhoIsCommand());
+        inoriChan.addCommand(new ReportCommand());
+        inoriChan.addCommand(new SpamlordCommand());
+        inoriChan.addCommand(new PurgeCommand());
+        inoriChan.addCommand(new WhoIsCommand());
         // MEME COMMANDS
-        InoriChan.addCommand(new ScrollOfTruthCommand(config));
-        InoriChan.addCommand(new HurensohnCommand(config));
-        InoriChan.addCommand(new DrakeCommand(config));
-        InoriChan.addCommand(new DistractedBoyfriendCommand(config));
-        InoriChan.addCommand(new TwoButtonsCommand(config));
-        InoriChan.addCommand(new PillsCommand(config));
-        InoriChan.addCommand(new BrainCommand(config));
-        InoriChan.addCommand(new SpongebobCommand(config));
-        InoriChan.addCommand(new GoodNoodleCommand(config));
-        InoriChan.addCommand(new ChangeMyMindCommand(config));
-        InoriChan.addCommand(new NpcCommand(config));
+        inoriChan.addCommand(new ScrollOfTruthCommand(config));
+        inoriChan.addCommand(new HurensohnCommand(config));
+        inoriChan.addCommand(new DrakeCommand(config));
+        inoriChan.addCommand(new DistractedBoyfriendCommand(config));
+        inoriChan.addCommand(new TwoButtonsCommand(config));
+        inoriChan.addCommand(new PillsCommand(config));
+        inoriChan.addCommand(new BrainCommand(config));
+        inoriChan.addCommand(new SpongebobCommand(config));
+        inoriChan.addCommand(new GoodNoodleCommand(config));
+        inoriChan.addCommand(new ChangeMyMindCommand(config));
+        inoriChan.addCommand(new NpcCommand(config));
         // GAME COMMANDS
-        InoriChan.addCommand(new RockPaperScissorsCommand());
-        InoriChan.addCommand(new HangmanCommand(waiter));
-        InoriChan.addCommand(new HighOrLowCommand(waiter));
+        inoriChan.addCommand(new RockPaperScissorsCommand());
+        inoriChan.addCommand(new HangmanCommand(waiter));
+        inoriChan.addCommand(new HighOrLowCommand(waiter));
         // UTILITY COMMANDS
-        InoriChan.addCommand(new unsplashCommand(config,waiter));
-        InoriChan.addCommand(new TranslateCommand());
-        InoriChan.addCommand(new DefinitionCommand());
-        InoriChan.addCommand(new GoogleCommand());
-        InoriChan.addCommand(new TopHelpMessages(database));
-        InoriChan.addCommand(new QuoteWtfCommand());
-        InoriChan.addCommand(new PollCommand(database));
-        InoriChan.addCommand(new TimerCommand());
-        InoriChan.addCommand(new YoutubeToMp3Command(config));
-        InoriChan.addCommand(new CodeCommand());
-        InoriChan.addCommand(new EmoteIdCommand());
-        InoriChan.addCommand(new AvatarCommand());
-        InoriChan.addCommand(new QuoteCommand());
+        inoriChan.addCommand(new unsplashCommand(config,waiter));
+        inoriChan.addCommand(new TranslateCommand());
+        inoriChan.addCommand(new DefinitionCommand());
+        inoriChan.addCommand(new GoogleCommand());
+        inoriChan.addCommand(new TopHelpMessages(database));
+        inoriChan.addCommand(new QuoteWtfCommand());
+        inoriChan.addCommand(new PollCommand(database));
+        inoriChan.addCommand(new TimerCommand());
+        inoriChan.addCommand(new YoutubeToMp3Command(config));
+        inoriChan.addCommand(new CodeCommand());
+        inoriChan.addCommand(new EmoteIdCommand());
+        inoriChan.addCommand(new AvatarCommand());
+        inoriChan.addCommand(new QuoteCommand());
         // FUN COMMANDS
-        InoriChan.addCommand(new BubbleSortCommand());
-        InoriChan.addCommand(new OoflmaoCommand(database));
-        InoriChan.addCommand(new DecryptCommand());
-        InoriChan.addCommand(new EncryptCommand());
-        InoriChan.addCommand(new DabCommand());
-        InoriChan.addCommand(new DeletThisCommand());
-        InoriChan.addCommand(new GifSequenceWriter());
+        inoriChan.addCommand(new BubbleSortCommand());
+        inoriChan.addCommand(new OoflmaoCommand(database));
+        inoriChan.addCommand(new DecryptCommand());
+        inoriChan.addCommand(new EncryptCommand());
+        inoriChan.addCommand(new DabCommand());
+        inoriChan.addCommand(new DeletThisCommand());
+        inoriChan.addCommand(new GifSequenceWriter());
 
         // HIDDEN COMMANDS
-        InoriChan.addCommand(new VCJoinByID());
-        InoriChan.addCommand(new SummonCommand());
-        InoriChan.addCommand(new DebugCommand());
+        inoriChan.addCommand(new VCJoinByID());
+        inoriChan.addCommand(new SummonCommand());
+        inoriChan.addCommand(new DebugCommand());
 
         jda.addEventListener(new StagingAreaEvent());
         jda.addEventListener(new BotCatchingEvent(database));
-        jda.addEventListener(InoriChan.build());
+        jda.addEventListener(inoriChan.build());
         jda.addEventListener(new AnimationEvent());
         jda.addEventListener(new imgToAsciiEvent());
         jda.addEventListener(new LemonSqueezyEvent());
