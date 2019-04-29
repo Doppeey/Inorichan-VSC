@@ -17,6 +17,8 @@ import EventsAndCommands.FunEvents.GoodBotEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
+import org.reflections.*;
+
 /**
  * CommandHandler
  */
@@ -39,9 +41,11 @@ public class ChatEventDistributor extends ListenerAdapter{
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        eventHandlers.stream()
-            .filter(x -> x.trigger(event))
-            .forEach(x -> x.receiveCommand(event));
+        for (var x : eventHandlers) {
+            if(x.trigger(event)){
+                x.receiveCommand(event);
+            }
+        }
     }
 
     public void registerChatEventHandler(ChatEventHandler handler){
@@ -52,6 +56,19 @@ public class ChatEventDistributor extends ListenerAdapter{
         eventHandlers.remove(handler);
     }
 
-    
+    public void load(Class<?> c){
+        Reflections reflections = new Reflections(this.getClass().getPackageName());
+
+        var handlers = reflections.getSubTypesOf(c);
+
+        for (var handler : handlers) {
+            try{
+                Constructor<?> ctor = handler.getConstructor();
+                ctor.newInstance();
+            } catch (Exception e){
+                // TODO: Handle
+            }
+        }
+    }
 
 }

@@ -77,7 +77,8 @@ class InoriChan extends ListenerAdapter {
         inoriChan.addCommand(new AboutCommand("\nInformation about the bot: \n", desc, perms));
 
 
-        ChatEventDistributor.getInstance().load(ChatEventHandler.class, InoriChan.class.getPackage());
+        ChatEventDistributor.getInstance().load(ChatEventHandler.class);
+        jda.addEventListener(ChatEventDistributor.getInstance());
 
 
 
@@ -85,7 +86,7 @@ class InoriChan extends ListenerAdapter {
 
         // TESTING
 
-        jda.addEventListener(new ReportByPmEvent(waiter));
+        // jda.addEventListener(new ReportByPmEvent(waiter));
 
         // ANIMAL COMMANDS
         inoriChan.addCommand(new CatCommand(config));
@@ -141,20 +142,20 @@ class InoriChan extends ListenerAdapter {
         inoriChan.addCommand(new SummonCommand());
         inoriChan.addCommand(new DebugCommand());
 
-        jda.addEventListener(new StagingAreaEvent());
-        jda.addEventListener(new BotCatchingEvent(database));
-        jda.addEventListener(inoriChan.build());
-        jda.addEventListener(new AnimationEvent());
-        jda.addEventListener(new imgToAsciiEvent());
-        jda.addEventListener(new LemonSqueezyEvent());
-        // jda.addEventListener(new GoodBotEvent());
-        jda.addEventListener(new AiTalkEvent(config));
-        jda.addEventListener(new VoiceChannelJoinNotifyEvent());
-        jda.addEventListener(new OofiesAndLmaosEvent(database));
-        jda.addEventListener(new AntiScholzEvent());
-        jda.addEventListener(new HelpMessageCountingEvent(database));
-        jda.addEventListener(new PollReactionListener(database));
-        jda.addEventListener(new UnspoilEvent(waiter));
+        // jda.addEventListener(new StagingAreaEvent());
+        // jda.addEventListener(new BotCatchingEvent(database));
+        // jda.addEventListener(inoriChan.build());
+        // jda.addEventListener(new AnimationEvent());
+        // jda.addEventListener(new imgToAsciiEvent());
+        // jda.addEventListener(new LemonSqueezyEvent());
+        // // jda.addEventListener(new GoodBotEvent());
+        // jda.addEventListener(new AiTalkEvent(config));
+        // jda.addEventListener(new VoiceChannelJoinNotifyEvent());
+        // jda.addEventListener(new OofiesAndLmaosEvent(database));
+        // jda.addEventListener(new AntiScholzEvent());
+        // jda.addEventListener(new HelpMessageCountingEvent(database));
+        // jda.addEventListener(new PollReactionListener(database));
+        // jda.addEventListener(new UnspoilEvent(waiter));
 
     }
 
