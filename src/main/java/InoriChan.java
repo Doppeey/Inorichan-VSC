@@ -78,7 +78,6 @@ class InoriChan extends ListenerAdapter {
 
 
         ChatEventDistributor.getInstance().load(ChatEventHandler.class);
-        jda.addEventListener(ChatEventDistributor.getInstance());
 
 
 
@@ -148,7 +147,6 @@ class InoriChan extends ListenerAdapter {
         jda.addEventListener(new AnimationEvent());
         jda.addEventListener(new imgToAsciiEvent());
         jda.addEventListener(new LemonSqueezyEvent());
-        jda.addEventListener(new GoodBotEvent());
         jda.addEventListener(new AiTalkEvent(config));
         jda.addEventListener(new VoiceChannelJoinNotifyEvent());
         jda.addEventListener(new OofiesAndLmaosEvent(database));
@@ -156,6 +154,7 @@ class InoriChan extends ListenerAdapter {
         jda.addEventListener(new HelpMessageCountingEvent(database));
         jda.addEventListener(new PollReactionListener(database));
         jda.addEventListener(new UnspoilEvent(waiter));
+        jda.addEventListener(ChatEventDistributor.getInstance());
 
     }
 
