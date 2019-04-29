@@ -12,8 +12,8 @@ public class GoodBotEvent extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-
-        if(event.getMessage().getContentRaw().toLowerCase().contains("good bot") || event.getMessage().getContentRaw().toLowerCase().contains("bad bot")) {
+        String msg = event.getMessage().getContentRaw().toLowerCase();
+        if(msg.contains("good bot") || msg.contains("bad bot")) {
             final TextChannel eventChannel = event.getChannel();
             eventChannel.getHistoryBefore(event.getMessage(), 1).queue(messageHistory -> {
 
