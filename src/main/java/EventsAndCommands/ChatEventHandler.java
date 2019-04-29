@@ -10,8 +10,8 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
  */
 public abstract class ChatEventHandler {
     public abstract void receiveCommand(GuildMessageReceivedEvent event);
-    public abstract boolean trigger(GuildMessageReceivedEvent e);
-    
+    public abstract boolean trigger(GuildMessageReceivedEvent event);
+
     protected void register(){
         ChatEventDistributor.getInstance().registerChatEventHandler(this);
     }
