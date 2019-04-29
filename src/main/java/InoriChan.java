@@ -142,20 +142,20 @@ class InoriChan extends ListenerAdapter {
         inoriChan.addCommand(new SummonCommand());
         inoriChan.addCommand(new DebugCommand());
 
-        // jda.addEventListener(new StagingAreaEvent());
-        // jda.addEventListener(new BotCatchingEvent(database));
-        // jda.addEventListener(inoriChan.build());
-        // jda.addEventListener(new AnimationEvent());
-        // jda.addEventListener(new imgToAsciiEvent());
-        // jda.addEventListener(new LemonSqueezyEvent());
-        // // jda.addEventListener(new GoodBotEvent());
-        // jda.addEventListener(new AiTalkEvent(config));
-        // jda.addEventListener(new VoiceChannelJoinNotifyEvent());
-        // jda.addEventListener(new OofiesAndLmaosEvent(database));
-        // jda.addEventListener(new AntiScholzEvent());
-        // jda.addEventListener(new HelpMessageCountingEvent(database));
-        // jda.addEventListener(new PollReactionListener(database));
-        // jda.addEventListener(new UnspoilEvent(waiter));
+        jda.addEventListener(new StagingAreaEvent());
+        jda.addEventListener(new BotCatchingEvent(database));
+        jda.addEventListener(inoriChan.build());
+        jda.addEventListener(new AnimationEvent());
+        jda.addEventListener(new imgToAsciiEvent());
+        jda.addEventListener(new LemonSqueezyEvent());
+        jda.addEventListener(new GoodBotEvent());
+        jda.addEventListener(new AiTalkEvent(config));
+        jda.addEventListener(new VoiceChannelJoinNotifyEvent());
+        jda.addEventListener(new OofiesAndLmaosEvent(database));
+        jda.addEventListener(new AntiScholzEvent());
+        jda.addEventListener(new HelpMessageCountingEvent(database));
+        jda.addEventListener(new PollReactionListener(database));
+        jda.addEventListener(new UnspoilEvent(waiter));
 
     }
 

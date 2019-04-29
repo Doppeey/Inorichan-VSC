@@ -12,11 +12,6 @@ import EventsAndCommands.ChatEventHandler;
 public class GoodBotEvent extends ChatEventHandler {
 
 
-    public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-
-
-    }
-
     @Override
     public void receiveCommand(GuildMessageReceivedEvent event) {
         final TextChannel eventChannel = event.getChannel();
