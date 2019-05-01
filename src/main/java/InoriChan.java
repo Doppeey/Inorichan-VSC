@@ -43,7 +43,7 @@ import java.util.Properties;
 
 import EventsAndCommands.*;
 
-class InoriChan extends ListenerAdapter {
+class InoriChan {
 
 
     public static void main(String[] args) throws Exception {
