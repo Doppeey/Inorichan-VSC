@@ -19,12 +19,14 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 public class CommandLoader {
 
     private List<Command> loadedCommands;
+    private List<ListenerAdapter> loadedListeners;
     private MongoDatabase db;
     private Properties config;
     private EventWaiter waiter;
 
     public CommandLoader(MongoDatabase db, Properties config, EventWaiter waiter) {
         loadedCommands = new ArrayList<>();
+        loadedListeners = new ArrayList<>();
         setDb(db);
         setConfig(config);
         setWaiter(waiter);
@@ -41,7 +43,7 @@ public class CommandLoader {
             for (var ctor : ctors) {
                 if (hasAcceptableParams(ctor)) {
                     try {
-                        instances.add(inject(ctor));
+                        instances.add(injectCommand(ctor));
                     } catch (Exception e) {
                         // TODO: Log
                         System.err.println("Could not load " + cmd.getName());
@@ -55,12 +57,55 @@ public class CommandLoader {
         setLoadedCommands(instances);
     }
 
+    public void loadListenerAdaptor() {
+        Reflections reflections = new Reflections(this.getClass().getPackageName());
+
+        Set<Class<? extends ListenerAdapter>> cmds = reflections.getSubTypesOf(ListenerAdapter.class);
+        List<ListenerAdapter> instances = new ArrayList<>();
+
+        for (var cmd : cmds) {
+            List<Constructor<?>> ctors = Arrays.asList(cmd.getConstructors());
+            for (var ctor : ctors) {
+                if (hasAcceptableParams(ctor)) {
+                    try {
+                        instances.add(injectListenerAdaptor(ctor));
+                    } catch (Exception e) {
+                        // TODO: Log
+                        System.err.println("Could not load " + cmd.getName());
+                    }
+                } else {
+                    System.err.println("No suitable constructor for " + cmd.getName());
+                }
+            }
+        }
+
+        setLoadedListeners(instances);
+    }
+
     /**
      * 
      * @param ctors
      * @return
      */
-    public Command inject(Constructor<?> ctor) throws Exception{
+    public ListenerAdapter injectListenerAdaptor(Constructor<?> ctor) throws Exception{
+        Class<?>[] paramTypes = ctor.getParameterTypes();
+        Object[] parameters = new Object[paramTypes.length];
+
+        for (int i = 0; i < paramTypes.length; i++) {
+            Class<?> type = paramTypes[i];
+            if (type.equals(db.getClass())) {
+                parameters[i] = db;
+            } else if (type.equals(config.getClass())) {
+                parameters[i] = config;
+            } else if (type.equals(waiter.getClass())) {
+                parameters[i] = waiter;
+            }
+        }
+
+        return (ListenerAdapter) ctor.newInstance(parameters);
+    }   
+    
+    public Command injectCommand(Constructor<?> ctor) throws Exception{
         Class<?>[] paramTypes = ctor.getParameterTypes();
         Object[] parameters = new Object[paramTypes.length];
 
@@ -141,6 +186,20 @@ public class CommandLoader {
      */
     public void setWaiter(EventWaiter waiter) {
         this.waiter = waiter;
+    }
+
+    /**
+     * @return the loadedListeners
+     */
+    public List<ListenerAdapter> getLoadedListeners() {
+        return loadedListeners;
+    }
+
+    /**
+     * @param loadedListeners the loadedListeners to set
+     */
+    public void setLoadedListeners(List<ListenerAdapter> loadedListeners) {
+        this.loadedListeners = loadedListeners;
     }
 
 

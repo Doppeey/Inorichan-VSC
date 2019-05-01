@@ -1,4 +1,3 @@
-import EventsAndCommands.ChatEventDistributor;
 import EventsAndCommands.EventUtility.AboutCommand;
 import EventsAndCommands.FunCommands.*;
 import EventsAndCommands.FunCommands.DeAndEncryptor.DecryptCommand;
@@ -79,9 +78,13 @@ class InoriChan {
 
         CommandLoader commands = new CommandLoader(database, config, waiter);
         commands.loadCommands();
+        commands.loadListenerAdaptor();
 
         for (var cmd : commands.getLoadedCommands()) {
             inoriChan.addCommand(cmd);
+        }
+        for (var listener : commands.getLoadedListeners()){
+            jda.addEventListener(listener);
         }
 
 
@@ -90,7 +93,7 @@ class InoriChan {
 
         // TESTING
 
-        jda.addEventListener(new ReportByPmEvent(waiter));
+        // jda.addEventListener(new ReportByPmEvent(waiter));
 
         // ANIMAL COMMANDS
         // inoriChan.addCommand(new CatCommand(config));
@@ -146,20 +149,19 @@ class InoriChan {
         // inoriChan.addCommand(new SummonCommand());
         // inoriChan.addCommand(new DebugCommand());
 
-        jda.addEventListener(new StagingAreaEvent());
-        jda.addEventListener(new BotCatchingEvent(database));
+        // jda.addEventListener(new StagingAreaEvent());
+        // jda.addEventListener(new BotCatchingEvent(database));
+        // jda.addEventListener(new AnimationEvent());
+        // jda.addEventListener(new imgToAsciiEvent());
+        // jda.addEventListener(new LemonSqueezyEvent());
+        // jda.addEventListener(new AiTalkEvent(config));
+        // jda.addEventListener(new VoiceChannelJoinNotifyEvent());
+        // jda.addEventListener(new OofiesAndLmaosEvent(database));
+        // jda.addEventListener(new AntiScholzEvent());
+        // jda.addEventListener(new HelpMessageCountingEvent(database));
+        // jda.addEventListener(new PollReactionListener(database));
+        // jda.addEventListener(new UnspoilEvent(waiter));
         jda.addEventListener(inoriChan.build());
-        jda.addEventListener(new AnimationEvent());
-        jda.addEventListener(new imgToAsciiEvent());
-        jda.addEventListener(new LemonSqueezyEvent());
-        jda.addEventListener(new AiTalkEvent(config));
-        jda.addEventListener(new VoiceChannelJoinNotifyEvent());
-        jda.addEventListener(new OofiesAndLmaosEvent(database));
-        jda.addEventListener(new AntiScholzEvent());
-        jda.addEventListener(new HelpMessageCountingEvent(database));
-        jda.addEventListener(new PollReactionListener(database));
-        jda.addEventListener(new UnspoilEvent(waiter));
-        jda.addEventListener(ChatEventDistributor.getInstance());
 
     }
 

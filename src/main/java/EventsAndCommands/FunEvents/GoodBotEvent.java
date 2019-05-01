@@ -8,8 +8,6 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.util.Random;
 
-import EventsAndCommands.ChatEventHandler;
-
 public class GoodBotEvent extends Command {
 
     @Override
