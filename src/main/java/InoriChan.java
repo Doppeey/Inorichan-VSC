@@ -77,7 +77,12 @@ class InoriChan {
         inoriChan.addCommand(new AboutCommand("\nInformation about the bot: \n", desc, perms));
 
 
-        ChatEventDistributor.getInstance().load(ChatEventHandler.class);
+        CommandLoader commands = new CommandLoader(database, config, waiter);
+        commands.loadCommands();
+
+        for (var cmd : commands.getLoadedCommands()) {
+            inoriChan.addCommand(cmd);
+        }
 
 
 
@@ -85,61 +90,61 @@ class InoriChan {
 
         // TESTING
 
-        // jda.addEventListener(new ReportByPmEvent(waiter));
+        jda.addEventListener(new ReportByPmEvent(waiter));
 
         // ANIMAL COMMANDS
-        inoriChan.addCommand(new CatCommand(config));
-        inoriChan.addCommand(new FoxCommand());
-        inoriChan.addCommand(new DogeCommand());
-        inoriChan.addCommand(new DogCommand(config));
-        // MODERATION COMMANDS
-        inoriChan.addCommand(new ReportCommand());
-        inoriChan.addCommand(new SpamlordCommand());
-        inoriChan.addCommand(new PurgeCommand());
-        inoriChan.addCommand(new WhoIsCommand());
-        // MEME COMMANDS
-        inoriChan.addCommand(new ScrollOfTruthCommand(config));
-        inoriChan.addCommand(new HurensohnCommand(config));
-        inoriChan.addCommand(new DrakeCommand(config));
-        inoriChan.addCommand(new DistractedBoyfriendCommand(config));
-        inoriChan.addCommand(new TwoButtonsCommand(config));
-        inoriChan.addCommand(new PillsCommand(config));
-        inoriChan.addCommand(new BrainCommand(config));
-        inoriChan.addCommand(new SpongebobCommand(config));
-        inoriChan.addCommand(new GoodNoodleCommand(config));
-        inoriChan.addCommand(new ChangeMyMindCommand(config));
-        inoriChan.addCommand(new NpcCommand(config));
-        // GAME COMMANDS
-        inoriChan.addCommand(new RockPaperScissorsCommand());
-        inoriChan.addCommand(new HangmanCommand(waiter));
-        inoriChan.addCommand(new HighOrLowCommand(waiter));
-        // UTILITY COMMANDS
-        inoriChan.addCommand(new unsplashCommand(config,waiter));
-        inoriChan.addCommand(new TranslateCommand());
-        inoriChan.addCommand(new DefinitionCommand());
-        inoriChan.addCommand(new GoogleCommand());
-        inoriChan.addCommand(new TopHelpMessages(database));
-        inoriChan.addCommand(new QuoteWtfCommand());
-        inoriChan.addCommand(new PollCommand(database));
-        inoriChan.addCommand(new TimerCommand());
-        inoriChan.addCommand(new YoutubeToMp3Command(config));
-        inoriChan.addCommand(new CodeCommand());
-        inoriChan.addCommand(new EmoteIdCommand());
-        inoriChan.addCommand(new AvatarCommand());
-        inoriChan.addCommand(new QuoteCommand());
-        // FUN COMMANDS
-        inoriChan.addCommand(new BubbleSortCommand());
-        inoriChan.addCommand(new OoflmaoCommand(database));
-        inoriChan.addCommand(new DecryptCommand());
-        inoriChan.addCommand(new EncryptCommand());
-        inoriChan.addCommand(new DabCommand());
-        inoriChan.addCommand(new DeletThisCommand());
-        inoriChan.addCommand(new GifSequenceWriter());
+        // inoriChan.addCommand(new CatCommand(config));
+        // inoriChan.addCommand(new FoxCommand());
+        // inoriChan.addCommand(new DogeCommand());
+        // inoriChan.addCommand(new DogCommand(config));
+        // // MODERATION COMMANDS
+        // inoriChan.addCommand(new ReportCommand());
+        // inoriChan.addCommand(new SpamlordCommand());
+        // inoriChan.addCommand(new PurgeCommand());
+        // inoriChan.addCommand(new WhoIsCommand());
+        // // MEME COMMANDS
+        // inoriChan.addCommand(new ScrollOfTruthCommand(config));
+        // inoriChan.addCommand(new HurensohnCommand(config));
+        // inoriChan.addCommand(new DrakeCommand(config));
+        // inoriChan.addCommand(new DistractedBoyfriendCommand(config));
+        // inoriChan.addCommand(new TwoButtonsCommand(config));
+        // inoriChan.addCommand(new PillsCommand(config));
+        // inoriChan.addCommand(new BrainCommand(config));
+        // inoriChan.addCommand(new SpongebobCommand(config));
+        // inoriChan.addCommand(new GoodNoodleCommand(config));
+        // inoriChan.addCommand(new ChangeMyMindCommand(config));
+        // inoriChan.addCommand(new NpcCommand(config));
+        // // GAME COMMANDS
+        // inoriChan.addCommand(new RockPaperScissorsCommand());
+        // inoriChan.addCommand(new HangmanCommand(waiter));
+        // inoriChan.addCommand(new HighOrLowCommand(waiter));
+        // // UTILITY COMMANDS
+        // inoriChan.addCommand(new unsplashCommand(config,waiter));
+        // inoriChan.addCommand(new TranslateCommand());
+        // inoriChan.addCommand(new DefinitionCommand());
+        // inoriChan.addCommand(new GoogleCommand());
+        // inoriChan.addCommand(new TopHelpMessages(database));
+        // inoriChan.addCommand(new QuoteWtfCommand());
+        // inoriChan.addCommand(new PollCommand(database));
+        // inoriChan.addCommand(new TimerCommand());
+        // inoriChan.addCommand(new YoutubeToMp3Command(config));
+        // inoriChan.addCommand(new CodeCommand());
+        // inoriChan.addCommand(new EmoteIdCommand());
+        // inoriChan.addCommand(new AvatarCommand());
+        // inoriChan.addCommand(new QuoteCommand());
+        // // FUN COMMANDS
+        // inoriChan.addCommand(new BubbleSortCommand());
+        // inoriChan.addCommand(new OoflmaoCommand(database));
+        // inoriChan.addCommand(new DecryptCommand());
+        // inoriChan.addCommand(new EncryptCommand());
+        // inoriChan.addCommand(new DabCommand());
+        // inoriChan.addCommand(new DeletThisCommand());
+        // inoriChan.addCommand(new GifSequenceWriter());
 
-        // HIDDEN COMMANDS
-        inoriChan.addCommand(new VCJoinByID());
-        inoriChan.addCommand(new SummonCommand());
-        inoriChan.addCommand(new DebugCommand());
+        // // HIDDEN COMMANDS
+        // inoriChan.addCommand(new VCJoinByID());
+        // inoriChan.addCommand(new SummonCommand());
+        // inoriChan.addCommand(new DebugCommand());
 
         jda.addEventListener(new StagingAreaEvent());
         jda.addEventListener(new BotCatchingEvent(database));

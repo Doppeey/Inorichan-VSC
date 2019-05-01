@@ -1,5 +1,6 @@
 package EventsAndCommands.FunEvents;
 
+import com.jagrosh.jdautilities.command.*;
 import net.dv8tion.jda.core.entities.MessageHistory;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -9,48 +10,44 @@ import java.util.Random;
 
 import EventsAndCommands.ChatEventHandler;
 
-public class GoodBotEvent extends ChatEventHandler {
-
+public class GoodBotEvent extends Command {
 
     @Override
-    public void execute(GuildMessageReceivedEvent event) {
-        final TextChannel eventChannel = event.getChannel();
-        eventChannel.getHistoryBefore(event.getMessage(), 1).queue(messageHistory -> {
+    public void execute(CommandEvent event){
+        final TextChannel eventChannel = event.getTextChannel();
+        String msg = event.getMessage().getContentRaw().toLowerCase();
+        if(msg.contains("good bot") || msg.contains("bad bot")){
+            eventChannel.getHistoryBefore(event.getMessage(), 1).queue(messageHistory -> {
 
-            final String id = messageHistory.getRetrievedHistory().get(0).getMember().getUser().getId();
-            final String contentRaw = event.getMessage().getContentRaw();
-            final String effectiveName = messageHistory.getRetrievedHistory().get(0).getMember().getEffectiveName();
-            final boolean isBot = messageHistory.getRetrievedHistory().get(0).getMember().getUser().isBot();
-
-            if (contentRaw.equalsIgnoreCase("good bot")) {
-
-                if (id.equalsIgnoreCase("503181069705805844")) {
-
-                    eventChannel.sendMessage("Thanks! :blush: :blush:  ").queue();
-
-                } else if (!isBot) {
-
+                final String id = messageHistory.getRetrievedHistory().get(0).getMember().getUser().getId();
+                final String contentRaw = event.getMessage().getContentRaw();
+                final String effectiveName = messageHistory.getRetrievedHistory().get(0).getMember().getEffectiveName();
+                final boolean isBot = messageHistory.getRetrievedHistory().get(0).getMember().getUser().isBot();
+        
+                if (contentRaw.equalsIgnoreCase("good bot")) {
+        
+                    if (id.equalsIgnoreCase("503181069705805844")) {
+        
+                        eventChannel.sendMessage("Thanks! :blush: :blush:  ").queue();
+        
+                    } else if (!isBot) {
+        
+                        eventChannel.sendMessage(
+                                "I'm " + new Random().nextInt(101) + "% sure that " + effectiveName + " is not a bot")
+                                .queue();
+        
+                    }
+        
+                } else if (id.equalsIgnoreCase("503181069705805844") && contentRaw.equalsIgnoreCase("bad bot")) {
+                        eventChannel.sendMessage("No u").queue();
+                } else if (!isBot && contentRaw.equalsIgnoreCase("bad bot")) {
                     eventChannel.sendMessage(
                             "I'm " + new Random().nextInt(101) + "% sure that " + effectiveName + " is not a bot")
                             .queue();
-
                 }
-
-            } else if (id.equalsIgnoreCase("503181069705805844") && contentRaw.equalsIgnoreCase("bad bot")) {
-                eventChannel.sendMessage("No u").queue();
-            } else if (!isBot && contentRaw.equalsIgnoreCase("bad bot")) {
-                eventChannel.sendMessage(
-                        "I'm " + new Random().nextInt(101) + "% sure that " + effectiveName + " is not a bot")
-                        .queue();
-            }
-
-        });
+        
+            });
+        }
     }
 
-    @Override
-    public boolean isTriggered(GuildMessageReceivedEvent event) {
-        String msg = event.getMessage().getContentRaw().toLowerCase();
-        boolean r = (msg.contains("good bot") || msg.contains("bad bot"));
-        return r;
-    }
 }

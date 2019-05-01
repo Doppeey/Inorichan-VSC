@@ -33,23 +33,26 @@ public class CommandLoader {
     public void loadCommands() {
         Reflections reflections = new Reflections(this.getClass().getPackageName());
 
-        Set<Class<? extends Command>> handlers = reflections.getSubTypesOf(Command.class);
+        Set<Class<? extends Command>> cmds = reflections.getSubTypesOf(Command.class);
         List<Command> instances = new ArrayList<>();
 
-        for (var handler : handlers) {
-            List<Constructor<?>> ctors = Arrays.asList(handler.getConstructors());
+        for (var cmd : cmds) {
+            List<Constructor<?>> ctors = Arrays.asList(cmd.getConstructors());
             for (var ctor : ctors) {
                 if (hasAcceptableParams(ctor)) {
                     try {
                         instances.add(inject(ctor));
                     } catch (Exception e) {
                         // TODO: Log
+                        System.err.println("Could not load " + cmd.getName());
                     }
+                } else {
+                    System.err.println("No suitable constructor for " + cmd.getName());
                 }
             }
         }
 
-        setLoadedCommands(loadedCommands);
+        setLoadedCommands(instances);
     }
 
     /**

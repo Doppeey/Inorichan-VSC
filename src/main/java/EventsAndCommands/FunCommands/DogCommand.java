@@ -1,7 +1,7 @@
 package EventsAndCommands.FunCommands;
 
+import com.jagrosh.jdautilities.command.*;
 import EventsAndCommands.Categories;
-import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
