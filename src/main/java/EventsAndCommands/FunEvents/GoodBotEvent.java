@@ -8,11 +8,11 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.util.Random;
 
-public class GoodBotEvent extends Command {
+public class GoodBotEvent extends ListenerAdapter {
 
     @Override
-    public void execute(CommandEvent event){
-        final TextChannel eventChannel = event.getTextChannel();
+    public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+        final TextChannel eventChannel = event.getChannel();
         String msg = event.getMessage().getContentRaw().toLowerCase();
         if(msg.contains("good bot") || msg.contains("bad bot")){
             eventChannel.getHistoryBefore(event.getMessage(), 1).queue(messageHistory -> {
