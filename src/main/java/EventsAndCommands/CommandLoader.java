@@ -3,6 +3,7 @@ package EventsAndCommands;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.jagrosh.jdautilities.command.Command;
 
@@ -36,6 +37,10 @@ public class CommandLoader {
         Reflections reflections = new Reflections(this.getClass().getPackageName());
 
         Set<Class<? extends Command>> cmds = reflections.getSubTypesOf(Command.class);
+        cmds = cmds.stream()
+            .filter(x -> x.getAnnotation(IgnoreCommand.class) == null)
+            .collect(Collectors.toSet());
+
         List<Command> instances = new ArrayList<>();
 
         for (var cmd : cmds) {
@@ -64,6 +69,10 @@ public class CommandLoader {
         Reflections reflections = new Reflections(this.getClass().getPackageName());
 
         Set<Class<? extends ListenerAdapter>> cmds = reflections.getSubTypesOf(ListenerAdapter.class);
+        cmds = cmds.stream()
+            .filter(x -> x.getAnnotation(IgnoreCommand.class) == null)
+            .collect(Collectors.toSet());
+            
         List<ListenerAdapter> instances = new ArrayList<>();
 
         for (var cmd : cmds) {

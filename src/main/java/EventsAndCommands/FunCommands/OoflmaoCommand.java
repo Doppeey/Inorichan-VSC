@@ -1,6 +1,8 @@
 package EventsAndCommands.FunCommands;
 
 import EventsAndCommands.Categories;
+import EventsAndCommands.IgnoreCommand;
+
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mongodb.client.MongoCollection;
@@ -19,6 +21,7 @@ import java.awt.Color;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
+@IgnoreCommand
 public class OoflmaoCommand extends Command {
 
     /*
