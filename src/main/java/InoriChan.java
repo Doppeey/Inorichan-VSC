@@ -78,11 +78,12 @@ class InoriChan {
 
         CommandLoader commands = new CommandLoader(database, config, waiter);
         commands.loadCommands();
-        commands.loadListenerAdaptor();
 
         for (var cmd : commands.getLoadedCommands()) {
             inoriChan.addCommand(cmd);
         }
+        jda.addEventListener(inoriChan.build());
+        commands.loadListenerAdaptor();
         for (var listener : commands.getLoadedListeners()){
             jda.addEventListener(listener);
         }
@@ -161,7 +162,6 @@ class InoriChan {
         // jda.addEventListener(new HelpMessageCountingEvent(database));
         // jda.addEventListener(new PollReactionListener(database));
         // jda.addEventListener(new UnspoilEvent(waiter));
-        jda.addEventListener(inoriChan.build());
 
     }
 
