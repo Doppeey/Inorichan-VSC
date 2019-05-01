@@ -24,7 +24,7 @@ import org.reflections.*;
  */
 public class ChatEventDistributor extends ListenerAdapter{
 
-    private static ChatEventDistributor instance = null;
+    private static ChatEventDistributor instance;
 
     private Set<ChatEventHandler> eventHandlers;
 
@@ -42,8 +42,8 @@ public class ChatEventDistributor extends ListenerAdapter{
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         for (var x : eventHandlers) {
-            if(x.trigger(event)){
-                x.receiveCommand(event);
+            if(x.isTriggered(event)){
+                x.execute(event);
             }
         }
     }

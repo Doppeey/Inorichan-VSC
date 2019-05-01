@@ -20,7 +20,7 @@ public abstract class ChatEventHandler {
      * This method should only handle what happens after the command was triggered, i.e. responses or whatever,
      * @param event the message that triggered the event.
      */
-    public abstract void receiveCommand(GuildMessageReceivedEvent event);
+    public abstract void execute(GuildMessageReceivedEvent event);
 
     /**
      * Determines if an event would trigger the command. If the given event evaluates to true, 
@@ -28,20 +28,5 @@ public abstract class ChatEventHandler {
      * @param event The event that might trigger the command.
      * @return true if the the command is triggered, false if not.
      */
-    public abstract boolean trigger(GuildMessageReceivedEvent event);
-
-    protected void register(){
-        ChatEventDistributor.getInstance().registerChatEventHandler(this);
-    }
-
-    protected void unregister(){
-        ChatEventDistributor.getInstance().unregisterChatEventHandler(this);
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        unregister();
-    }
-
-
+    public abstract boolean isTriggered(GuildMessageReceivedEvent event);
 }

@@ -13,7 +13,7 @@ public class GoodBotEvent extends ChatEventHandler {
 
 
     @Override
-    public void receiveCommand(GuildMessageReceivedEvent event) {
+    public void execute(GuildMessageReceivedEvent event) {
         final TextChannel eventChannel = event.getChannel();
         eventChannel.getHistoryBefore(event.getMessage(), 1).queue(messageHistory -> {
 
@@ -48,7 +48,7 @@ public class GoodBotEvent extends ChatEventHandler {
     }
 
     @Override
-    public boolean trigger(GuildMessageReceivedEvent event) {
+    public boolean isTriggered(GuildMessageReceivedEvent event) {
         String msg = event.getMessage().getContentRaw().toLowerCase();
         boolean r = (msg.contains("good bot") || msg.contains("bad bot"));
         return r;
