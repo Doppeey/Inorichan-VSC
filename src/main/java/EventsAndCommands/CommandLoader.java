@@ -44,8 +44,11 @@ public class CommandLoader {
                 if (hasAcceptableParams(ctor)) {
                     try {
                         instances.add(injectCommand(ctor));
+                    } catch (InvocationTargetException e){
+                        e.getCause().printStackTrace();
                     } catch (Exception e) {
                         // TODO: Log
+                        System.err.println(e.getMessage());
                         System.err.println("Could not load " + cmd.getName());
                     }
                 } else {
@@ -69,8 +72,11 @@ public class CommandLoader {
                 if (hasAcceptableParams(ctor)) {
                     try {
                         instances.add(injectListenerAdaptor(ctor));
+                    } catch (InvocationTargetException e){
+                        e.getCause().printStackTrace();
                     } catch (Exception e) {
                         // TODO: Log
+                        System.err.println(e.getMessage());
                         System.err.println("Could not load " + cmd.getName());
                     }
                 } else {
