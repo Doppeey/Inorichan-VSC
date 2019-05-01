@@ -12,9 +12,6 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
  */
 public abstract class ChatEventHandler {
 
-    public ChatEventHandler(){
-        register();
-    }
     /**
      * This method is executed when the command got triggered trough {@see ChatEventHandler#trigger(GuildMessageReceivedEvent)}.
      * This method should only handle what happens after the command was triggered, i.e. responses or whatever,
