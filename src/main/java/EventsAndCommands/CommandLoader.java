@@ -38,8 +38,7 @@ public class CommandLoader {
     public void loadCommands() {
         Reflections reflections = new Reflections(this.getClass().getPackageName());
 
-        Set<Class<? extends Command>> cmds = reflections.getSubTypesOf(Command.class);
-        cmds = cmds.stream()
+        Set<Class<? extends Command>> cmds = reflections.getSubTypesOf(Command.class).stream()
             .filter(x -> !x.isAnnotationPresent(IgnoreCommand.class))
             .collect(Collectors.toSet());
 
@@ -70,8 +69,7 @@ public class CommandLoader {
     public void loadListenerAdaptor() {
         Reflections reflections = new Reflections(this.getClass().getPackageName());
 
-        Set<Class<? extends ListenerAdapter>> cmds = reflections.getSubTypesOf(ListenerAdapter.class);
-        cmds = cmds.stream()
+        Set<Class<? extends ListenerAdapter>> cmds = reflections.getSubTypesOf(ListenerAdapter.class).stream()
             .filter(x -> !x.isAnnotationPresent(IgnoreCommand.class))
             .collect(Collectors.toSet());
 
