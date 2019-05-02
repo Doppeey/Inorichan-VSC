@@ -2,55 +2,57 @@ package EventsAndCommands;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.jagrosh.jdautilities.command.Command;
-
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-
-import org.reflections.*;
-import com.mongodb.client.MongoDatabase;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.mongodb.client.MongoDatabase;
+
+import org.reflections.Reflections;
 
 /**
  * CommandHandler
  */
-public class CommandLoader {
+public class CommandLoader<T> {
 
-    private List<Command> loadedCommands;
-    private List<ListenerAdapter> loadedListeners;
+    private List<T> loadedClasses = new ArrayList<>();
+    private Class<T> token;
     private MongoDatabase db;
     private Properties config;
     private EventWaiter waiter;
 
-    public CommandLoader(MongoDatabase db, Properties config, EventWaiter waiter) {
-        loadedCommands = new ArrayList<>();
-        loadedListeners = new ArrayList<>();
+    public CommandLoader(Class<T> token, MongoDatabase db, Properties config, EventWaiter waiter) {
         setDb(db);
         setConfig(config);
         setWaiter(waiter);
+        setToken(token);
     }
 
     /**
-     * loads all classes via reflection and instanciates them once. Injects needed dependencies in the constructor
+     * loads all classes via reflection and instanciates them once. Injects needed
+     * dependencies in the constructor
      */
-    public void loadCommands() {
+    public void loadClasses() {
         Reflections reflections = new Reflections(this.getClass().getPackageName());
 
-        Set<Class<? extends Command>> cmds = reflections.getSubTypesOf(Command.class).stream()
-            .filter(x -> !x.isAnnotationPresent(IgnoreCommand.class))
-            .collect(Collectors.toSet());
+        Set<Class<? extends T>> cmds = reflections.getSubTypesOf(token).stream()
+                .filter(x -> !x.isAnnotationPresent(IgnoreCommand.class))
+                .collect(Collectors.toSet());
 
-        List<Command> instances = new ArrayList<>();
+        List<T> instances = new ArrayList<>();
 
         for (var cmd : cmds) {
             List<Constructor<?>> ctors = Arrays.asList(cmd.getConstructors());
             for (var ctor : ctors) {
                 if (hasAcceptableParams(ctor)) {
                     try {
-                        instances.add(injectCommand(ctor));
-                    } catch (InvocationTargetException e){
+                        instances.add(inject(ctor));
+                    } catch (InvocationTargetException e) {
                         e.getCause().printStackTrace();
                     } catch (Exception e) {
                         // TODO: Log
@@ -64,47 +66,10 @@ public class CommandLoader {
             }
         }
 
-        setLoadedCommands(instances);
+        setLoadedClasses(instances);
     }
 
-    public void loadListenerAdaptor() {
-        Reflections reflections = new Reflections(this.getClass().getPackageName());
-
-        Set<Class<? extends ListenerAdapter>> cmds = reflections.getSubTypesOf(ListenerAdapter.class).stream()
-            .filter(x -> !x.isAnnotationPresent(IgnoreCommand.class))
-            .collect(Collectors.toSet());
-
-        List<ListenerAdapter> instances = new ArrayList<>();
-
-        for (var cmd : cmds) {
-            List<Constructor<?>> ctors = Arrays.asList(cmd.getConstructors());
-            for (var ctor : ctors) {
-                if (hasAcceptableParams(ctor)) {
-                    try {
-                        instances.add(injectListenerAdaptor(ctor));
-                    } catch (InvocationTargetException e){
-                        e.getCause().printStackTrace();
-                    } catch (Exception e) {
-                        // TODO: Log
-                        System.err.println(e.getMessage());
-                        e.printStackTrace();
-                        System.err.println("Could not load " + cmd.getName());
-                    }
-                } else {
-                    System.err.println("No suitable constructor for " + cmd.getName());
-                }
-            }
-        }
-
-        setLoadedListeners(instances);
-    }
-
-    /**
-     * 
-     * @param ctors
-     * @return
-     */
-    public ListenerAdapter injectListenerAdaptor(Constructor<?> ctor) throws Exception{
+    public T inject(Constructor<?> ctor) throws Exception {
         Class<?>[] paramTypes = ctor.getParameterTypes();
         Object[] parameters = new Object[paramTypes.length];
 
@@ -119,48 +84,16 @@ public class CommandLoader {
             }
         }
 
-        return (ListenerAdapter) ctor.newInstance(parameters);
-    }   
-    
-    public Command injectCommand(Constructor<?> ctor) throws Exception{
-        Class<?>[] paramTypes = ctor.getParameterTypes();
-        Object[] parameters = new Object[paramTypes.length];
-
-        for (int i = 0; i < paramTypes.length; i++) {
-            Class<?> type = paramTypes[i];
-            if (type.equals(db.getClass())) {
-                parameters[i] = db;
-            } else if (type.equals(config.getClass())) {
-                parameters[i] = config;
-            } else if (type.equals(waiter.getClass())) {
-                parameters[i] = waiter;
-            }
-        }
-
-        return (Command) ctor.newInstance(parameters);
+        return (T) ctor.newInstance(parameters);
     }
 
-    public boolean hasAcceptableParams(Constructor<?> ctor){
+    public boolean hasAcceptableParams(Constructor<?> ctor) {
         final Set<Class<?>> acceptableParams = new HashSet<>();
         acceptableParams.add(MongoDatabase.class);
         acceptableParams.add(Properties.class);
         acceptableParams.add(EventWaiter.class);
 
         return acceptableParams.containsAll(Arrays.asList(ctor.getParameterTypes()));
-    }
-
-    /**
-     * @return the eventHandlers
-     */
-    public List<Command> getLoadedCommands() {
-        return Collections.unmodifiableList(loadedCommands);
-    }
-
-    /**
-     * @param eventHandlers the eventHandlers to set
-     */
-    public void setLoadedCommands(List<Command> loadedCommands) {
-        this.loadedCommands = loadedCommands;
     }
 
     /**
@@ -206,19 +139,31 @@ public class CommandLoader {
     }
 
     /**
-     * @return the loadedListeners
+     * @return the token
      */
-    public List<ListenerAdapter> getLoadedListeners() {
-        return Collections.unmodifiableList(loadedListeners);
+    public Class<T> getToken() {
+        return token;
     }
 
     /**
-     * @param loadedListeners the loadedListeners to set
+     * @param token the token to set
      */
-    public void setLoadedListeners(List<ListenerAdapter> loadedListeners) {
-        this.loadedListeners = loadedListeners;
+    public void setToken(Class<T> token) {
+        this.token = token;
     }
 
+    /**
+     * @return the loadedClasses
+     */
+    public List<T> getLoadedClasses() {
+        return loadedClasses;
+    }
 
-    
+    /**
+     * @param loadedClasses the loadedClasses to set
+     */
+    public void setLoadedClasses(List<T> loadedClasses) {
+        this.loadedClasses = loadedClasses;
+    }
+
 }
