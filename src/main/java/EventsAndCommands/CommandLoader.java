@@ -16,7 +16,10 @@ import com.mongodb.client.MongoDatabase;
 import org.reflections.Reflections;
 
 /**
- * CommandHandler
+ * Autodetects commands that implement a generic type T.
+ * Can be used to dynaically load up all commands without explicitly instantiating them. 
+ * Injects needed dependencies into the instances individually.
+ * T = The superclass whose childclasses should be loaded.
  */
 public class CommandLoader<T> {
 
@@ -26,6 +29,13 @@ public class CommandLoader<T> {
     private Properties config;
     private EventWaiter waiter;
 
+    /**
+     * Ctor that takes in the surounding dependencies and a token that represents the loaded class.
+     * @param token A reflection Class that represents the class that will be loaded.
+     * @param db A connection to a MongoDB.
+     * @param config The read in properties from some cfg file.
+     * @param waiter A waiter that is needed by some commands.
+     */
     public CommandLoader(Class<T> token, MongoDatabase db, Properties config, EventWaiter waiter) {
         setDb(db);
         setConfig(config);
@@ -34,8 +44,7 @@ public class CommandLoader<T> {
     }
 
     /**
-     * loads all classes via reflection and instanciates them once. Injects needed
-     * dependencies in the constructor
+     * Dynamically loads all Classes that are 
      */
     public void loadClasses() {
         Reflections reflections = new Reflections(this.getClass().getPackageName());
@@ -68,8 +77,14 @@ public class CommandLoader<T> {
 
         setLoadedClasses(instances);
     }
-
-    public T inject(Constructor<?> ctor) throws Exception {
+    /**
+     * Takes in a reflective constructor and instances it with dependencies.
+     * The dependencies are determined at runtime based on the parameter order and type of the constructor.
+     * @param ctor The constructer that will be used to generate an object.
+     * @return An actual instance derived from the given ctor.
+     * @throws Exception Multiple exceptions can be thrown if something goes wrong while invoking.
+     */
+    private T inject(Constructor<?> ctor) throws Exception {
         Class<?>[] paramTypes = ctor.getParameterTypes();
         Object[] parameters = new Object[paramTypes.length];
 
@@ -87,7 +102,14 @@ public class CommandLoader<T> {
         return (T) ctor.newInstance(parameters);
     }
 
-    public boolean hasAcceptableParams(Constructor<?> ctor) {
+    /**
+     * Determines if a constructor is suited for dependency injection defined in this class.
+     * An acceptable constructor can only be a default constructor or a constructor that thakes 
+     * any combination of the types {@see MongoDatabase}, {@see Properties}, {@see EventWaiter} in any order or count.
+     * @param ctor The to be tested constructor.
+     * @return True if the above condition is true, false if otherwise.
+     */
+    private boolean hasAcceptableParams(Constructor<?> ctor) {
         final Set<Class<?>> acceptableParams = new HashSet<>();
         acceptableParams.add(MongoDatabase.class);
         acceptableParams.add(Properties.class);
