@@ -153,7 +153,7 @@ public class CommandLoader {
      * @return the eventHandlers
      */
     public List<Command> getLoadedCommands() {
-        return loadedCommands;
+        return Collections.unmodifiableList(loadedCommands);
     }
 
     /**
@@ -209,7 +209,7 @@ public class CommandLoader {
      * @return the loadedListeners
      */
     public List<ListenerAdapter> getLoadedListeners() {
-        return loadedListeners;
+        return Collections.unmodifiableList(loadedListeners);
     }
 
     /**
