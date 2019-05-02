@@ -55,6 +55,7 @@ public class CommandLoader {
                     } catch (Exception e) {
                         // TODO: Log
                         System.err.println(e.getMessage());
+                        e.printStackTrace();
                         System.err.println("Could not load " + cmd.getName());
                     }
                 } else {
@@ -86,6 +87,7 @@ public class CommandLoader {
                     } catch (Exception e) {
                         // TODO: Log
                         System.err.println(e.getMessage());
+                        e.printStackTrace();
                         System.err.println("Could not load " + cmd.getName());
                     }
                 } else {
