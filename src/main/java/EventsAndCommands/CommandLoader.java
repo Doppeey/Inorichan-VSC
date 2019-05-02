@@ -47,21 +47,20 @@ public class CommandLoader<T> {
     }
 
     /**
-     * Dynamically loads all Classes that inherit from type T.
+     * Dynamically instanciates all Classes that inherit from type T. But ignores classes that are annotated with {@see IgnoreCommand}
      */
     public void loadClasses() {
         Reflections reflections = new Reflections(this.getClass().getPackageName());
 
         Set<Class<? extends T>> cmds = reflections.getSubTypesOf(token).stream()
-                .filter(x -> !x.isAnnotationPresent(IgnoreCommand.class))
-                .collect(Collectors.toSet());
+                .filter(x -> !x.isAnnotationPresent(IgnoreCommand.class)).collect(Collectors.toSet());
 
         List<T> instances = new ArrayList<>();
 
         for (var cmd : cmds) {
             try {
                 T instance = inject(cmd);
-                if(instance != null){
+                if (instance != null) {
                     instances.add(instance);
                 } else {
                     System.err.println("No suitable constructor found for " + cmd.getName());
@@ -80,9 +79,12 @@ public class CommandLoader<T> {
 
     /**
      * Innstances the class cl with dependencies injected.
+     * 
      * @param cl A reflective Class that needs to be instanced.
-     * @return A concrete object derived from cl. Or null if no suitable constructor was found.
-     * @throws Exception gets thrown if something goes wrong with reflective operations.
+     * @return A concrete object derived from cl. Or null if no suitable constructor
+     *         was found.
+     * @throws Exception gets thrown if something goes wrong with reflective
+     *                   operations.
      */
     private T inject(Class<? extends T> cl) throws Exception {
         Constructor<? extends T> ctor = findFittingConstructor(cl);
@@ -104,9 +106,11 @@ public class CommandLoader<T> {
     }
 
     /**
-     * Finds the ctor with the most args that fits the Dependency Injection criteria.
-     * The constructor needs to be empty or have any combination of the following parametertypes:
-     * {{@see MongoDatabase}, {@see Properties}, {@see EventWaiter}}.
+     * Finds the ctor with the most args that fits the Dependency Injection
+     * criteria. The constructor needs to be empty or have any combination of the
+     * following parametertypes: {{@see MongoDatabase}, {@see Properties},
+     * {@see EventWaiter}}.
+     * 
      * @param cl The class that has constructors.
      * @return The best fitting constructor.
      */
