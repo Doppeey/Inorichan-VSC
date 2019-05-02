@@ -47,7 +47,7 @@ public class CommandLoader<T> {
     }
 
     /**
-     * Dynamically loads all Classes that are
+     * Dynamically loads all Classes that inherit from type T.
      */
     public void loadClasses() {
         Reflections reflections = new Reflections(this.getClass().getPackageName());
@@ -60,7 +60,12 @@ public class CommandLoader<T> {
 
         for (var cmd : cmds) {
             try {
-                instances.add(inject(cmd));
+                T instance = inject(cmd);
+                if(instance != null){
+                    instances.add(instance);
+                } else {
+                    System.err.println("No suitable constructor found for " + cmd.getName());
+                }
             } catch (InvocationTargetException e) {
                 e.getCause().printStackTrace();
             } catch (Exception e) {
@@ -73,6 +78,12 @@ public class CommandLoader<T> {
         setLoadedClasses(instances);
     }
 
+    /**
+     * Innstances the class cl with dependencies injected.
+     * @param cl A reflective Class that needs to be instanced.
+     * @return A concrete object derived from cl. Or null if no suitable constructor was found.
+     * @throws Exception gets thrown if something goes wrong with reflective operations.
+     */
     private T inject(Class<? extends T> cl) throws Exception {
         Constructor<? extends T> ctor = findFittingConstructor(cl);
 
@@ -92,6 +103,13 @@ public class CommandLoader<T> {
         return (T) ctor.newInstance(parameters);
     }
 
+    /**
+     * Finds the ctor with the most args that fits the Dependency Injection criteria.
+     * The constructor needs to be empty or have any combination of the following parametertypes:
+     * {{@see MongoDatabase}, {@see Properties}, {@see EventWaiter}}.
+     * @param cl The class that has constructors.
+     * @return The best fitting constructor.
+     */
     private Constructor<? extends T> findFittingConstructor(Class<? extends T> cl) {
         final Set<Class<?>> acceptableParams = new HashSet<>();
         acceptableParams.add(MongoDatabase.class);
