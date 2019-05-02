@@ -16,10 +16,10 @@ import com.mongodb.client.MongoDatabase;
 import org.reflections.Reflections;
 
 /**
- * Autodetects commands that implement a generic type T.
- * Can be used to dynaically load up all commands without explicitly instantiating them. 
- * Injects needed dependencies into the instances individually.
- * T = The superclass whose childclasses should be loaded.
+ * Autodetects commands that implement a generic type T. Can be used to
+ * dynaically load up all commands without explicitly instantiating them.
+ * Injects needed dependencies into the instances individually. T = The
+ * superclass whose childclasses should be loaded.
  */
 public class CommandLoader<T> {
 
@@ -30,9 +30,12 @@ public class CommandLoader<T> {
     private EventWaiter waiter;
 
     /**
-     * Ctor that takes in the surounding dependencies and a token that represents the loaded class.
-     * @param token A reflection Class that represents the class that will be loaded.
-     * @param db A connection to a MongoDB.
+     * Ctor that takes in the surounding dependencies and a token that represents
+     * the loaded class.
+     * 
+     * @param token  A reflection Class that represents the class that will be
+     *               loaded.
+     * @param db     A connection to a MongoDB.
      * @param config The read in properties from some cfg file.
      * @param waiter A waiter that is needed by some commands.
      */
@@ -44,7 +47,7 @@ public class CommandLoader<T> {
     }
 
     /**
-     * Dynamically loads all Classes that are 
+     * Dynamically loads all Classes that are
      */
     public void loadClasses() {
         Reflections reflections = new Reflections(this.getClass().getPackageName());
@@ -56,38 +59,25 @@ public class CommandLoader<T> {
         List<T> instances = new ArrayList<>();
 
         for (var cmd : cmds) {
-            List<Constructor<?>> ctors = Arrays.asList(cmd.getConstructors());
-            for (var ctor : ctors) {
-                if (hasAcceptableParams(ctor)) {
-                    try {
-                        instances.add(inject(ctor));
-                    } catch (InvocationTargetException e) {
-                        e.getCause().printStackTrace();
-                    } catch (Exception e) {
-                        // TODO: Log
-                        System.err.println(e.getMessage());
-                        e.printStackTrace();
-                        System.err.println("Could not load " + cmd.getName());
-                    }
-                } else {
-                    System.err.println("No suitable constructor for " + cmd.getName());
-                }
+            try {
+                instances.add(inject(cmd));
+            } catch (InvocationTargetException e) {
+                e.getCause().printStackTrace();
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+                System.err.println("Could not load " + cmd.getName());
             }
         }
 
         setLoadedClasses(instances);
     }
-    /**
-     * Takes in a reflective constructor and instances it with dependencies.
-     * The dependencies are determined at runtime based on the parameter order and type of the constructor.
-     * @param ctor The constructer that will be used to generate an object.
-     * @return An actual instance derived from the given ctor.
-     * @throws Exception Multiple exceptions can be thrown if something goes wrong while invoking.
-     */
-    private T inject(Constructor<?> ctor) throws Exception {
+
+    private T inject(Class<? extends T> cl) throws Exception {
+        Constructor<? extends T> ctor = findFittingConstructor(cl);
+
         Class<?>[] paramTypes = ctor.getParameterTypes();
         Object[] parameters = new Object[paramTypes.length];
-
         for (int i = 0; i < paramTypes.length; i++) {
             Class<?> type = paramTypes[i];
             if (type.equals(db.getClass())) {
@@ -102,20 +92,30 @@ public class CommandLoader<T> {
         return (T) ctor.newInstance(parameters);
     }
 
-    /**
-     * Determines if a constructor is suited for dependency injection defined in this class.
-     * An acceptable constructor can only be a default constructor or a constructor that thakes 
-     * any combination of the types {@see MongoDatabase}, {@see Properties}, {@see EventWaiter} in any order or count.
-     * @param ctor The to be tested constructor.
-     * @return True if the above condition is true, false if otherwise.
-     */
-    private boolean hasAcceptableParams(Constructor<?> ctor) {
+    private Constructor<? extends T> findFittingConstructor(Class<? extends T> cl) {
         final Set<Class<?>> acceptableParams = new HashSet<>();
         acceptableParams.add(MongoDatabase.class);
         acceptableParams.add(Properties.class);
         acceptableParams.add(EventWaiter.class);
 
-        return acceptableParams.containsAll(Arrays.asList(ctor.getParameterTypes()));
+        List<Constructor<?>> ctors = Arrays.asList(cl.getConstructors());
+        ctors.sort((x, y) -> x.getParameterCount() - y.getParameterCount());
+
+        Constructor<? extends T> fitting = null;
+
+        for (var ctor : ctors) {
+            Class<?>[] params = ctor.getParameterTypes();
+            if (acceptableParams.containsAll(Arrays.asList(ctor.getParameterTypes()))) {
+                try {
+                    return cl.getConstructor(params);
+                } catch (NoSuchMethodException e) {
+                } catch (SecurityException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return fitting;
     }
 
     /**
