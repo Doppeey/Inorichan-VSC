@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import com.jagrosh.jdautilities.command.Command;
 
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import org.reflections.*;
@@ -33,12 +32,15 @@ public class CommandLoader {
         setWaiter(waiter);
     }
 
+    /**
+     * loads all classes via reflection and instanciates them once. Injects needed dependencies in the constructor
+     */
     public void loadCommands() {
         Reflections reflections = new Reflections(this.getClass().getPackageName());
 
         Set<Class<? extends Command>> cmds = reflections.getSubTypesOf(Command.class);
         cmds = cmds.stream()
-            .filter(x -> x.getAnnotation(IgnoreCommand.class) == null)
+            .filter(x -> !x.isAnnotationPresent(IgnoreCommand.class))
             .collect(Collectors.toSet());
 
         List<Command> instances = new ArrayList<>();
@@ -70,9 +72,9 @@ public class CommandLoader {
 
         Set<Class<? extends ListenerAdapter>> cmds = reflections.getSubTypesOf(ListenerAdapter.class);
         cmds = cmds.stream()
-            .filter(x -> x.getAnnotation(IgnoreCommand.class) == null)
+            .filter(x -> !x.isAnnotationPresent(IgnoreCommand.class))
             .collect(Collectors.toSet());
-            
+
         List<ListenerAdapter> instances = new ArrayList<>();
 
         for (var cmd : cmds) {
