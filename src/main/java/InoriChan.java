@@ -14,6 +14,7 @@ import EventsAndCommands.ModerationCommands.ReportCommand;
 import EventsAndCommands.ModerationCommands.SpamlordCommand;
 import EventsAndCommands.ModerationCommands.WhoIsCommand;
 import EventsAndCommands.UtilityEvents.ReportByPmEvent;
+import EventsAndCommands.UtilityEvents.SafetyFeature;
 import EventsAndCommands.TestCommandsAndEvents.VCJoinByID;
 import EventsAndCommands.UtilityCommands.*;
 import EventsAndCommands.UtilityEvents.BotCatchingEvent;
@@ -140,6 +141,7 @@ class InoriChan extends ListenerAdapter {
         jda.addEventListener(new imgToAsciiEvent());
         jda.addEventListener(new LemonSqueezyEvent());
         jda.addEventListener(new GoodBotEvent());
+        jda.addEventListener(new SafetyFeature());
         jda.addEventListener(new AiTalkEvent(config));
         jda.addEventListener(new VoiceChannelJoinNotifyEvent());
         jda.addEventListener(new OofiesAndLmaosEvent(database));
