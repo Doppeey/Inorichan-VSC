@@ -18,8 +18,10 @@ public class SafetyFeature extends ListenerAdapter {
 
             event.getChannel().getMessageById(event.getMessageId()).queue(success -> {
 
+                
                 if (success.getContentRaw().toLowerCase().contains(roleById.getName().toLowerCase())) {
-                    if (event.getReactionEmote().getId().equals("573862296846336001")) {
+                    if (event.getReactionEmote().getId().equals("312735215829385216")) {
+
                         success.delete().queue();
                     }
                 }

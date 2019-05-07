@@ -27,7 +27,7 @@ public class DeletThisCommand extends Command {
 
 
         try {
-            String fileName = "delet/"+ (new Random().nextInt(20)+1)+".jpg";
+            String fileName = "delet/"+ (new Random().nextInt(21)+1)+".jpg";
 
            file = new File(fileName);
 

@@ -31,7 +31,6 @@ public class SpamlordCommand extends Command {
         final TextChannel spamChannel = gc.getGuild().getTextChannelsByName("spam", true).get(0);
         final Role spamlord = commandEvent.getGuild().getRolesByName("spamlord", true).get(0);
 
-        if(commandEvent.getMessage().getMentionedMembers().isEmpty
         final Member spammer = commandEvent.getMessage().getMentionedMembers().get(0);
 
         // IF NO ARGUMENTS ARE GIVEN
