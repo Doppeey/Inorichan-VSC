@@ -3,25 +3,23 @@ package EventsAndCommands.FunEvents;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class UserFilteringAdapter extends ListenerAdapter {
 
-    private HashMap<String, Boolean> userIDs;
-    private HashSet<String> bannedWords;
+    private Map<String, Boolean> userIDs;
+    private Set<String> bannedWords;
 
-    private final String FILTER_ON = ">spamfilter on";
-    private final String FILTER_OFF = ">spamfilter off";
+    private final static String FILTER_ON = ">spamfilter on";
+    private final static String FILTER_OFF = ">spamfilter off";
 
-    private final String FILTER_MESSAGE = "Anti spam measures are now: ";
+    private final static String FILTER_MESSAGE = "Anti spam measures are now: ";
 
     private boolean filterIsOn = false;
 
     public UserFilteringAdapter() {
-        userIDs = new HashMap<>();
-        bannedWords = new HashSet<>();
+        userIDs = new HashMap();
+        bannedWords = new HashSet();
 
         userIDs.put("431542303346262039", false); //scholfz
         userIDs.put("301485597925703683", false); //Ayresia
