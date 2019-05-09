@@ -1,5 +1,6 @@
 package EventsAndCommands.GuildMessageEventCommands;
 
+import EventsAndCommands.Command;
 import EventsAndCommands.CommandDispatcher;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
@@ -10,13 +11,10 @@ public class GuildMessageEventCommandDispatcher extends CommandDispatcher<GuildM
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        String rawContent = event.getMessage().getContentRaw();
-        getRegisteredCommands().forEach((k, v) ->{
-            if(rawContent.startsWith(k)){
-                v.executeCommand(event);
-                return;
-            }
-        });
+        String command = event.getMessage().getContentRaw().split(Command.getCommandInfix())[0];
+        if(!command.isEmpty() && getRegisteredCommands().containsKey(command)){
+            getRegisteredCommands().get(command).executeCommand(event);
+        }
     }
 
 }

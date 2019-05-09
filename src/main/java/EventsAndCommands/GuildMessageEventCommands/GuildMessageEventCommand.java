@@ -14,6 +14,8 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
  * if you want there to be a space after the command, you can set " " as an Infix. The command returned by {@link #getFullCommand()}
  * would then be ">spamfilter ".
  *
+ * The standard Prefix is {@value COMMAND_PREFIX} and the standard Infix is {@value COMMAND_INFIX}
+ *
  * After an Event has been recognized to be destined for this Command, it will first call {@link #executeCommand(GuildMessageReceivedEvent)}
  * where the Channel and user is checked. Afzerwards, it calls the function {@link #parseCommand(String, GuildMessageReceivedEvent)}
  * with the raw Message <b>without</b> the command <b>and</b> the event itself.
@@ -26,9 +28,6 @@ public abstract class GuildMessageEventCommand extends Command<GuildMessageRecei
     private final String commandDescription;
     private final String roleNeeded;
     private final String requiredChannel;
-
-    private static String COMMAND_PREFIX = "";
-    private static String COMMAND_INFIX = " ";
 
     /**
      * Setup the command
@@ -96,14 +95,6 @@ public abstract class GuildMessageEventCommand extends Command<GuildMessageRecei
      */
     public String getCommand(){
         return command;
-    }
-
-    public static void setCommandPrefix(String commandPrefix){
-        COMMAND_PREFIX = commandPrefix;
-    }
-
-    public static void setCommandInfix(String commandInfix){
-        COMMAND_INFIX = commandInfix;
     }
 
 }

@@ -12,9 +12,27 @@ import net.dv8tion.jda.core.events.Event;
  * @param <T> has to extend {@link Event}
  */
 public abstract class Command<T extends Event>{
+    private static String COMMAND_PREFIX = "";
+    private static String COMMAND_INFIX = " ";
 
     public abstract void executeCommand(T event);
 
     public abstract String getFullCommand();
+
+    public static void setCommandPrefix(String commandPrefix){
+        COMMAND_PREFIX = commandPrefix;
+    }
+
+    public static void setCommandInfix(String commandInfix){
+        COMMAND_INFIX = commandInfix;
+    }
+
+    public static String getCommandPrefix(){
+        return COMMAND_PREFIX;
+    }
+
+    public static String getCommandInfix(){
+        return COMMAND_INFIX;
+    }
 
 }
