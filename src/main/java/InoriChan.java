@@ -81,7 +81,10 @@ class InoriChan extends ListenerAdapter {
          * This is an example implementation of {@link EventsAndCommands.CommandDispatcher}
          */
         GuildMessageEventCommandDispatcher commandDispatcher = new GuildMessageEventCommandDispatcher();
-        commandDispatcher.addCommand(new ExampleGuildMessageEventCommand());
+        ExampleGuildMessageEventCommand exampleCommand = new ExampleGuildMessageEventCommand();
+        exampleCommand.setCommandPrefix(">");
+        exampleCommand.setCommandInfix(" ");
+        commandDispatcher.addCommand(exampleCommand);
         jda.addEventListener(commandDispatcher);
         /**
          * Example finished
