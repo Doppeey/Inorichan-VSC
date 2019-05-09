@@ -8,6 +8,8 @@ import EventsAndCommands.FunEvents.*;
 import EventsAndCommands.GameCommands.HangmanCommand;
 import EventsAndCommands.GameCommands.HighOrLowCommand;
 import EventsAndCommands.GameCommands.RockPaperScissorsCommand;
+import EventsAndCommands.GuildMessageEventCommands.ExampleGuildMessageEventCommand;
+import EventsAndCommands.GuildMessageEventCommands.GuildMessageEventCommandDispatcher;
 import EventsAndCommands.Hiddencommands.SummonCommand;
 import EventsAndCommands.ModerationCommands.PurgeCommand;
 import EventsAndCommands.ModerationCommands.ReportCommand;
@@ -74,6 +76,16 @@ class InoriChan extends ListenerAdapter {
         InoriChan.setEmojis("\uD83D\uDE03", "\uD83D\uDE2E", "\uD83D\uDE26");
         InoriChan.setPrefix(config.getProperty("PREFIX")); // prefix for testbot < , prefix for InoriChan >
         InoriChan.addCommand(new AboutCommand("\nInformation about the bot: \n", desc, perms));
+
+        /**
+         * This is an example implementation of {@link EventsAndCommands.CommandDispatcher}
+         */
+        GuildMessageEventCommandDispatcher commandDispatcher = new GuildMessageEventCommandDispatcher();
+        commandDispatcher.addCommand(new ExampleGuildMessageEventCommand());
+        jda.addEventListener(commandDispatcher);
+        /**
+         * Example finished
+         */
 
 
         // TESTING
@@ -145,10 +157,11 @@ class InoriChan extends ListenerAdapter {
         jda.addEventListener(new AiTalkEvent(config));
         jda.addEventListener(new VoiceChannelJoinNotifyEvent());
         jda.addEventListener(new OofiesAndLmaosEvent(database));
-        jda.addEventListener(new AntiScholzEvent());
+        jda.addEventListener(new UserFilteringAdapter());
         jda.addEventListener(new HelpMessageCountingEvent(database));
         jda.addEventListener(new PollReactionListener(database));
         jda.addEventListener(new UnspoilEvent(waiter));
+
 
     }
 
