@@ -33,6 +33,13 @@ public abstract class Command<T extends Event>{
     public abstract void executeCommand(T event);
 
     /**
+     * Use this to parse the command and do your desired actions.
+     * @param message the raw message <b>without</b> the <b>full</b> command. See {@link #getFullCommand()} for it.
+     * @param event the event itself
+     */
+    protected abstract void parseCommand(String message, T event);
+
+    /**
      * Returns the full Command. The composition of it is:
      * <b></b>COMMAND_PREFIX + command + COMMAND_INFIX</b>
      * @return

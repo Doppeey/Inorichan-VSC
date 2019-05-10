@@ -11,22 +11,19 @@ public class GuildMessageEventCommandDispatcher extends CommandDispatcher<GuildM
 
     /**
      * This function checks to see if an existing command matches to the keyword.
+     *
      * @param event
      */
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
-        //Todo Create a check to maybe call different functions if the command has no infix/parameters.
-        //Example: ">help" and ">help roles"
-
-        String command = event.getMessage().getContentRaw().split(Command.getCommandInfix())[0];
-        if(!command.isEmpty() && getRegisteredCommands().containsKey(command)){
-            getRegisteredCommands().get(command).executeCommand(event);
+        String contentRaw = event.getMessage().getContentRaw();
+        if (contentRaw.split(Command.getCommandInfix()).length != 0) {
+            getRegisteredCommands().get(contentRaw.split(Command.getCommandInfix())[0]).executeCommand(event);
+        } else if (getRegisteredCommands().containsKey(contentRaw)) {
+            getRegisteredCommands().get(contentRaw).executeCommand(event);
         }
-    }
 
-    private String addInfixToCommand(String command){
-        return command + Command.getCommandInfix();
     }
 
 }

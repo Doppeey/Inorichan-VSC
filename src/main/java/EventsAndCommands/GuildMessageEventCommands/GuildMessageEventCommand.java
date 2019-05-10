@@ -41,18 +41,22 @@ public abstract class GuildMessageEventCommand extends Command<GuildMessageRecei
         this.requiredChannel = requiredChannel;
     }
 
+    /**
+     * This function removes the command that is inside of the message. If you are expecting a no args argument,
+     * you can use {@link String#isEmpty()} to check that only the command was written.
+     *
+     * If you want to check yourself (should never be needed) you can use the given event which contains all information.
+     * @param event
+     */
     @Override
     public void executeCommand(GuildMessageReceivedEvent event){
         if(checkIfChannelIsCorrect(event) && checkIfRoleIsCorrect(event)){
-            parseCommand(event.getMessage().getContentRaw().replace(getFullCommand(), ""), event);
+            String partToRemove = event.getMessage().getContentRaw().contains(getFullCommand()) ? getFullCommand() : getCommandWithoutInfix();
+            parseCommand(event.getMessage().getContentRaw().replace(partToRemove, ""), event);
         }
     }
 
-    /**
-     * Use this to parse the command and do your desired actions.
-     * @param message the raw message <b>without</b> the <b>full</b> command. See {@link #getFullCommand()} for it.
-     * @param event the event itself
-     */
+    @Override
     protected abstract void parseCommand(String message, GuildMessageReceivedEvent event);
 
     private boolean checkIfChannelIsCorrect(GuildMessageReceivedEvent event){

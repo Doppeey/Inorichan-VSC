@@ -55,7 +55,7 @@ public abstract class CommandDispatcher<T extends Command> extends ListenerAdapt
     }
 
     public void addCommands(T ...commandsToAdd){
-        Arrays.stream(commandsToAdd).forEach(e -> registeredCommands.put(e.getFullCommand(), e));
+        Arrays.stream(commandsToAdd).forEach(e -> registeredCommands.put(e.getCommandWithoutInfix(), e));
     }
 
     public void removeCommand(T commandToRemove){
