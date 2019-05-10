@@ -1,6 +1,5 @@
 package EventsAndCommands;
 
-import jdk.jfr.Event;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -56,9 +55,7 @@ public abstract class CommandDispatcher<T extends Command> extends ListenerAdapt
     }
 
     public void addCommands(T ...commandsToAdd){
-        Arrays.stream(commandsToAdd).forEach(e -> {
-            registeredCommands.put(e.getFullCommand(), e);
-        });
+        Arrays.stream(commandsToAdd).forEach(e -> registeredCommands.put(e.getFullCommand(), e));
     }
 
     public void removeCommand(T commandToRemove){

@@ -9,15 +9,58 @@ import net.dv8tion.jda.core.events.Event;
  * The function {@link #executeCommand(Event)} is used for the Dispatcher - its the entry point for any event.
  * The functionality and build of the dispatcher requires {@link #getFullCommand()} to check if a command was called.
  *
+ * The setup of the command itself follows trough its name, for example "spamfilter".
+ * You can then use the function {@link #setCommandPrefix(String)} to set the Prefix, for example ">".
+ * Using the function {@link #setCommandInfix(String)} you can set what is expected after the command. For example,
+ * if you want there to be a space after the command, you can set " " as an Infix. The command returned by {@link #getFullCommand()}
+ * would then be ">spamfilter ".
+ *
+ * The standard Prefix is {@value COMMAND_PREFIX} and the standard Infix is {@value COMMAND_INFIX}
+ *
  * @param <T> has to extend {@link Event}
  */
 public abstract class Command<T extends Event>{
     private static String COMMAND_PREFIX = "";
     private static String COMMAND_INFIX = " ";
+    private final String command;
+    private final String commandDescription;
+
+    public Command(String command, String commandDescription){
+        this.command = command;
+        this.commandDescription = commandDescription;
+    }
 
     public abstract void executeCommand(T event);
 
-    public abstract String getFullCommand();
+    /**
+     * Returns the full Command. The composition of it is:
+     * <b></b>COMMAND_PREFIX + command + COMMAND_INFIX</b>
+     * @return
+     */
+    public String getFullCommand(){
+        return COMMAND_PREFIX + command + COMMAND_INFIX;
+    }
+
+    /**
+     * Returns the partial Command. This can be used to check for commands that require no parameters, for
+     * example ">help"
+     * @return
+     */
+    public String getCommandWithoutInfix(){
+        return COMMAND_PREFIX + command;
+    }
+    /**
+     * Contrary to {@link #getFullCommand()}, this returns only the name of the command.
+     * Example: FullCommand is ">spamfilter ", {@link #getCommand()} return "spamfilter"
+     * @return
+     */
+    public String getCommand(){
+        return command;
+    }
+
+    public String getCommandDescription(){
+        return commandDescription;
+    }
 
     public static void setCommandPrefix(String commandPrefix){
         COMMAND_PREFIX = commandPrefix;
@@ -34,5 +77,7 @@ public abstract class Command<T extends Event>{
     public static String getCommandInfix(){
         return COMMAND_INFIX;
     }
+
+
 
 }

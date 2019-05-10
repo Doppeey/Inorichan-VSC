@@ -1,3 +1,4 @@
+import EventsAndCommands.Command;
 import EventsAndCommands.EventUtility.AboutCommand;
 import EventsAndCommands.FunCommands.*;
 import EventsAndCommands.FunCommands.DeAndEncryptor.DecryptCommand;
@@ -48,12 +49,12 @@ class InoriChan extends ListenerAdapter {
 
 
     public static void main(String[] args) throws Exception {
-        
+
         // Loading config file
         final String configFileName = "tjbot.config";
         Properties config = loadConfig(configFileName);
         System.out.println(configFileName.substring(0, configFileName.length() - 7) + " config loaded.");
-      
+
 
 
         // DATABASE
@@ -82,8 +83,14 @@ class InoriChan extends ListenerAdapter {
          */
         GuildMessageEventCommandDispatcher commandDispatcher = new GuildMessageEventCommandDispatcher();
         ExampleGuildMessageEventCommand exampleCommand = new ExampleGuildMessageEventCommand();
-        exampleCommand.setCommandPrefix(">");
-        exampleCommand.setCommandInfix(" ");
+
+        /**
+         * You can use {@link EventsAndCommands.Command#setCommandInfix(String)} and
+         * {@link EventsAndCommands.Command#setCommandPrefix(String)} to setup the commands
+         */
+        Command.setCommandPrefix(">");
+        Command.setCommandInfix(" ");
+
         commandDispatcher.addCommand(exampleCommand);
         jda.addEventListener(commandDispatcher);
         /**

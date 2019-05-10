@@ -8,14 +8,6 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
  * This class inherits from {@link Command} and sets the type to {@link GuildMessageReceivedEvent}.
  * It offers the user the ability to add a required Role and/or a required channel for the command to trigger.
  *
- * The setup of the command itself follows trough its name, for example "spamfilter".
- * You can then use the function {@link #setCommandPrefix(String)} to set the Prefix, for example ">".
- * Using the function {@link #setCommandInfix(String)} you can set what is expected after the command. For example,
- * if you want there to be a space after the command, you can set " " as an Infix. The command returned by {@link #getFullCommand()}
- * would then be ">spamfilter ".
- *
- * The standard Prefix is {@value COMMAND_PREFIX} and the standard Infix is {@value COMMAND_INFIX}
- *
  * After an Event has been recognized to be destined for this Command, it will first call {@link #executeCommand(GuildMessageReceivedEvent)}
  * where the Channel and user is checked. Afzerwards, it calls the function {@link #parseCommand(String, GuildMessageReceivedEvent)}
  * with the raw Message <b>without</b> the command <b>and</b> the event itself.
@@ -24,8 +16,6 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
  */
 public abstract class GuildMessageEventCommand extends Command<GuildMessageReceivedEvent> {
 
-    private final String command;
-    private final String commandDescription;
     private final String roleNeeded;
     private final String requiredChannel;
 
@@ -46,8 +36,7 @@ public abstract class GuildMessageEventCommand extends Command<GuildMessageRecei
      * @param requiredChannel the channel required. You can leave this as "" if you want no channel to be required
      */
     public GuildMessageEventCommand(String command, String commandDescription, String roleNeeded, String requiredChannel){
-        this.command = command;
-        this.commandDescription = commandDescription;
+        super(command, commandDescription);
         this.roleNeeded = roleNeeded;
         this.requiredChannel = requiredChannel;
     }
@@ -72,29 +61,6 @@ public abstract class GuildMessageEventCommand extends Command<GuildMessageRecei
 
     private boolean checkIfRoleIsCorrect(GuildMessageReceivedEvent event){
         return roleNeeded.isEmpty() || !event.getGuild().getRolesByName(roleNeeded, true).isEmpty();
-    }
-
-    /**
-     * Returns the full Command. The composition of it is:
-     * <b></b>COMMAND_PREFIX + command + COMMAND_INFIX</b>
-     * @return
-     */
-    @Override
-    public String getFullCommand(){
-        return COMMAND_PREFIX + command + COMMAND_INFIX;
-    }
-
-    public String getCommandDescription(){
-        return commandDescription;
-    }
-
-    /**
-     * Contrary to {@link #getFullCommand()}, this returns only the name of the command.
-     * Example: FullCommand is ">spamfilter ", {@link #getCommand()} return "spamfilter"
-     * @return
-     */
-    public String getCommand(){
-        return command;
     }
 
 }
