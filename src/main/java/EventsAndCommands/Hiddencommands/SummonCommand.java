@@ -20,6 +20,8 @@ public class SummonCommand extends Command implements Hiddencommand {
     @Override
     protected void execute(CommandEvent commandEvent) {
 
+
+
         System.out.println("Summon command fired");
 
 
@@ -31,9 +33,13 @@ public class SummonCommand extends Command implements Hiddencommand {
             final String summonerName = summoningMember.getEffectiveName();
             final String serverName = commandEvent.getGuild().getName();
 
+        
+
             try {
                 summonedUser = commandEvent.getMessage().getMentionedUsers().get(0);
                 summonedMember = commandEvent.getMessage().getMentionedMembers().get(0);
+
+                
             } catch (Exception e) {
                 commandEvent.reply("User not found, mention them");
                 return;

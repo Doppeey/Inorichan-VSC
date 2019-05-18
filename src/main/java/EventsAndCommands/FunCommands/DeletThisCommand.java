@@ -17,6 +17,8 @@ public class DeletThisCommand extends Command {
 
     private File file;
 
+    
+
     @Override
     protected void execute(CommandEvent commandEvent) {
 

@@ -45,7 +45,7 @@ public class AiTalkEvent extends ListenerAdapter {
             if (mentionedMembers.get(0).getUser() == event.getJDA().getSelfUser()) {
 
                 //Check if it has been at least 5 seconds since the last call
-                if (!hasCooldown()) {
+                if (!hasCooldown() || event.getAuthor().getId().equals("332989789936549889")) {
 
 
 

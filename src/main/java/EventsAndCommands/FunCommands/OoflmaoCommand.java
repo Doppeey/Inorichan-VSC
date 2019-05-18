@@ -5,27 +5,24 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import org.bson.Document;
 
+import java.awt.*;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-
-import java.awt.Color;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class OoflmaoCommand extends Command {
 
     /*
      * This command will retrieve a random message from the Oofs and lmaos channel
      * by a specified user, or if no user is specified, then from a random user
-     * 
-     * 
+     *
+     *
      * THIS COMMAND IS ON HOLD, NEED TO DO IT WITH THE DB INSTEAD
      */
 
@@ -55,31 +52,31 @@ public class OoflmaoCommand extends Command {
         commandEvent.getGuild().getTextChannelById(randomDocument.getString("channel"))
                 .getMessageById(randomDocument.getString("id")).queue(message -> {
 
-                    final OffsetDateTime creationTime = message.getCreationTime();
-                    final Member member = message.getMember();
+            final OffsetDateTime creationTime = message.getCreationTime();
+            final Member member = message.getMember();
 
-                    EmbedBuilder embed = new EmbedBuilder();
+            EmbedBuilder embed = new EmbedBuilder();
 
-                    embed.setDescription(
-                            message.getContentRaw() + "\n \n [[Jump to message]](" + message.getJumpUrl() + ")  ");
-                    embed.appendDescription(
-                            "Creation time:  " + creationTime.toLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE)
-                                   );
-                    embed.setColor(Color.BLUE);
+            embed.setDescription(
+                    message.getContentRaw() + "\n \n [[Jump to message]](" + message.getJumpUrl() + ")  ");
+            embed.appendDescription(
+                    "Creation time:  " + creationTime.toLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE)
+            );
+            embed.setColor(Color.BLUE);
 
-                    try {
-                        boolean hasImage = message.getAttachments().get(0).isImage();
-                        if (hasImage) {
-                            embed.setImage(message.getAttachments().get(0).getUrl());
-                        }
-                    } catch (Exception e) {
-                        // Nothing, is not a picture
-                    }
-                    embed.setAuthor(member.getEffectiveName(), null, message.getAuthor().getEffectiveAvatarUrl());
+            try {
+                boolean hasImage = message.getAttachments().get(0).isImage();
+                if (hasImage) {
+                    embed.setImage(message.getAttachments().get(0).getUrl());
+                }
+            } catch (Exception e) {
+                // Nothing, is not a picture
+            }
+            embed.setAuthor(member.getEffectiveName(), null, message.getAuthor().getEffectiveAvatarUrl());
 
-                    commandEvent.reply(embed.build());
+            commandEvent.reply(embed.build());
 
-                });
+        });
     }
 
 }

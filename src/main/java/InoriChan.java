@@ -107,6 +107,7 @@ class InoriChan extends ListenerAdapter {
         InoriChan.addCommand(new HangmanCommand(waiter));
         InoriChan.addCommand(new HighOrLowCommand(waiter));
         // UTILITY COMMANDS
+        InoriChan.addCommand(new BigCommand());
         InoriChan.addCommand(new unsplashCommand(config,waiter));
         InoriChan.addCommand(new TranslateCommand());
         InoriChan.addCommand(new DefinitionCommand());
