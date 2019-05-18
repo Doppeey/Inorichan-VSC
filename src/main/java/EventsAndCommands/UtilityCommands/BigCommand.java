@@ -1,5 +1,6 @@
 package EventsAndCommands.UtilityCommands;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -11,6 +12,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 
 import EventsAndCommands.Categories;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -35,37 +37,38 @@ public class BigCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
 
-        event.getGuild().getWebhooks().queue(hooks -> {
+        if(event.getArgs().isEmpty()){
+            event.reply("Usage: >big + emoji");
+            return;
+        }
 
-            Optional<Webhook> webhook = hooks.stream().filter(hook -> hook.getName().equals("bigEmote")).findFirst();
 
-            if (webhook.isPresent()) {
+        event.getTextChannel().getWebhooks().queue(hooks -> {
 
-                WebhookClientBuilder builder = webhook.get().newClient();
-                WebhookClient client = builder.build(); 
-                WebhookMessageBuilder messageBuilder = new WebhookMessageBuilder();
-
+            if (hooks.size() > 0) {
 
                 Message message = event.getMessage();
                 List<Emote> emotes = message.getEmotes();
 
-                Optional<Emote> emote = Optional.ofNullable(emotes.get(0));
+                Webhook webhook = hooks.get(0);
+                WebhookClientBuilder builder = webhook.newClient();
+                WebhookClient client = builder.build();
+                WebhookMessageBuilder messageBuilder = new WebhookMessageBuilder();
 
                 if (!emotes.isEmpty()) {
                     MessageChannel channel = event.getChannel();
 
                     try {
-                        String imageUrl = emotes.get(0).getImageUrl();
 
+                        String imageUrl = emotes.get(0).getImageUrl();
                         InputStream is = new URL(imageUrl).openStream();
 
-                        if(imageUrl.contains("gif")){
-                            messageBuilder.addFile("bigemoji.gif",is);
+                        if (imageUrl.contains("gif")) {
+                            messageBuilder.addFile("bigemoji.gif", is);
                         } else {
                             messageBuilder.addFile("bigemoji.jpg", is);
                         }
 
-                        
                         messageBuilder.setAvatarUrl(event.getAuthor().getAvatarUrl());
                         messageBuilder.setUsername(event.getMember().getEffectiveName());
 
@@ -73,11 +76,7 @@ public class BigCommand extends Command {
                         client.send(webMsg);
                         client.close();
 
-
                         message.delete().queue();
-
-
-
 
                     } catch (IOException e) {
                         channel.sendMessage("Oopsie doopsie owie wowie, something went fuckie wuckie uwu")
@@ -89,7 +88,18 @@ public class BigCommand extends Command {
 
                     event.reply("no emoji found");
                 }
+            } else {
+
+                EmbedBuilder error = new EmbedBuilder();
+                error.setColor(Color.red);
+                error.setTitle("⚠️ Big Emoji || No Webhook Error!");
+                error.setDescription("This channel does not have a webhook!");
+
+                event.reply(error.build());
+
+
             }
+
         });
 
     }
