@@ -37,7 +37,7 @@ public class CatCommand extends Command {
     @Override
     protected void execute(CommandEvent commandEvent) {
 
-        System.out.println("Cat command fired");
+
         int category = 0;
         String requestedCategory = "";
 
