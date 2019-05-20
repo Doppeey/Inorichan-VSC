@@ -81,13 +81,18 @@ public class BigCommand extends Command {
                     } catch (IOException e) {
                         channel.sendMessage("Oopsie doopsie owie wowie, something went fuckie wuckie uwu")
                                 .queue(x -> x.delete().queueAfter(5, TimeUnit.SECONDS));
-
+                        client.close();
+                        return;
                     }
 
                 } else {
 
                     event.reply("no emoji found");
+                    client.close();
+                    return;
                 }
+
+                client.close();
             } else {
 
                 EmbedBuilder error = new EmbedBuilder();
@@ -99,6 +104,8 @@ public class BigCommand extends Command {
 
 
             }
+
+            
 
         });
 
