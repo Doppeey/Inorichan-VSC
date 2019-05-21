@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import me.doppeey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
 import org.json.JSONObject;
 
@@ -55,9 +56,8 @@ public class SpongebobCommand extends Command {
                     .queryString("cache-control", "no-cache")
                     .asString();
         } catch (UnirestException e) {
-            e.printStackTrace();
-
-;
+            InoriChan.LOGGER.error(e.getMessage(), e);
+            return;
         }
 
         JSONObject json = null;
@@ -74,7 +74,7 @@ public class SpongebobCommand extends Command {
             embedBuilder.setImage(str);
             embedBuilder.setColor(Color.yellow);
             commandEvent.getChannel().sendMessage(embedBuilder.build()).queue();
-        } else System.out.println("Spongeboy exception");
+        } else InoriChan.LOGGER.warn("Spongebob exception");
 
     }
 }

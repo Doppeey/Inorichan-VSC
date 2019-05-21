@@ -46,9 +46,9 @@ public class InoriChan extends ListenerAdapter {
             System.exit(-1);
         }
 
-        System.out.println(CONFIG_FILENAME.substring(0, CONFIG_FILENAME.length() - 7) + " config loaded.");
+        LOGGER.info("{} config loaded.", CONFIG_FILENAME.substring(0, CONFIG_FILENAME.length() - 7));
 
-        //DATABASE
+        //DATABASES
         MongoClientURI uri = new MongoClientURI(CONFIG.getProperty("MONGO_URI"));
         DATABASE = new MongoClient(uri).getDatabase("TogetherJava");
     }
@@ -147,7 +147,6 @@ public class InoriChan extends ListenerAdapter {
     }
 
     private static Properties loadConfig(String fileName) {
-
         // CONFIG
         Properties prop = new Properties();
         InputStream is = null;
@@ -155,13 +154,13 @@ public class InoriChan extends ListenerAdapter {
             is = new FileInputStream(fileName);
 
         } catch (FileNotFoundException ex) {
-            System.out.println("Could not find config file");
+            LOGGER.info("Could not find config file");
             return null;
         }
         try {
             prop.load(is);
         } catch (IOException ex) {
-            System.out.println("Could not load config file");
+            LOGGER.info("Could not load config file");
             return null;
         }
         //

@@ -31,7 +31,7 @@ public class FoxCommand extends Command {
             response = Unirest.get("https://randomfox.ca/floof/").asString();
         } catch (Exception e) {
 
-            e.printStackTrace();
+            InoriChan.LOGGER.error(e.getMessage(), e);
 
 
         }

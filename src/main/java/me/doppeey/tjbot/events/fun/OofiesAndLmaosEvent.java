@@ -2,6 +2,7 @@ package me.doppeey.tjbot.events.fun;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import me.doppeey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
@@ -126,7 +127,7 @@ public class OofiesAndLmaosEvent extends ListenerAdapter {
                                     oofsAndLmaosCollection.insertOne(document);
                                 });
 
-                                System.out.println("Added a message [ID: " + message.getId() + "] to the offsAndLmao channel.");
+                                InoriChan.LOGGER.info("Added a message [ID: {}] to the offsAndLmao channel.", message.getId());
                             }
 
 

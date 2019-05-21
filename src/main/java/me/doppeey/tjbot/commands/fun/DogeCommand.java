@@ -33,7 +33,7 @@ public class DogeCommand extends Command {
         try {
             response = Unirest.get("http://shibe.online/api/shibes?count=1&urls=true").asString();
         } catch (Exception e) {
-          e.printStackTrace();
+          InoriChan.LOGGER.error(e.getMessage(), e);
 
 
         }

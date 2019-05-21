@@ -13,6 +13,7 @@ package me.doppeey.tjbot.commands.fun.memes.CrabRaveMeme;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppeey.tjbot.InoriChan;
 
 import javax.imageio.*;
 import javax.imageio.metadata.IIOMetadata;
@@ -219,7 +220,7 @@ public class GifSequenceWriter extends Command {
         try {
             firstImage = ImageIO.read(new File("./crabrave/beginning.gif"));
         } catch (IOException e) {
-            System.out.println("Couldn't read beginning file for gif");
+            InoriChan.LOGGER.error("Couldn't read beginning file for gif", e);
         }
 
         // create a new BufferedOutputStream with the last argument
@@ -228,7 +229,7 @@ public class GifSequenceWriter extends Command {
         try {
             output = new FileImageOutputStream(new File("./crabrave/done.gif"));
         } catch (IOException e) {
-            e.printStackTrace();
+            InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
         }
@@ -240,7 +241,7 @@ public class GifSequenceWriter extends Command {
         try {
             writer = new GifSequenceWriter(output, firstImage.getType(), 67, true);
         } catch (IOException e) {
-            e.printStackTrace();
+            InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
         }
@@ -249,7 +250,7 @@ public class GifSequenceWriter extends Command {
         try {
             writer.writeToSequence(firstImage);
         } catch (IOException e) {
-            e.printStackTrace();
+            InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
         }
@@ -260,7 +261,7 @@ public class GifSequenceWriter extends Command {
                 try {
                     nextImage = ImageIO.read(new File("/crabrave/" + i + ".png"));
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
                 }
@@ -280,13 +281,13 @@ public class GifSequenceWriter extends Command {
                 try {
                     writer.writeToSequence(nextImage);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
                 }
-                System.out.println("Wrote " + i);
+                InoriChan.LOGGER.info("Wrote {}", i);
             } catch (Exception e) {
-                System.out.println("couldn't write to " + i);
+                InoriChan.LOGGER.error("couldn't write to {}", i, e);
             }
 
         }
@@ -294,7 +295,7 @@ public class GifSequenceWriter extends Command {
         try {
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
         }
@@ -303,7 +304,7 @@ public class GifSequenceWriter extends Command {
                 output.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
         }

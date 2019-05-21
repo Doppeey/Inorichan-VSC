@@ -27,7 +27,7 @@ public class DeletThisCommand extends Command {
             file = new File(fileName);
                         
         } catch (Exception e) {
-            e.printStackTrace();
+            InoriChan.LOGGER.error(e.getMessage(), e);
             return;
         }
 

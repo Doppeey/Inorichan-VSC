@@ -2,6 +2,7 @@ package me.doppeey.tjbot.commands.hidden;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppeey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.User;
@@ -19,10 +20,7 @@ public class SummonCommand extends Command implements Hiddencommand {
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-
-
-
-        System.out.println("Summon command fired");
+        InoriChan.LOGGER.info("Summon command fired");
 
 
         if (!Hiddencommand.isTogetherJavaServer(commandEvent.getGuild().getId())) {

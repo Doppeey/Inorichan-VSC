@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import me.doppeey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -93,7 +94,7 @@ public class CatCommand extends Command {
                     }
                 } catch (
                         UnirestException e) {
-                    System.out.println("Connection timeout at Cat command");
+                    InoriChan.LOGGER.error("Connection timeout at Cat command", e);
                     commandEvent.reply("Connection timeout, cat api does not react, try again later :(");
                     return;
 

@@ -40,7 +40,7 @@ public class PillsCommand extends Command {
                     .queryString("cache-control", "no-cache")
                     .asString();
         } catch (UnirestException e) {
-            e.printStackTrace();
+            InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
         }

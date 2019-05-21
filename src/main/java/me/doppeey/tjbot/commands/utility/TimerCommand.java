@@ -3,6 +3,7 @@ package me.doppeey.tjbot.commands.utility;
 import me.doppeey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppeey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
 
 import java.awt.*;
@@ -34,7 +35,7 @@ public class TimerCommand extends Command {
             commandEvent.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
 
         } catch (Exception e) {
-            System.out.println("Missing permission error, can't delete timer on " + commandEvent.getGuild().getName());
+            InoriChan.LOGGER.error("Missing permission error, can't delete timer on {}", commandEvent.getGuild().getName(), e);
         }
 
 
@@ -86,7 +87,7 @@ public class TimerCommand extends Command {
                         try {
                             Thread.sleep(finalTime * 1000);
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
                         }
@@ -94,19 +95,19 @@ public class TimerCommand extends Command {
                         try {
                             Thread.sleep(1000 * 60 * finalTime);
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
                         }
                     }
                 } catch (Exception e) {
-                    System.out.println("Missing permission, can't delete the timer");
+                    InoriChan.LOGGER.error("Missing permission, can't delete the timer", e);
                     commandEvent.getChannel().sendMessage("I've started a " + finalTime + finalSecondsOrMinutes + " timer and will PM you when it's done!").queue();
                     if (finalSecondsOrMinutes.equalsIgnoreCase("s")) {
                         try {
                             Thread.sleep(finalTime * 1000);
                         } catch (InterruptedException f) {
-                            e.printStackTrace();
+                            InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
                         }
@@ -114,7 +115,7 @@ public class TimerCommand extends Command {
                         try {
                             Thread.sleep(1000 * 60 * finalTime);
                         } catch (InterruptedException g) {
-                            e.printStackTrace();
+                            InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
                         }

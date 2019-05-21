@@ -35,7 +35,7 @@ public class DebugCommand extends Command {
                 try {
                     robot = new Robot();
                 } catch (AWTException e) {
-                    e.printStackTrace();
+                    InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
                 }
@@ -51,7 +51,7 @@ public class DebugCommand extends Command {
                 try {
                     ImageIO.write(screenFullImage, "jpg", new File(fileName));
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
                 }
@@ -59,7 +59,7 @@ public class DebugCommand extends Command {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
                 }

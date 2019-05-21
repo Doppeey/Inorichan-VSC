@@ -24,7 +24,7 @@ public class imgToAsciiEvent extends ListenerAdapter {
                     try {
                         image = ImageIO.read(event.getMessage().getAttachments().get(0).getInputStream());
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
                         return;
@@ -32,7 +32,7 @@ public class imgToAsciiEvent extends ListenerAdapter {
                     try {
                         event.getChannel().sendMessage("```\n" + run(image) + "\n```").queue();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
                         event.getChannel().sendMessage("Couldn't convert image").queue();

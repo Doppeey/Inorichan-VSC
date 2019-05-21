@@ -36,7 +36,7 @@ public class DogCommand extends Command {
                     .header("cache-control", "no-cache")
                     .asString();
         } catch (UnirestException e) {
-            e.printStackTrace();
+            InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
         }
@@ -122,7 +122,7 @@ public class DogCommand extends Command {
                 commandEvent.reply(embed.build());
             } catch (Exception e) {
                 commandEvent.reply("Couldn't find breed");
-                e.printStackTrace();
+                InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
 
@@ -152,7 +152,7 @@ public class DogCommand extends Command {
                     .queryString("has_breeds", "true")
                     .asString();
         } catch (UnirestException e) {
-            e.printStackTrace();
+            InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
         }

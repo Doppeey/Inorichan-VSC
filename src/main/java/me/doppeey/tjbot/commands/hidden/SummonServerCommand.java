@@ -2,6 +2,7 @@ package me.doppeey.tjbot.commands.hidden;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppeey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 
@@ -65,7 +66,7 @@ public class SummonServerCommand extends Command implements Hiddencommand {
 
 
                             } catch (Exception e) {
-                                System.out.println("Couldn't contact " + member.getEffectiveName());
+                                InoriChan.LOGGER.error("Couldn't contact {}", member.getEffectiveName(), e);
                                 howManyMembersHadPmOff++;
                             }
 

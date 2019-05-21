@@ -118,7 +118,7 @@ public class PollCommand extends Command {
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
             }

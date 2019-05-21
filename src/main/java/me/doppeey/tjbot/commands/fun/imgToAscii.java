@@ -31,7 +31,7 @@ public class imgToAscii extends Command {
         try {
             image = ImageIO.read(commandEvent.getMessage().getAttachments().get(0).getInputStream());
         } catch (Exception e) {
-            e.printStackTrace();
+            InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
             return;
@@ -39,7 +39,7 @@ public class imgToAscii extends Command {
         try {
                     commandEvent.reply("```\n"+run(image)+"\n```");
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    InoriChan.LOGGER.error(e.getMessage(), e);
 
 ;
                     commandEvent.reply("Couldn't convert image");

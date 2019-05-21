@@ -2,6 +2,7 @@ package me.doppeey.tjbot.events.fun;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
+import me.doppeey.tjbot.InoriChan;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -82,7 +83,7 @@ public class AiTalkEvent extends ListenerAdapter {
                                 .queryString("q", message)
                                 .asString();
                     } catch (Exception e) {
-                        System.out.println("Error chatbot ai");
+                        InoriChan.LOGGER.error("Error chatbot ai", e);
                         eventChannel.sendMessage("Something went wrong, you might be too fast").queue();
                         return;
                     }
