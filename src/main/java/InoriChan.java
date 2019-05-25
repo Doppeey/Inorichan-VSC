@@ -1,3 +1,4 @@
+import EventsAndCommands.Command;
 import EventsAndCommands.EventUtility.AboutCommand;
 import EventsAndCommands.FunCommands.*;
 import EventsAndCommands.FunCommands.DeAndEncryptor.DecryptCommand;
@@ -8,6 +9,8 @@ import EventsAndCommands.FunEvents.*;
 import EventsAndCommands.GameCommands.HangmanCommand;
 import EventsAndCommands.GameCommands.HighOrLowCommand;
 import EventsAndCommands.GameCommands.RockPaperScissorsCommand;
+import EventsAndCommands.GuildMessageEventCommands.ExampleGuildMessageEventCommand;
+import EventsAndCommands.GuildMessageEventCommands.GuildMessageEventCommandDispatcher;
 import EventsAndCommands.Hiddencommands.SummonCommand;
 import EventsAndCommands.ModerationCommands.PurgeCommand;
 import EventsAndCommands.ModerationCommands.ReportCommand;
@@ -46,12 +49,12 @@ class InoriChan extends ListenerAdapter {
 
 
     public static void main(String[] args) throws Exception {
-        
+
         // Loading config file
         final String configFileName = "tjbot.config";
         Properties config = loadConfig(configFileName);
         System.out.println(configFileName.substring(0, configFileName.length() - 7) + " config loaded.");
-      
+
 
 
         // DATABASE
@@ -74,6 +77,25 @@ class InoriChan extends ListenerAdapter {
         InoriChan.setEmojis("\uD83D\uDE03", "\uD83D\uDE2E", "\uD83D\uDE26");
         InoriChan.setPrefix(config.getProperty("PREFIX")); // prefix for testbot < , prefix for InoriChan >
         InoriChan.addCommand(new AboutCommand("\nInformation about the bot: \n", desc, perms));
+
+        /**
+         * This is an example implementation of {@link EventsAndCommands.CommandDispatcher}
+         */
+        GuildMessageEventCommandDispatcher commandDispatcher = new GuildMessageEventCommandDispatcher();
+        ExampleGuildMessageEventCommand exampleCommand = new ExampleGuildMessageEventCommand();
+
+        /**
+         * You can use {@link EventsAndCommands.Command#setCommandInfix(String)} and
+         * {@link EventsAndCommands.Command#setCommandPrefix(String)} to setup the commands
+         */
+        Command.setCommandPrefix(">");
+        Command.setCommandInfix(" ");
+
+        commandDispatcher.addCommand(exampleCommand);
+        jda.addEventListener(commandDispatcher);
+        /**
+         * Example finished
+         */
 
 
         // TESTING
@@ -147,10 +169,11 @@ class InoriChan extends ListenerAdapter {
         jda.addEventListener(new AiTalkEvent(config));
         jda.addEventListener(new VoiceChannelJoinNotifyEvent());
         jda.addEventListener(new OofiesAndLmaosEvent(database));
-        jda.addEventListener(new AntiScholzEvent());
+        jda.addEventListener(new UserFilteringAdapter());
         jda.addEventListener(new HelpMessageCountingEvent(database));
         jda.addEventListener(new PollReactionListener(database));
         jda.addEventListener(new UnspoilEvent(waiter));
+
 
     }
 
