@@ -67,8 +67,6 @@ public class CommandLoader<T> {
                 } else {
                     System.err.println("No suitable constructor found for " + cmd.getName());
                 }
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
             } catch (Exception e) {
                 System.err.println(e.getMessage());
                 e.printStackTrace();
