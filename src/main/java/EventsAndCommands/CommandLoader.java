@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -121,8 +122,8 @@ public class CommandLoader<T> {
         acceptableParams.add(EventWaiter.class);
 
         List<Constructor<?>> ctors = Arrays.asList(cl.getConstructors());
-        ctors.sort((x, y) -> x.getParameterCount() - y.getParameterCount());
-
+        // Might need reverse order, but no Command there to test yet
+        ctors.sort(Comparator.comparingInt(Constructor::getParameterCount));
         Constructor<? extends T> fitting = null;
 
         for (var ctor : ctors) {
