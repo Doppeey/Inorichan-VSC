@@ -17,7 +17,7 @@ import org.reflections.Reflections;
 
 /**
  * Autodetects commands that implement a generic type T. Can be used to
- * dynaically load up all commands without explicitly instantiating them.
+ * dynamically load up all commands without explicitly instantiating them.
  * Injects needed dependencies into the instances individually. T = The
  * superclass whose childclasses should be loaded.
  */
