@@ -83,10 +83,10 @@ public class CommandLoader<T> {
      * @param cl A reflective Class that needs to be instanced.
      * @return A concrete object derived from cl. Or null if no suitable constructor
      *         was found.
-     * @throws Exception gets thrown if something goes wrong with reflective
+     * @throws ReflectiveOperationException gets thrown if something goes wrong with reflective
      *                   operations.
      */
-    private T inject(Class<? extends T> cl) throws Exception {
+    private T inject(Class<? extends T> cl) throws ReflectiveOperationException {
         Constructor<? extends T> ctor = findFittingConstructor(cl);
 
         Class<?>[] paramTypes = ctor.getParameterTypes();
