@@ -8,7 +8,6 @@ import org.bson.Document;
 
 public class HelpMessageCountingEvent extends ListenerAdapter {
 
-
     private MongoCollection<Document> helpMessages;
 
     public HelpMessageCountingEvent(MongoDatabase database) {
@@ -17,37 +16,26 @@ public class HelpMessageCountingEvent extends ListenerAdapter {
 
     }
 
-
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
-        //Variables
+        // Variables
         final String channelName = event.getChannel().getName().toLowerCase();
         final String authorID = event.getAuthor().getId();
         final String eventContentRaw = event.getMessage().getContentRaw();
-        final boolean doppeyIsCallingResetCommand = authorID.equalsIgnoreCase("272158112318750720") && eventContentRaw.equalsIgnoreCase(">resethelpermessages");
+        final boolean doppeyIsCallingResetCommand = authorID.equalsIgnoreCase("272158112318750720")
+                && eventContentRaw.equalsIgnoreCase(">resethelpermessages");
 
-
-        if(doppeyIsCallingResetCommand){
+        if (doppeyIsCallingResetCommand) {
             resetHelpMessageDatabase(event);
             return;
         }
 
-        if(channelName.contains("help") || channelName.contains("review")) {
+        if (channelName.contains("help") || channelName.contains("review")) {
             IncrementMessageCounter(event);
         }
 
-
     }
-
-
-
-
-
-
-
-
-
 
     private void resetHelpMessageDatabase(GuildMessageReceivedEvent event) {
         helpMessages.deleteMany(new Document());
@@ -58,13 +46,10 @@ public class HelpMessageCountingEvent extends ListenerAdapter {
         Document searchTarget = new Document();
         searchTarget.put("_id", event.getAuthor().getId());
 
-
         if (helpMessages.find(searchTarget).first() == null) {
 
-            helpMessages.insertOne(new Document()
-                    .append("_id", event.getAuthor().getId())
-                    .append("username", event.getAuthor().getName())
-                    .append("messageCount", 1)
+            helpMessages.insertOne(new Document().append("_id", event.getAuthor().getId())
+                    .append("username", event.getAuthor().getName()).append("messageCount", 1)
 
             );
 

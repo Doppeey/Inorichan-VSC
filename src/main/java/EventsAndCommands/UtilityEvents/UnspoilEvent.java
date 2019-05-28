@@ -4,7 +4,6 @@ import java.util.concurrent.TimeUnit;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 
-
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.MessageReaction.ReactionEmote;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -29,7 +28,7 @@ public class UnspoilEvent extends ListenerAdapter {
 
         final String contentRaw = event.getMessage().getContentRaw();
         final String replyMessage = "I have detected a message with more than 3 spoilers, react with the magnifying glass to reveal it";
-        boolean hasABunchOfSpoilers; 
+        boolean hasABunchOfSpoilers;
 
         // Only check the message if it contains at least one spoiler symbol.
         if (contentRaw.contains("|")) {
@@ -50,7 +49,6 @@ public class UnspoilEvent extends ListenerAdapter {
 
             }
             hasABunchOfSpoilers = (howManySpoilerTags / 4) > 3;
-
 
             if (hasABunchOfSpoilers) {
 

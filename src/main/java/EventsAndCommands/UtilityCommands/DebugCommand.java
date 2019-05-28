@@ -18,7 +18,8 @@ public class DebugCommand extends Command {
         this.help = "visits a website for you and previews the link";
         this.category = Categories.Utility;
         this.hidden = true;
-        this.ownerCommand = true;
+        this.cooldownScope = CooldownScope.GUILD;
+        this.cooldown = 10;
 
     }
 

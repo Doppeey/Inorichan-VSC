@@ -48,6 +48,7 @@ class InoriChan {
         JDA jda = new JDABuilder(config.getProperty("BOT_TOKEN")).build();
 
         jda.addEventListener(waiter);
+      
         inoriChan.setOwnerId(config.getProperty("OWNER_ID"));
         inoriChan.setEmojis("\uD83D\uDE03", "\uD83D\uDE2E", "\uD83D\uDE26");
         inoriChan.setPrefix(config.getProperty("PREFIX")); // prefix for testbot < , prefix for InoriChan >
@@ -66,6 +67,7 @@ class InoriChan {
         for (var listener : listeners.getLoadedClasses()){
             jda.addEventListener(listener);
         }
+
 
     }
 
