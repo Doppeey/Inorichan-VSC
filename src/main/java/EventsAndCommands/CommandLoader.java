@@ -15,6 +15,8 @@ import com.mongodb.client.MongoDatabase;
 
 import org.reflections.Reflections;
 
+import EventsAndCommands.IgnoreCommand;
+
 /**
  * Autodetects commands that implement a generic type T. Can be used to
  * dynamically load up all commands without explicitly instantiating them.
@@ -47,7 +49,7 @@ public class CommandLoader<T> {
     }
 
     /**
-     * Dynamically instanciates all Classes that inherit from type T. But ignores classes that are annotated with {@see IgnoreCommand}
+     * Dynamically instanciates all Classes that inherit from type T. But ignores classes that are annotated with {@link IgnoreCommand}
      */
     public void loadClasses() {
         Reflections reflections = new Reflections(this.getClass().getPackageName());
