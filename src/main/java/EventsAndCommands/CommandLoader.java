@@ -131,7 +131,7 @@ public class CommandLoader<T> {
             if (acceptableParams.containsAll(Arrays.asList(ctor.getParameterTypes()))) {
                 try {
                     return cl.getConstructor(params);
-                } catch (NoSuchMethodException e) {
+                } catch (NoSuchMethodException ignore) {
                 } catch (SecurityException e) {
                     e.printStackTrace();
                 }
