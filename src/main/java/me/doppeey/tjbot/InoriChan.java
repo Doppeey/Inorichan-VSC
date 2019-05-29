@@ -37,16 +37,16 @@ import java.util.Properties;
 public class InoriChan extends ListenerAdapter {
 
     public static final String CONFIG_FILENAME = "tjbot.config";
-    public static final Properties CONFIG = loadConfig(CONFIG_FILENAME);
+    private static final Properties CONFIG = loadConfig(CONFIG_FILENAME);
     public static final MongoDatabase DATABASE;
     public static final Logger LOGGER = LoggerFactory.getLogger(InoriChan.class);
 
     static {
-        if (CONFIG == null) {
+        if (getConfig() == null) {
             System.exit(-1);
         }
 
-        LOGGER.info("{} config loaded.", CONFIG_FILENAME.substring(0, CONFIG_FILENAME.length() - 7));
+        LOGGER.info("{} loaded.", CONFIG_FILENAME.replace('.', ' '));
 
         //DATABASES
         MongoClientURI uri = new MongoClientURI(CONFIG.getProperty("MONGO_URI"));
@@ -61,12 +61,12 @@ public class InoriChan extends ListenerAdapter {
         EventWaiter waiter = new EventWaiter();
         CommandClientBuilder InoriChan = new CommandClientBuilder();
 
-        JDA jda = new JDABuilder(CONFIG.getProperty("BOT_TOKEN")).build();
+        JDA jda = new JDABuilder(getConfig().getProperty("BOT_TOKEN")).build();
 
         jda.addEventListener(waiter);
-        InoriChan.setOwnerId(CONFIG.getProperty("OWNER_ID"));
+        InoriChan.setOwnerId(getConfig().getProperty("OWNER_ID"));
         InoriChan.setEmojis("\uD83D\uDE03", "\uD83D\uDE2E", "\uD83D\uDE26");
-        InoriChan.setPrefix(CONFIG.getProperty("PREFIX")); // prefix for testbot < , prefix for InoriChan >
+        InoriChan.setPrefix(getConfig().getProperty("PREFIX")); // prefix for testbot < , prefix for InoriChan >
         InoriChan.addCommand(new AboutCommand("\nInformation about the bot: \n", desc, perms));
 
 
@@ -75,34 +75,34 @@ public class InoriChan extends ListenerAdapter {
         jda.addEventListener(new ReportByPmEvent(waiter));
 
         // ANIMAL COMMANDS
-        InoriChan.addCommand(new CatCommand(CONFIG));
+        InoriChan.addCommand(new CatCommand(getConfig()));
         InoriChan.addCommand(new FoxCommand());
         InoriChan.addCommand(new DogeCommand());
-        InoriChan.addCommand(new DogCommand(CONFIG));
+        InoriChan.addCommand(new DogCommand(getConfig()));
         // MODERATION COMMANDS
         InoriChan.addCommand(new ReportCommand());
         InoriChan.addCommand(new SpamlordCommand());
         InoriChan.addCommand(new PurgeCommand());
         InoriChan.addCommand(new WhoIsCommand());
         // MEME COMMANDS
-        InoriChan.addCommand(new ScrollOfTruthCommand(CONFIG));
-        InoriChan.addCommand(new HurensohnCommand(CONFIG));
-        InoriChan.addCommand(new DrakeCommand(CONFIG));
-        InoriChan.addCommand(new DistractedBoyfriendCommand(CONFIG));
-        InoriChan.addCommand(new TwoButtonsCommand(CONFIG));
-        InoriChan.addCommand(new PillsCommand(CONFIG));
-        InoriChan.addCommand(new BrainCommand(CONFIG));
-        InoriChan.addCommand(new SpongebobCommand(CONFIG));
-        InoriChan.addCommand(new GoodNoodleCommand(CONFIG));
-        InoriChan.addCommand(new ChangeMyMindCommand(CONFIG));
-        InoriChan.addCommand(new NpcCommand(CONFIG));
+        InoriChan.addCommand(new ScrollOfTruthCommand(getConfig()));
+        InoriChan.addCommand(new HurensohnCommand(getConfig()));
+        InoriChan.addCommand(new DrakeCommand(getConfig()));
+        InoriChan.addCommand(new DistractedBoyfriendCommand(getConfig()));
+        InoriChan.addCommand(new TwoButtonsCommand(getConfig()));
+        InoriChan.addCommand(new PillsCommand(getConfig()));
+        InoriChan.addCommand(new BrainCommand(getConfig()));
+        InoriChan.addCommand(new SpongebobCommand(getConfig()));
+        InoriChan.addCommand(new GoodNoodleCommand(getConfig()));
+        InoriChan.addCommand(new ChangeMyMindCommand(getConfig()));
+        InoriChan.addCommand(new NpcCommand(getConfig()));
         // GAME COMMANDS
         InoriChan.addCommand(new RockPaperScissorsCommand());
         InoriChan.addCommand(new HangmanCommand(waiter));
         InoriChan.addCommand(new HighOrLowCommand(waiter));
         // UTILITY COMMANDS
         InoriChan.addCommand(new BigCommand());
-        InoriChan.addCommand(new unsplashCommand(CONFIG, waiter));
+        InoriChan.addCommand(new unsplashCommand(getConfig(), waiter));
         InoriChan.addCommand(new TranslateCommand());
         InoriChan.addCommand(new DefinitionCommand());
         InoriChan.addCommand(new GoogleCommand());
@@ -110,7 +110,7 @@ public class InoriChan extends ListenerAdapter {
         InoriChan.addCommand(new QuoteWtfCommand());
         InoriChan.addCommand(new PollCommand(DATABASE));
         InoriChan.addCommand(new TimerCommand());
-        InoriChan.addCommand(new YoutubeToMp3Command(CONFIG));
+        InoriChan.addCommand(new YoutubeToMp3Command(getConfig()));
         InoriChan.addCommand(new CodeCommand());
         InoriChan.addCommand(new EmoteIdCommand());
         InoriChan.addCommand(new AvatarCommand());
@@ -136,7 +136,7 @@ public class InoriChan extends ListenerAdapter {
         jda.addEventListener(new LemonSqueezyEvent());
         jda.addEventListener(new GoodBotEvent());
         jda.addEventListener(new SafetyFeature());
-        jda.addEventListener(new AiTalkEvent(CONFIG));
+        jda.addEventListener(new AiTalkEvent(getConfig()));
         jda.addEventListener(new VoiceChannelJoinNotifyEvent());
         jda.addEventListener(new OofiesAndLmaosEvent(DATABASE));
         jda.addEventListener(new AntiScholzEvent());
@@ -146,25 +146,21 @@ public class InoriChan extends ListenerAdapter {
 
     }
 
+    public static Properties getConfig() {
+        return CONFIG;
+    }
+
     private static Properties loadConfig(String fileName) {
         // CONFIG
         Properties prop = new Properties();
-        InputStream is = null;
         try {
-            is = new FileInputStream(fileName);
-
+            InputStream is = new FileInputStream(fileName);
+            prop.load(is);
         } catch (FileNotFoundException ex) {
             LOGGER.info("Could not find config file");
-            return null;
-        }
-        try {
-            prop.load(is);
         } catch (IOException ex) {
             LOGGER.info("Could not load config file");
-            return null;
         }
-        //
-
         return prop;
     }
 

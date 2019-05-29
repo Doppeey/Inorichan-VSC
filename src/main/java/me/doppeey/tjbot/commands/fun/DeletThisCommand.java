@@ -3,6 +3,7 @@ package me.doppeey.tjbot.commands.fun;
 import me.doppeey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppeey.tjbot.InoriChan;
 
 import java.io.File;
 import java.util.Random;

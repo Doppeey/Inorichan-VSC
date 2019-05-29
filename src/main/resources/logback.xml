@@ -1,37 +1,26 @@
 <configuration>
+    <turboFilter class="me.doppeey.tjbot.logging.InoriFilter"/>
 
-    <contextListener name="me.doppeey.tjbot.logging.LoggerStartupListener"/>
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+
+    <contextListener class="me.doppeey.tjbot.logging.LoggerStartupListener"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <filter class="me.doppeey.tjbot.logging.LoggerFilter"/>
-
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} %msg%n</pattern>
+            <pattern>[%d{MMMM dd HH:mm:ss.SSS} {%thread} %-5level %logger{36}] %msg%n</pattern>
         </encoder>
     </appender>
 
-    <appender name="SYSLOG-TLS" class="com.papertrailapp.logback.Syslog4jAppender">
-        <filter class="me.doppeey.tjbot.logging.LoggerFilter"/>
-
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%-5level %logger{35}: %m%n%xEx</pattern>
-        </layout>
-
-        <syslogConfig class="org.productivity.java.syslog4j.impl.net.tcp.ssl.SSLTCPNetSyslogConfig">
-            <!-- remote system to log to -->
-            <host>${HOST}</host>
-            <!-- remote port to log to -->
-            <port>${PORT}</port>
-            <!-- program name to log as -->
-            <ident>${NAME}</ident>
-            <!-- max log message length in bytes -->
-            <maxMessageLength>128000</maxMessageLength>
-        </syslogConfig>
+    <appender name="PAPERTRAIL" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost>${HOST}</syslogHost>
+        <port>${PORT}</port>
+        <facility>USER</facility>
+        <suffixPattern>InoriChan-Bot: [%-5level {%thread} %logger] %msg</suffixPattern>
     </appender>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
-        <appender-ref ref="SYSLOG-TLS"/>
+        <appender-ref ref="PAPERTRAIL"/>
     </root>
 
 </configuration>

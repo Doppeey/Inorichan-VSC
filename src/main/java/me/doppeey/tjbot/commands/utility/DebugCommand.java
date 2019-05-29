@@ -3,6 +3,7 @@ package me.doppeey.tjbot.commands.utility;
 import me.doppeey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppeey.tjbot.InoriChan;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

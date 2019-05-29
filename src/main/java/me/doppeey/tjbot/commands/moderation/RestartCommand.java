@@ -2,6 +2,7 @@ package me.doppeey.tjbot.commands.moderation;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppeey.tjbot.InoriChan;
 
 import java.awt.*;
 import java.io.File;

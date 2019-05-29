@@ -12,27 +12,28 @@ import me.doppeey.tjbot.InoriChan;
 import java.util.Properties;
 
 public class LoggerStartupListener extends ContextAwareBase implements LoggerContextListener, LifeCycle {
+
     private boolean started = false;
 
     @Override
     public void start() {
-        Properties config = InoriChan.CONFIG;
-
-        if (started || config == null) {
+        if (started) {
             return;
         }
+
+        Properties config = InoriChan.getConfig();
 
         Context context = getContext();
 
         context.putProperty("HOST", config.getProperty("PT_HOST"));
         context.putProperty("PORT", config.getProperty("PT_PORT"));
-        context.putProperty("NAME", config.getProperty("PT_NAME"));
 
         started = true;
     }
 
     @Override
-    public void stop() {}
+    public void stop() {
+    }
 
     @Override
     public boolean isStarted() {
@@ -45,14 +46,18 @@ public class LoggerStartupListener extends ContextAwareBase implements LoggerCon
     }
 
     @Override
-    public void onStart(LoggerContext loggerContext) {}
+    public void onStart(LoggerContext context) {
+    }
 
     @Override
-    public void onReset(LoggerContext loggerContext) {}
+    public void onReset(LoggerContext context) {
+    }
 
     @Override
-    public void onStop(LoggerContext loggerContext) {}
+    public void onStop(LoggerContext context) {
+    }
 
     @Override
-    public void onLevelChange(Logger logger, Level level) {}
+    public void onLevelChange(Logger logger, Level level) {
+    }
 }

@@ -1,5 +1,6 @@
 package me.doppeey.tjbot.events.fun;
 
+import me.doppeey.tjbot.InoriChan;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
