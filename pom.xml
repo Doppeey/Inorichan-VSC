@@ -9,7 +9,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
-    <groupId>me.doppeey</groupId>
+    <groupId>me.doppey</groupId>
     <artifactId>tjbot</artifactId>
     <version>1.0.0</version>
 

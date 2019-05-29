@@ -1,7 +1,7 @@
 <configuration>
-    <turboFilter class="me.doppeey.tjbot.logging.InoriFilter"/>
+    <turboFilter class="me.doppey.tjbot.logging.InoriFilter"/>
 
-    <contextListener class="me.doppeey.tjbot.logging.LoggerStartupListener"/>
+    <contextListener class="me.doppey.tjbot.logging.LoggerStartupListener"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
