@@ -21,8 +21,9 @@ import EventsAndCommands.IgnoreCommand;
 /**
  * Autodetects commands that implement a generic type T. Can be used to
  * dynamically load up all commands without explicitly instantiating them.
- * Injects needed dependencies into the instances individually. T = The
- * superclass whose childclasses should be loaded.
+ * Injects needed dependencies into the instances individually.
+ * 
+ * @param <T> The superclass whose subclasses should be loaded
  */
 public class CommandLoader<T> {
 
