@@ -1,14 +1,24 @@
 <configuration>
- 
-    <appender level="warn" name="console" class="ch.qos.logback.core.ConsoleAppender">
-        <target level="warn">System.out</target>
+    <turboFilter class="me.doppey.tjbot.logging.InoriFilter"/>
+
+    <contextListener class="me.doppey.tjbot.logging.LoggerStartupListener"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} %msg%n</pattern>
+            <pattern>[%d{MMMM dd HH:mm:ss.SSS} {%thread} %-5level %logger{36}] %msg%n</pattern>
         </encoder>
     </appender>
- 
-    <root level="warn">
-    
+
+    <appender name="PAPERTRAIL" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost>${HOST}</syslogHost>
+        <port>${PORT}</port>
+        <facility>USER</facility>
+        <suffixPattern>InoriChan-Bot: [%-5level {%thread} %logger] %msg</suffixPattern>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="PAPERTRAIL"/>
     </root>
- 
+
 </configuration>
