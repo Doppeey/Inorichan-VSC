@@ -39,10 +39,10 @@ public class TopHelpMessages extends Command {
             } catch (Exception e) {
                 commandEvent.getChannel().sendMessage("Showing the top 10..").queue();
             }
-            if (amountOfHelpers > 15) {
-                amountOfHelpers = 15;
-                commandEvent.getChannel().sendMessage("Max amount is 15, setting parameter to 15...").queue();
-            }
+//            if (amountOfHelpers > 15) {
+//                amountOfHelpers = 15;
+//                commandEvent.getChannel().sendMessage("Max amount is 15, setting parameter to 15...").queue();
+//            }
         } else {
             Document doc = new Document();
             doc.put("_id", commandEvent.getMember().getUser().getId());

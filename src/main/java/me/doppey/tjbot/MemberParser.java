@@ -11,7 +11,7 @@ import net.dv8tion.jda.core.entities.Message;
  */
 public abstract class MemberParser {
 
-    public static Member getMemberFromArgs(CommandEvent commandEvent) {
+    public static Member getMemberFromArgs(CommandEvent commandEvent)  {
 
         String args = commandEvent.getArgs();
         final Guild guild = commandEvent.getGuild();
