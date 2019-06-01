@@ -9,10 +9,7 @@ import EventsAndCommands.GameCommands.HangmanCommand;
 import EventsAndCommands.GameCommands.HighOrLowCommand;
 import EventsAndCommands.GameCommands.RockPaperScissorsCommand;
 import EventsAndCommands.Hiddencommands.SummonCommand;
-import EventsAndCommands.ModerationCommands.PurgeCommand;
-import EventsAndCommands.ModerationCommands.ReportCommand;
-import EventsAndCommands.ModerationCommands.SpamlordCommand;
-import EventsAndCommands.ModerationCommands.WhoIsCommand;
+import EventsAndCommands.ModerationCommands.*;
 import EventsAndCommands.UtilityEvents.ReportByPmEvent;
 import EventsAndCommands.UtilityEvents.SafetyFeature;
 import EventsAndCommands.TestCommandsAndEvents.VCJoinByID;
@@ -86,6 +83,7 @@ class InoriChan extends ListenerAdapter {
         InoriChan.addCommand(new DogeCommand());
         InoriChan.addCommand(new DogCommand(config));
         // MODERATION COMMANDS
+        InoriChan.addCommand(new NoteCommand(database));
         InoriChan.addCommand(new ReportCommand());
         InoriChan.addCommand(new SpamlordCommand());
         InoriChan.addCommand(new PurgeCommand());
@@ -107,6 +105,7 @@ class InoriChan extends ListenerAdapter {
         InoriChan.addCommand(new HangmanCommand(waiter));
         InoriChan.addCommand(new HighOrLowCommand(waiter));
         // UTILITY COMMANDS
+        InoriChan.addCommand(new TagCommand(database,waiter));
         InoriChan.addCommand(new FreeCommand());
         InoriChan.addCommand(new BigCommand());
         InoriChan.addCommand(new unsplashCommand(config,waiter));
