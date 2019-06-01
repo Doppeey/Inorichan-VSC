@@ -27,6 +27,8 @@ public class PurgeCommand extends Command {
     protected void execute(CommandEvent commandEvent) {
         final MessageChannel commandEventChannel = commandEvent.getChannel();
 
+    
+
 
         GuildController gc = new GuildController(commandEvent.getGuild());
 
