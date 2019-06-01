@@ -1,4 +1,4 @@
-package EventsAndCommands.UtilityCommands;
+package me.doppey.tjbot.commands.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -64,7 +64,9 @@ public class TagCommand extends Command {
         //Creating a tag
         if (contentRaw.toLowerCase().contains("tag create")) {
 
-            if (managerRoleMissing(event, tagManagerRole)) return;
+            if (managerRoleMissing(event, tagManagerRole)) {
+                return;
+            }
 
             createTag(event, runnable);
             return;
@@ -79,12 +81,16 @@ public class TagCommand extends Command {
 
         //Editing a tag
         if (contentRaw.contains("edit")) {
-            if (managerRoleMissing(event, tagManagerRole)) return;
+            if (managerRoleMissing(event, tagManagerRole)) {
+                return;
+            }
 
             //Incase user tries to edit in one line
             if (contentRaw.split(" ")[1].equalsIgnoreCase("edit") && contentRaw.split(" ").length >= 4) {
 
-                if (updateTagOneLine(event, contentRaw)) return;
+                if (updateTagOneLine(event, contentRaw)) {
+                    return;
+                }
                 return;
             }
 
@@ -96,7 +102,9 @@ public class TagCommand extends Command {
         //Delete a tag
         if (contentRaw.contains("delete")) {
 
-            if (managerRoleMissing(event, tagManagerRole)) return;
+            if (managerRoleMissing(event, tagManagerRole)) {
+                return;
+            }
             deleteTag(event, runnable);
         }
 
@@ -136,70 +144,75 @@ public class TagCommand extends Command {
 
     private void deleteTag(CommandEvent event, Runnable runnable) {
         event.reply("Which tag do you want to delete?");
-        waiter.waitForEvent(GuildMessageReceivedEvent.class, received -> received.getAuthor().equals(event.getAuthor()) && received.getChannel().equals(event.getChannel()), confirmed -> {
+        waiter.waitForEvent(GuildMessageReceivedEvent.class,
+                received -> received.getAuthor().equals(event.getAuthor()) && received.getChannel().equals(event.getChannel()), confirmed -> {
 
-            String name = confirmed.getMessage().getContentRaw().toLowerCase().strip();
-            Document doc = new Document().append("name", name);
+                    String name = confirmed.getMessage().getContentRaw().toLowerCase().strip();
+                    Document doc = new Document().append("name", name);
 
-            if (tagCollection.find(doc).first() == null) {
+                    if (tagCollection.find(doc).first() == null) {
 
-                EmbedBuilder alreadyExistsEmbed = new EmbedBuilder();
-                alreadyExistsEmbed.setTitle("Error || Not found");
-                alreadyExistsEmbed.setColor(Color.RED);
-                alreadyExistsEmbed.setDescription("A tag with that name doesn't exist!");
-                event.reply(alreadyExistsEmbed.build());
-                return;
-            }
-
-
-            tagCollection.deleteOne(doc);
-
-            EmbedBuilder embedBuilder = new EmbedBuilder();
-            embedBuilder.setColor(Color.GREEN);
-            embedBuilder.setTitle("Success || Tag delete");
-            embedBuilder.setDescription("The tag " + name + " has successfully been deleted!");
-            event.reply(embedBuilder.build());
+                        EmbedBuilder alreadyExistsEmbed = new EmbedBuilder();
+                        alreadyExistsEmbed.setTitle("Error || Not found");
+                        alreadyExistsEmbed.setColor(Color.RED);
+                        alreadyExistsEmbed.setDescription("A tag with that name doesn't exist!");
+                        event.reply(alreadyExistsEmbed.build());
+                        return;
+                    }
 
 
-        }, 30, TimeUnit.SECONDS, runnable);
+                    tagCollection.deleteOne(doc);
+
+                    EmbedBuilder embedBuilder = new EmbedBuilder();
+                    embedBuilder.setColor(Color.GREEN);
+                    embedBuilder.setTitle("Success || Tag delete");
+                    embedBuilder.setDescription("The tag " + name + " has successfully been deleted!");
+                    event.reply(embedBuilder.build());
+
+
+                }, 30, TimeUnit.SECONDS, runnable);
     }
 
     private void editTag(CommandEvent event, Runnable runnable) {
         event.reply("What tag do you want to edit?");
-        waiter.waitForEvent(GuildMessageReceivedEvent.class, msg -> event.getChannel().equals(msg.getChannel()) && msg.getAuthor().equals(event.getAuthor()), correct -> {
+        waiter.waitForEvent(GuildMessageReceivedEvent.class,
+                msg -> event.getChannel().equals(msg.getChannel()) && msg.getAuthor().equals(event.getAuthor()),
+                correct -> {
 
-            String name = correct.getMessage().getContentDisplay().toLowerCase();
+                    String name = correct.getMessage().getContentDisplay().toLowerCase();
 
-            if (tagCollection.find(new Document("name", name)).first() == null) {
-                EmbedBuilder alreadyExistsEmbed = new EmbedBuilder();
-                alreadyExistsEmbed.setTitle("Error || Not found");
-                alreadyExistsEmbed.setColor(Color.RED);
-                alreadyExistsEmbed.setDescription("A tag with that name doesn't exist!");
-                event.reply(alreadyExistsEmbed.build());
-                return;
-            }
-
-
-            event.reply("Please tell me the new content.");
-
-
-            waiter.waitForEvent(GuildMessageReceivedEvent.class, message -> event.getChannel().equals(message.getChannel()) && message.getAuthor().equals(event.getAuthor()), success -> {
-                EmbedBuilder embedBuilder = new EmbedBuilder();
-                embedBuilder.setColor(Color.GREEN);
-                embedBuilder.setTitle("Success || Tag edit");
-                embedBuilder.setDescription("The tag " + name + " has successfully been edited!");
-                event.reply(embedBuilder.build());
+                    if (tagCollection.find(new Document("name", name)).first() == null) {
+                        EmbedBuilder alreadyExistsEmbed = new EmbedBuilder();
+                        alreadyExistsEmbed.setTitle("Error || Not found");
+                        alreadyExistsEmbed.setColor(Color.RED);
+                        alreadyExistsEmbed.setDescription("A tag with that name doesn't exist!");
+                        event.reply(alreadyExistsEmbed.build());
+                        return;
+                    }
 
 
-                Document tag = new Document();
-                tag.append("name", name);
-
-                tagCollection.updateOne(tag, new Document("$set", new Document("content", success.getMessage().getContentRaw())));
+                    event.reply("Please tell me the new content.");
 
 
-            }, 30, TimeUnit.SECONDS, runnable);
+                    waiter.waitForEvent(GuildMessageReceivedEvent.class,
+                            message -> event.getChannel().equals(message.getChannel()) && message.getAuthor().equals(event.getAuthor()), success -> {
+                                EmbedBuilder embedBuilder = new EmbedBuilder();
+                                embedBuilder.setColor(Color.GREEN);
+                                embedBuilder.setTitle("Success || Tag edit");
+                                embedBuilder.setDescription("The tag " + name + " has successfully been edited!");
+                                event.reply(embedBuilder.build());
 
-        }, 30, TimeUnit.SECONDS, runnable);
+
+                                Document tag = new Document();
+                                tag.append("name", name);
+
+                                tagCollection.updateOne(tag, new Document("$set", new Document("content",
+                                        success.getMessage().getContentRaw())));
+
+
+                            }, 30, TimeUnit.SECONDS, runnable);
+
+                }, 30, TimeUnit.SECONDS, runnable);
     }
 
     private void displayTag(CommandEvent event, String contentRaw) {
@@ -223,39 +236,42 @@ public class TagCommand extends Command {
 
     private void createTag(CommandEvent event, Runnable runnable) {
         event.reply("What do you want the tag to be named?");
-        waiter.waitForEvent(GuildMessageReceivedEvent.class, msg -> event.getChannel().equals(msg.getChannel()) && msg.getAuthor().equals(event.getAuthor()), correct -> {
+        waiter.waitForEvent(GuildMessageReceivedEvent.class,
+                msg -> event.getChannel().equals(msg.getChannel()) && msg.getAuthor().equals(event.getAuthor()),
+                correct -> {
 
-            String name = correct.getMessage().getContentDisplay().toLowerCase();
+                    String name = correct.getMessage().getContentDisplay().toLowerCase();
 
-            if (tagCollection.find(new Document("name", name)).first() != null) {
-                EmbedBuilder alreadyExistsEmbed = new EmbedBuilder();
-                alreadyExistsEmbed.setTitle("Error || Duplicate tag");
-                alreadyExistsEmbed.setColor(Color.RED);
-                alreadyExistsEmbed.setDescription("A tag with that name already exists!");
-                event.reply(alreadyExistsEmbed.build());
-                return;
-            }
-
-
-            event.reply("Alright, the name will be " + name + ". Please tell me the content now.");
+                    if (tagCollection.find(new Document("name", name)).first() != null) {
+                        EmbedBuilder alreadyExistsEmbed = new EmbedBuilder();
+                        alreadyExistsEmbed.setTitle("Error || Duplicate tag");
+                        alreadyExistsEmbed.setColor(Color.RED);
+                        alreadyExistsEmbed.setDescription("A tag with that name already exists!");
+                        event.reply(alreadyExistsEmbed.build());
+                        return;
+                    }
 
 
-            waiter.waitForEvent(GuildMessageReceivedEvent.class, message -> event.getChannel().equals(message.getChannel()) && message.getAuthor().equals(event.getAuthor()), success -> {
-                EmbedBuilder embedBuilder = new EmbedBuilder();
-                embedBuilder.setColor(Color.GREEN);
-                embedBuilder.setTitle("Success || Tag creation");
-                embedBuilder.setDescription("The tag " + name + " has successfully been created!");
-                event.reply(embedBuilder.build());
+                    event.reply("Alright, the name will be " + name + ". Please tell me the content now.");
 
-                Document tag = new Document();
-                tag.append("name", name);
-                tag.append("creatorId", event.getAuthor().getId());
-                tag.append("content", success.getMessage().getContentRaw());
-                tagCollection.insertOne(tag);
 
-            }, 30, TimeUnit.SECONDS, runnable);
+                    waiter.waitForEvent(GuildMessageReceivedEvent.class,
+                            message -> event.getChannel().equals(message.getChannel()) && message.getAuthor().equals(event.getAuthor()), success -> {
+                                EmbedBuilder embedBuilder = new EmbedBuilder();
+                                embedBuilder.setColor(Color.GREEN);
+                                embedBuilder.setTitle("Success || Tag creation");
+                                embedBuilder.setDescription("The tag " + name + " has successfully been created!");
+                                event.reply(embedBuilder.build());
 
-        }, 30, TimeUnit.SECONDS, runnable);
+                                Document tag = new Document();
+                                tag.append("name", name);
+                                tag.append("creatorId", event.getAuthor().getId());
+                                tag.append("content", success.getMessage().getContentRaw());
+                                tagCollection.insertOne(tag);
+
+                            }, 30, TimeUnit.SECONDS, runnable);
+
+                }, 30, TimeUnit.SECONDS, runnable);
     }
 
     private void sendTagList(CommandEvent event) {

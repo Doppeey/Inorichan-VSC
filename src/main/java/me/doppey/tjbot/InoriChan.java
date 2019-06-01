@@ -106,6 +106,7 @@ public class InoriChan extends ListenerAdapter {
         builder.addCommand(new HangmanCommand(waiter));
         builder.addCommand(new HighOrLowCommand(waiter));
         // UTILITY COMMANDS
+        builder.addCommand(new TagCommand(DATABASE, waiter));
         builder.addCommand(new FreeCommand());
         builder.addCommand(new BigCommand());
         builder.addCommand(new unsplashCommand(getConfig(), waiter));
