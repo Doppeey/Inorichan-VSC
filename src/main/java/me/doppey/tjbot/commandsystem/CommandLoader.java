@@ -1,7 +1,6 @@
-package EventsAndCommands;
+package me.doppey.tjbot.commandsystem;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -15,8 +14,6 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.mongodb.client.MongoDatabase;
 
 import org.reflections.Reflections;
-
-import EventsAndCommands.IgnoreCommand;
 
 /**
  * Autodetects commands that implement a generic type T. Can be used to

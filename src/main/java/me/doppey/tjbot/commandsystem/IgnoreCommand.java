@@ -1,4 +1,4 @@
-package EventsAndCommands;
+package me.doppey.tjbot.commandsystem;
 
 import java.lang.annotation.*;
 

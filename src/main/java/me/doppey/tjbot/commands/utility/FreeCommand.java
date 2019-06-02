@@ -2,8 +2,10 @@ package me.doppey.tjbot.commands.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import java.util.stream.Collectors;
 import me.doppey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 
@@ -17,9 +19,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class FreeCommand extends Command {
 
+    private List<TextChannel> helpChannels;
+
     public FreeCommand() {
         this.name = "free";
         this.help = "Shows the times any given help channel has been idle for";
+    }
+
+    private List<TextChannel> getHelpChannels(JDA jda) {
+      if (helpChannels == null) {
+        helpChannels = jda.getTextChannels().stream()
+            .filter(c -> c.getName().toLowerCase().contains("help"))
+            .collect(Collectors.toUnmodifiableList());
+      }
+      return helpChannels;
     }
 
     @Override
@@ -27,12 +40,12 @@ public class FreeCommand extends Command {
         StringBuilder description = new StringBuilder();
         LocalDateTime now = ZonedDateTime.now(Clock.systemUTC()).toLocalDateTime();
 
-        List<TextChannel> helpChannels = InoriChan.getHelpChannels();
-        Map<String, Message> latestMessage = new TreeMap<>();
+        List<TextChannel> helpChannels = getHelpChannels(event.getJDA());
+        Map<TextChannel, Message> latestMessage = new HashMap<>();
         AtomicInteger countChannels = new AtomicInteger(0);
 
         helpChannels.forEach(c -> c.getHistory().retrievePast(1).queue(retrieved -> {
-            latestMessage.put(c.getName(), retrieved.get(0));
+            latestMessage.put(c, retrieved.get(0));
             countChannels.getAndIncrement();
         }));
 
@@ -48,7 +61,7 @@ public class FreeCommand extends Command {
 
 
         latestMessage.forEach((c, m) -> {
-            appendNameAndTime(description, m, c, now);
+            appendNameAndTime(description, m, c.getName(), now);
             countChannels.getAndIncrement();
         });
 
