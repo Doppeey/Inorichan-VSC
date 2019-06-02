@@ -21,9 +21,6 @@ public class OoflmaoCommand extends Command {
     /*
      * This command will retrieve a random message from the Oofs and lmaos channel
      * by a specified user, or if no user is specified, then from a random user
-     *
-     *
-     * THIS COMMAND IS ON HOLD, NEED TO DO IT WITH THE DB INSTEAD
      */
 
     MongoCollection oofLmaoCollection;
