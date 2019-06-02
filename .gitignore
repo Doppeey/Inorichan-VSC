@@ -1,6 +1,7 @@
 # IntelliJ ouput files
 .idea/
 out/
+*.iml
 
 # Maven output
 target/
@@ -10,6 +11,9 @@ dependency-reduced-pom.xml
 .settings/
 .classpath
 .project
+
+# VSCode
+.vscode/
 
 # Bot config file
 *.config
