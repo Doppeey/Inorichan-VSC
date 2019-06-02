@@ -1,2 +1,2 @@
 # Inorichan-VSC
-vsc for inorichan
+it's getting better ;)
