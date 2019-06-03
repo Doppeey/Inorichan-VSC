@@ -12,9 +12,7 @@ import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class FreeCommand extends Command {
@@ -30,11 +28,11 @@ public class FreeCommand extends Command {
         LocalDateTime now = ZonedDateTime.now(Clock.systemUTC()).toLocalDateTime();
 
         List<TextChannel> helpChannels = InoriChan.getHelpChannels();
-        Map<TextChannel, Message> latestMessage = new HashMap<>();
+        Map<String, Message> latestMessage = new TreeMap<>();
         AtomicInteger countChannels = new AtomicInteger(0);
 
         helpChannels.forEach(c -> c.getHistory().retrievePast(1).queue(retrieved -> {
-            latestMessage.put(c, retrieved.get(0));
+            latestMessage.put(c.getName(), retrieved.get(0));
             countChannels.getAndIncrement();
         }));
 
@@ -47,8 +45,10 @@ public class FreeCommand extends Command {
 
         countChannels.set(0);
 
+
+
         latestMessage.forEach((c, m) -> {
-            appendNameAndTime(description, m, c.getName(), now);
+            appendNameAndTime(description, m, c, now);
             countChannels.getAndIncrement();
         });
 

@@ -123,6 +123,7 @@ public class InoriChan extends ListenerAdapter {
         builder.addCommand(new AvatarCommand());
         builder.addCommand(new QuoteCommand());
         // FUN COMMANDS
+        builder.addCommand(new CoinsCommand(DATABASE));
         builder.addCommand(new BubbleSortCommand());
         builder.addCommand(new OoflmaoCommand(DATABASE));
         builder.addCommand(new DecryptCommand());
@@ -135,6 +136,7 @@ public class InoriChan extends ListenerAdapter {
         builder.addCommand(new SummonCommand());
         builder.addCommand(new DebugCommand());
 
+        jda.addEventListener(new JavacoinEvent(DATABASE));
         jda.addEventListener(new StagingAreaEvent());
         jda.addEventListener(new BotCatchingEvent(DATABASE));
         jda.addEventListener(builder.build());
