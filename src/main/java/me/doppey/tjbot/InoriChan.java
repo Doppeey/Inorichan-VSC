@@ -6,11 +6,6 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoDatabase;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 import me.doppey.tjbot.commands.utility.AboutCommand;
 import me.doppey.tjbot.commandsystem.CommandLoader;
 import net.dv8tion.jda.core.JDA;
@@ -20,93 +15,76 @@ import net.dv8tion.jda.core.hooks.EventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 public class InoriChan {
 
-  public static Logger LOGGER = LoggerFactory.getLogger(InoriChan.class);
+    public static final String CONFIG_FILENAME = "tjbot.config";
+    private static final Config CONFIG = loadConfig(CONFIG_FILENAME);
+    public static final MongoDatabase DATABASE;
+    public static final Logger LOGGER = LoggerFactory.getLogger(InoriChan.class);
 
-  private static Properties config;
+    static {
+        if (getConfig() == null) {
+            System.exit(-1);
+        }
 
-  /**
-   * Returns the config file.
-   *
-   * @return the config file
-   * @deprecated this is really leaky
-   */
-  @Deprecated(forRemoval = true)
-  public static Properties getConfig() {
-    return config;
-  }
+        LOGGER.info("{} loaded.", CONFIG_FILENAME.substring(0, CONFIG_FILENAME.length() - 7));
 
-  public static void main(String[] args) throws Exception {
-
-    // Loading config file
-    final String configFileName = "tjbot.config";
-    config = loadConfig(configFileName);
-    
-    System.out
-        .println(configFileName.substring(0, configFileName.length() - 7) + " config loaded.");
-
-    // DATABASE
-    MongoClientURI uri = new MongoClientURI(config.getProperty("MONGO_URI"));
-
-    MongoClient mongoClient = new MongoClient(uri);
-    MongoDatabase database = mongoClient.getDatabase("TogetherJava");
-    // DATABASE END
-
-    String[] desc = {"Generates dank memes", "more to come..."};
-    Permission[] perms = {Permission.MESSAGE_READ, Permission.MESSAGE_WRITE};
-
-    EventWaiter waiter = new EventWaiter();
-    CommandClientBuilder inoriChan = new CommandClientBuilder();
-
-    JDA jda = new JDABuilder(config.getProperty("BOT_TOKEN")).build();
-
-    jda.addEventListener(waiter);
-
-    inoriChan.setOwnerId(config.getProperty("OWNER_ID"));
-    inoriChan.setEmojis("\uD83D\uDE03", "\uD83D\uDE2E", "\uD83D\uDE26");
-    inoriChan
-        .setPrefix(config.getProperty("PREFIX")); // prefix for testbot < , prefix for InoriChan >
-    inoriChan.addCommand(new AboutCommand("\nInformation about the bot: \n", desc, perms));
-
-    CommandLoader<Command> commands = new CommandLoader<>(Command.class, database, config, waiter);
-    commands.loadClasses();
-
-    for (var cmd : commands.getLoadedClasses()) {
-      inoriChan.addCommand(cmd);
-    }
-    CommandLoader<EventListener> listeners = new CommandLoader<>(EventListener.class, database,
-        config, waiter);
-    jda.addEventListener(inoriChan.build());
-    listeners.loadClasses();
-    for (var listener : listeners.getLoadedClasses()) {
-      jda.addEventListener(listener);
+        //DATABASES
+        MongoClientURI uri = new MongoClientURI(CONFIG.getProperty("MONGO_URI"));
+        DATABASE = new MongoClient(uri).getDatabase("TogetherJava");
     }
 
+    public static void main(String[] args) {
+        try {
+            String[] desc = {"Generates dank memes", "more to come..."};
+            Permission[] perms = {Permission.MESSAGE_READ, Permission.MESSAGE_WRITE};
 
-  }
+            EventWaiter waiter = new EventWaiter();
+            CommandClientBuilder builder = new CommandClientBuilder();
 
-  private static Properties loadConfig(String fileName) throws Exception {
+            JDA jda = new JDABuilder(getConfig().getProperty("BOT_TOKEN")).build();
 
-    // CONFIG
-    Properties prop = new Properties();
-    InputStream is = null;
-    try {
-      is = new FileInputStream(fileName);
+            jda.addEventListener(waiter);
 
-    } catch (FileNotFoundException ex) {
-      System.out.println("Could not find config file");
-      throw new FileNotFoundException();
+            builder.setOwnerId(getConfig().getProperty("OWNER_ID"));
+            builder.setEmojis("\uD83D\uDE03", "\uD83D\uDE2E", "\uD83D\uDE26");
+            builder.setPrefix(getConfig().getProperty("PREFIX")); // prefix for testbot < , prefix for InoriChan >
+            builder.addCommand(new AboutCommand("\nInformation about the bot: \n", desc, perms));
+
+            CommandLoader<Command> commands = new CommandLoader<>(Command.class, DATABASE, CONFIG, waiter);
+            commands.loadClasses().forEach(builder::addCommand);
+
+            jda.addEventListener(builder.build());
+
+            CommandLoader<EventListener> listeners = new CommandLoader<>(EventListener.class, DATABASE, CONFIG, waiter);
+            listeners.loadClasses().forEach(jda::addEventListener);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        }
     }
-    try {
-      prop.load(is);
-    } catch (IOException ex) {
-      System.out.println("Could not load config file");
-      throw new IOException();
+
+    public static Config getConfig() {
+        return CONFIG;
     }
-    //
 
-    return prop;
-  }
-
+    private static Config loadConfig(String filename) {
+        // CONFIG
+        Properties properties = new Properties();
+        try {
+            InputStream is = new FileInputStream(filename);
+            properties.load(is);
+        } catch (FileNotFoundException ex) {
+            //logger doesn't work until after config is loaded
+            System.out.println("Could not find config file");
+        } catch (IOException ex) {
+            System.out.println("Could not load config file");
+        }
+        return new Config(properties);
+    }
 }

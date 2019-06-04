@@ -1,23 +1,22 @@
 package me.doppey.tjbot.commands.fun.memes;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import me.doppey.tjbot.Categories;
+import me.doppey.tjbot.Config;
 import me.doppey.tjbot.InoriChan;
 import org.json.JSONObject;
-
-import java.util.Properties;
 
 public class NpcCommand extends Command {
 
     private final String memeId;
     private HttpResponse<String> response = null;
-    private Properties config;
+    private Config config;
 
 
-    public NpcCommand(Properties config){
+    public NpcCommand(Config config){
         this.config = config;
         this.name = "npc";
         this.help = "npc, usage: >npc [text here]";

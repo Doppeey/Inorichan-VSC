@@ -1,21 +1,21 @@
 package me.doppey.tjbot.commands.fun;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppey.tjbot.Categories;
+import me.doppey.tjbot.Config;
 import net.dv8tion.jda.core.EmbedBuilder;
 
-import java.awt.*;
-import java.util.Properties;
+import java.awt.Color;
 
 
 public class YoutubeToMp3Command extends Command {
 
 
 
-    private Properties config;
+    private Config config;
 
-    public YoutubeToMp3Command(Properties config) {
+    public YoutubeToMp3Command(Config config) {
         this.config = config;
         this.name = "youtubetomp3";
         this.help = "Will post a link to download your mp3";

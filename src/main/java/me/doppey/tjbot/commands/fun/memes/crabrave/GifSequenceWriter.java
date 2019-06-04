@@ -1,4 +1,4 @@
-package me.doppey.tjbot.commands.fun.memes.CrabRaveMeme;
+package me.doppey.tjbot.commands.fun.memes.crabrave;
 
 //
 //  GifSequenceWriter.java
@@ -14,19 +14,23 @@ package me.doppey.tjbot.commands.fun.memes.CrabRaveMeme;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.doppey.tjbot.InoriChan;
+import me.doppey.tjbot.commandsystem.IgnoreCommand;
 
 import javax.imageio.*;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
+@IgnoreCommand //TODO remove later maybe?
 public class GifSequenceWriter extends Command {
 
 

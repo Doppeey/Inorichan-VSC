@@ -5,7 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 
 import java.util.concurrent.TimeUnit;
 
-class SayCommand extends Command {
+public class SayCommand extends Command {
 
 
 
