@@ -7,9 +7,8 @@ import ch.qos.logback.classic.spi.LoggerContextListener;
 import ch.qos.logback.core.Context;
 import ch.qos.logback.core.spi.ContextAwareBase;
 import ch.qos.logback.core.spi.LifeCycle;
+import me.doppey.tjbot.Config;
 import me.doppey.tjbot.InoriChan;
-
-import java.util.Properties;
 
 public class LoggerStartupListener extends ContextAwareBase implements LoggerContextListener, LifeCycle {
 
@@ -21,7 +20,7 @@ public class LoggerStartupListener extends ContextAwareBase implements LoggerCon
             return;
         }
 
-        Properties config = InoriChan.getConfig();
+        Config config = InoriChan.getConfig();
 
         Context context = getContext();
 

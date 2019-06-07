@@ -1,11 +1,12 @@
 package me.doppey.tjbot.commands.fun;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import me.doppey.tjbot.Categories;
+import me.doppey.tjbot.Config;
 import me.doppey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
 import org.json.JSONArray;
@@ -13,7 +14,6 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Properties;
 
 
 public class DogCommand extends Command {
@@ -22,7 +22,7 @@ public class DogCommand extends Command {
     private final HashMap<String, Integer> dogIds;
     private String apiKey;
 
-    public DogCommand(Properties config) {
+    public DogCommand(Config config) {
         this.apiKey = config.getProperty("DOG_API_KEY");
         this.name = "dog";
         this.help = "Gets dog pictures with extra info about breed etc.";

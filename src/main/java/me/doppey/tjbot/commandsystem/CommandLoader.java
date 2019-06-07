@@ -1,62 +1,60 @@
 package me.doppey.tjbot.commandsystem;
 
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.mongodb.client.MongoDatabase;
-
+import me.doppey.tjbot.Config;
+import me.doppey.tjbot.InoriChan;
 import org.reflections.Reflections;
 
+import java.lang.reflect.Constructor;
+import java.util.*;
+import java.util.stream.Collectors;
+
 /**
- * Autodetects commands that implement a generic type T. Can be used to
- * dynamically load up all commands without explicitly instantiating them.
- * Injects needed dependencies into the instances individually.
- * 
- * @param <T> The superclass whose subclasses should be loaded
+ * Auto-detects and loads commands that implement a generic type T. Can be used to dynamically load up all commands
+ * without explicitly instantiating them. Injects needed dependencies into the instances individually.
+ *
+ * @param <T> The superclass whose subclasses should be loaded.
  */
 public class CommandLoader<T> {
 
-    private List<T> loadedClasses = new ArrayList<>();
+    private Set<T> loadedClasses = Set.of();
     private Class<T> token;
-    private MongoDatabase db;
-    private Properties config;
+    private MongoDatabase database;
+    private Config config;
     private EventWaiter waiter;
 
     /**
-     * Ctor that takes in the surounding dependencies and a token that represents
-     * the loaded class.
-     * 
-     * @param token  A reflection Class that represents the class that will be
-     *               loaded.
-     * @param db     A connection to a MongoDB.
-     * @param config The read in properties from some cfg file.
-     * @param waiter A waiter that is needed by some commands.
+     * Creates a {@link CommandLoader} that takes in the surrounding dependencies and a token that represents the
+     * classes to load.
+     *
+     * @param token A reflection {@link Class} that represents the superclass to load all subclasses from.
+     * @param database A connection to a {@link MongoDatabase}.
+     * @param config The configuration for the bot.
+     * @param waiter An {@link EventWaiter} that is needed by some commands.
      */
-    public CommandLoader(Class<T> token, MongoDatabase db, Properties config, EventWaiter waiter) {
-        setDb(db);
-        setConfig(config);
-        setWaiter(waiter);
-        setToken(token);
+    public CommandLoader(Class<T> token, MongoDatabase database, Config config, EventWaiter waiter) {
+        this.token = token;
+        this.database = database;
+        this.config = config;
+        this.waiter = waiter;
     }
 
     /**
-     * Dynamically instanciates all Classes that inherit from type T. But ignores classes that are annotated with {@link IgnoreCommand}
+     * Dynamically instantiates all classes that inherit from type T,
+     * ignoring classes that are annotated with {@link IgnoreCommand}.
+     *
+     * @return An unmodifiable set of instantiated objects derived from the superclass {@code T}.
      */
-    public void loadClasses() {
-        Reflections reflections = new Reflections(this.getClass().getPackageName());
+    public Set<T> loadClasses() {
+        Reflections reflections = new Reflections(InoriChan.class.getPackageName());
+        String masterPack = InoriChan.class.getPackageName();
 
         Set<Class<? extends T>> cmds = reflections.getSubTypesOf(token).stream()
-                .filter(x -> !x.isAnnotationPresent(IgnoreCommand.class)).collect(Collectors.toSet());
+                .filter(clazz -> !clazz.isAnnotationPresent(IgnoreCommand.class) && clazz.getPackageName().startsWith(masterPack))
+                .collect(Collectors.toSet());
 
-        List<T> instances = new ArrayList<>();
+        Set<T> instances = new HashSet<>();
 
         for (var cmd : cmds) {
             try {
@@ -64,149 +62,89 @@ public class CommandLoader<T> {
                 if (instance != null) {
                     instances.add(instance);
                 } else {
-                    System.err.println("No suitable constructor found for " + cmd.getName());
+                    InoriChan.LOGGER.error("No suitable constructor found for {}", cmd.getName());
                 }
             } catch (Exception e) {
-                System.err.println(e.getMessage());
-                e.printStackTrace();
-                System.err.println("Could not load " + cmd.getName());
+                InoriChan.LOGGER.error("Could not load {}", cmd.getName(), e);
             }
         }
 
-        setLoadedClasses(instances);
+        this.loadedClasses = Collections.unmodifiableSet(instances);
+        return loadedClasses;
     }
 
     /**
-     * Innstances the class cl with dependencies injected.
-     * 
-     * @param cl A reflective Class that needs to be instanced.
-     * @return A concrete object derived from cl. Or null if no suitable constructor
-     *         was found.
-     * @throws ReflectiveOperationException gets thrown if something goes wrong with reflective
-     *                   operations.
+     * Instantiates the class provided with dependencies injected.
+     *
+     * @param clazz A reflective {@link Class} that needs to be instanced.
+     * @return An instance of the class provided if a suitable constructor was found, null otherwise.
+     * @throws ReflectiveOperationException Thrown if something goes wrong with reflective operations.
      */
-    private T inject(Class<? extends T> cl) throws ReflectiveOperationException {
-        Constructor<? extends T> ctor = findFittingConstructor(cl);
+    private T inject(Class<? extends T> clazz) throws ReflectiveOperationException {
+        Constructor<? extends T> ctor = findFittingConstructor(clazz);
+        if (ctor == null) {
+            return null;
+        }
+
+        if (ctor.getParameterCount() == 0) {
+            return ctor.newInstance();
+        }
 
         Class<?>[] paramTypes = ctor.getParameterTypes();
         Object[] parameters = new Object[paramTypes.length];
         for (int i = 0; i < paramTypes.length; i++) {
             Class<?> type = paramTypes[i];
-            if (type.equals(db.getClass())) {
-                parameters[i] = db;
-            } else if (type.equals(config.getClass())) {
+            if (type.isAssignableFrom(database.getClass())) {
+                parameters[i] = database;
+            } else if (type.isAssignableFrom(config.getClass())) {
                 parameters[i] = config;
-            } else if (type.equals(waiter.getClass())) {
+            } else if (type.isAssignableFrom(waiter.getClass())) {
                 parameters[i] = waiter;
             }
         }
 
-        return (T) ctor.newInstance(parameters);
+        return ctor.newInstance(parameters);
     }
 
     /**
-     * Finds the ctor with the most args that fits the Dependency Injection
-     * criteria. The constructor needs to be empty or have any combination of the
-     * following parametertypes: {{@see MongoDatabase}, {@see Properties},
-     * {@see EventWaiter}}.
-     * 
-     * @param cl The class that has constructors.
-     * @return The best fitting constructor.
+     * Finds the constructor with the most arguments that fits the Dependency Injection criteria. The constructor
+     * needs to be empty or have any combination of the following parameter types: {{@link MongoDatabase},
+     * {@link Config}, {@link EventWaiter}}.
+     *
+     * @param clazz The class to find a suitable constructor for.
+     * @return The best fitting constructor, or null if none if found.
      */
-    private Constructor<? extends T> findFittingConstructor(Class<? extends T> cl) {
-        final Set<Class<?>> acceptableParams = new HashSet<>();
-        acceptableParams.add(MongoDatabase.class);
-        acceptableParams.add(Properties.class);
-        acceptableParams.add(EventWaiter.class);
+    private Constructor<? extends T> findFittingConstructor(Class<? extends T> clazz) {
+        final Set<Class<?>> acceptableParams = Set.of(MongoDatabase.class, Config.class, EventWaiter.class);
 
-        List<Constructor<?>> ctors = Arrays.asList(cl.getConstructors());
+        List<Constructor<? extends T>> ctors = Arrays.asList((Constructor<? extends T>[]) clazz.getConstructors());
         // Might need reverse order, but no Command there to test yet
         ctors.sort(Comparator.comparingInt(Constructor::getParameterCount));
-        Constructor<? extends T> fitting = null;
 
         for (var ctor : ctors) {
-            Class<?>[] params = ctor.getParameterTypes();
             if (acceptableParams.containsAll(Arrays.asList(ctor.getParameterTypes()))) {
                 try {
-                    return cl.getConstructor(params);
-                } catch (NoSuchMethodException ignore) {
+                    return ctor;
                 } catch (SecurityException e) {
-                    e.printStackTrace();
+                    InoriChan.LOGGER.error(e.getMessage(), e);
                 }
             }
         }
 
-        return fitting;
+        try {
+            return clazz.getDeclaredConstructor(); //return empty constructor
+        } catch (NoSuchMethodException e) {
+            return null;
+        }
     }
 
     /**
-     * @return the db
+     * Returns an unmodifiable set of instantiated objects derived from the superclass {@code T}. This set is empty if
+     * {@link #loadClasses()} has not been called yet.
+     *
+     * @return An unmodifiable set of instantiated objects derived from the superclass {@code T}.
      */
-    public MongoDatabase getDb() {
-        return db;
-    }
-
-    /**
-     * @param db the db to set
-     */
-    public void setDb(MongoDatabase db) {
-        this.db = db;
-    }
-
-    /**
-     * @return the config
-     */
-    public Properties getConfig() {
-        return config;
-    }
-
-    /**
-     * @param config the config to set
-     */
-    public void setConfig(Properties config) {
-        this.config = config;
-    }
-
-    /**
-     * @return the waiter
-     */
-    public EventWaiter getWaiter() {
-        return waiter;
-    }
-
-    /**
-     * @param waiter the waiter to set
-     */
-    public void setWaiter(EventWaiter waiter) {
-        this.waiter = waiter;
-    }
-
-    /**
-     * @return the token
-     */
-    public Class<T> getToken() {
-        return token;
-    }
-
-    /**
-     * @param token the token to set
-     */
-    public void setToken(Class<T> token) {
-        this.token = token;
-    }
-
-    /**
-     * @return the loadedClasses
-     */
-    public List<T> getLoadedClasses() {
+    public Set<T> getLoadedClasses() {
         return loadedClasses;
     }
-
-    /**
-     * @param loadedClasses the loadedClasses to set
-     */
-    public void setLoadedClasses(List<T> loadedClasses) {
-        this.loadedClasses = loadedClasses;
-    }
-
 }

@@ -12,13 +12,10 @@ public class InoriFilter extends TurboFilter {
     public FilterReply decide(Marker marker, Logger logger, Level level, String format, Object[] params, Throwable t) {
         if (!isStarted()) {
             return FilterReply.NEUTRAL;
-        }
-        if (level.isGreaterOrEqual(Level.WARN)) {
+        } else if (level.isGreaterOrEqual(Level.WARN)) {
             return FilterReply.ACCEPT;
-        }
-        if (logger.getName().contains("mongodb")) {
+        } else if (logger.getName().contains("mongodb")) {
             return FilterReply.DENY;
-        }
-        return FilterReply.NEUTRAL;
+        } else return FilterReply.NEUTRAL;
     }
 }

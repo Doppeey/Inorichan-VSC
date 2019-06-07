@@ -1,23 +1,22 @@
 package me.doppey.tjbot.commands.fun.memes;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import me.doppey.tjbot.Categories;
+import me.doppey.tjbot.Config;
 import me.doppey.tjbot.InoriChan;
 import org.json.JSONObject;
-
-import java.util.Properties;
 
 public class ScrollOfTruthCommand extends Command {
 
     private final String memeId;
     private HttpResponse<String> response = null;
-    private Properties config;
+    private Config config;
 
 
-    public ScrollOfTruthCommand(Properties config){
+    public ScrollOfTruthCommand(Config config){
         this.config = config;
         this.name = "sot";
         this.help = "scroll of truth meme, usage: >sot [text here]";

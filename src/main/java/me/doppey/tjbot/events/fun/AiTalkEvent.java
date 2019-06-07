@@ -2,6 +2,7 @@ package me.doppey.tjbot.events.fun;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
+import me.doppey.tjbot.Config;
 import me.doppey.tjbot.InoriChan;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -11,7 +12,6 @@ import org.json.JSONObject;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 public class AiTalkEvent extends ListenerAdapter {
@@ -20,7 +20,7 @@ public class AiTalkEvent extends ListenerAdapter {
     String sessionID;
     String chatbotId;
 
-    public AiTalkEvent(Properties config){
+    public AiTalkEvent(Config config){
         this.apiKey = config.getProperty("CHATBOT_API_KEY");
         this.chatbotId = config.getProperty("CHATBOT_ID");
         this.sessionID = config.getProperty("CHATBOT_SESSION_ID");

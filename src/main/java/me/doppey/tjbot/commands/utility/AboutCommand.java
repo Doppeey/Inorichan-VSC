@@ -4,13 +4,14 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.doc.standard.CommandInfo;
 import com.jagrosh.jdautilities.examples.doc.Author;
+import me.doppey.tjbot.commandsystem.IgnoreCommand;
 import net.dv8tion.jda.bot.entities.ApplicationInfo;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
+import java.awt.Color;
 
 /**
  * @author John Grosh (jagrosh)
@@ -22,6 +23,7 @@ import java.awt.*;
         description = "Gets information about the bot."
 )
 @Author("John Grosh (jagrosh)")
+@IgnoreCommand
 public class AboutCommand extends Command {
     private boolean IS_AUTHOR = true;
     private String REPLACEMENT_ICON = "+";

@@ -1,32 +1,30 @@
 package me.doppey.tjbot.commands.utility;
 
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Properties;
-import java.util.concurrent.TimeUnit;
-
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
-
-import org.json.JSONObject;
-
 import me.doppey.tjbot.Categories;
+import me.doppey.tjbot.Config;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
+import org.json.JSONObject;
+
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 /**
  * unsplashCommand
  */
 public class unsplashCommand extends Command {
 
-    Properties config;
+    Config config;
     EventWaiter waiter;
 
-    public unsplashCommand(Properties property, EventWaiter waiter) {
-        this.config = property;
+    public unsplashCommand(Config config, EventWaiter waiter) {
+        this.config = config;
         this.waiter = waiter;
         this.name = "unsplash";
         this.help = "usage: >unsplash searchQuery";

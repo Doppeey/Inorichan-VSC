@@ -1,16 +1,15 @@
 package me.doppey.tjbot.commands.fun;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import me.doppey.tjbot.Categories;
+import me.doppey.tjbot.Config;
 import me.doppey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.Properties;
 
 
 public class CatCommand extends Command {
@@ -20,11 +19,11 @@ public class CatCommand extends Command {
 
     JSONObject json = null;
     private String url = null;
-    private Properties config;
+    private Config config;
     private String apiKey;
 
 
-    public CatCommand(Properties config) {
+    public CatCommand(Config config) {
 
         this.config=config;
         this.name = "cat";
