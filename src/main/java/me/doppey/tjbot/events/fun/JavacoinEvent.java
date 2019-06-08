@@ -31,7 +31,7 @@ public class JavacoinEvent extends ListenerAdapter {
         }
 
         //Don't count messages in these channels
-        if (channelName.contains("help") || channelName.contains("spam") || channelName.contains("bot")) {
+        if (channelName.contains("spam")) {
             return;
         }
 
