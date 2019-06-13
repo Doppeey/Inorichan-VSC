@@ -6,6 +6,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.managers.GuildController;
@@ -29,7 +30,8 @@ public class SpamlordCommand extends Command {
         final TextChannel spamChannel = gc.getGuild().getTextChannelsByName("spam", true).get(0);
         final Role spamlord = commandEvent.getGuild().getRolesByName("spamlord", true).get(0);
 
-        final Member spammer = commandEvent.getMessage().getMentionedMembers().get(0);
+        final Message message = commandEvent.getMessage();
+        final Member spammer = message.getMentionedMembers().get(0);
 
         // IF NO ARGUMENTS ARE GIVEN
         if (commandEvent.getArgs().isEmpty()) {
@@ -43,11 +45,11 @@ public class SpamlordCommand extends Command {
         }
 
         // IF TIME ARGUMENTS ARE GIVEN (A user and optionally a time)
-        if (commandEvent.getMessage().getContentRaw().contains("-")) {
+        if (message.getContentRaw().contains("-")) {
 
             final int time = Integer.parseInt(commandEvent.getArgs().split("-")[1].strip());
 
-            commandEvent.getMessage().addReaction("✅").queue();
+            message.addReaction("✅").queue();
             gc.addSingleRoleToMember(spammer, spamlord)
                     .queue(muted -> gc.removeSingleRoleFromMember(spammer, spamlord).queueAfter(time, TimeUnit.HOURS));
             spamChannel.sendMessage(spammer.getAsMention() + " you are locked here for " + time
@@ -59,7 +61,7 @@ public class SpamlordCommand extends Command {
         gc.addSingleRoleToMember(spammer, spamlord)
                 .queue(muted -> gc.removeSingleRoleFromMember(spammer, spamlord).queueAfter(1, TimeUnit.HOURS));
         commandEvent.getChannel().sendMessage("The user has been locked to the spam channel for an hour").queue();
-        commandEvent.getMessage().addReaction("✅").queue();
+        message.addReaction("✅").queue();
         spamChannel
                 .sendMessage(spammer.getAsMention()
                         + " you are locked here for an hour, please refrain from spammy behaviour in the future!")
