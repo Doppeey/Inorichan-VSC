@@ -1,20 +1,18 @@
 package me.doppey.tjbot.commands.utility;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import me.doppey.tjbot.Categories;
 import me.doppey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
-import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.awt.*;
-import java.io.File;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
@@ -33,14 +31,13 @@ public class DefinitionCommand extends Command {
 
         String wordToDefine = URLEncoder.encode(event.getArgs(), StandardCharsets.UTF_8);
 
-        HttpResponse<String> response = null;
+        HttpResponse<JsonNode> response;
 
         try {
-            response = Unirest.get("https://od-api.oxforddictionaries.com/api/v1/entries/en/" + wordToDefine + "/regions=us")
-                    .header("app_id", "cd5250e8")
-                    .header("app_key", "b504b23d94231e2cb8758db372c6c0cb")
-                    .header("cache-control", "no-cache")
-                    .asString();
+            response = Unirest.get("https://mashape-community-urban-dictionary.p.rapidapi.com/define")
+                    .header("X-RapidAPI-Key", "f280f864c0mshf1d2aa90f4e5b26p16b045jsn5444bbfa5484")
+                    .queryString("term", wordToDefine)
+                    .asJson();
 
         } catch (UnirestException e) {
             event.reply("Oopsie doopsie I did an ouchie wouchie uwu, something went wrong!", x -> x.delete().queueAfter(5, TimeUnit.SECONDS));
@@ -50,162 +47,34 @@ public class DefinitionCommand extends Command {
         EmbedBuilder embedBuilder = new EmbedBuilder();
 
 
-        assert response != null;
+        JSONObject responseJson = new JSONObject(response.getBody());
+        JSONArray resultArray = responseJson.getJSONArray("array");
+
         try {
 
-
-            JSONObject responseJson = new JSONObject(response.getBody());
-            JSONArray resultArray = responseJson.getJSONArray("results");
-
-
             //DEFINITION
-            String definition = resultArray.getJSONObject(0)
-                    .getJSONArray("lexicalEntries")
-                    .getJSONObject(0)
-                    .getJSONArray("entries")
-                    .getJSONObject(0)
-                    .getJSONArray("senses")
-                    .getJSONObject(0)
-                    .getJSONArray("definitions")
-                    .getString(0);
+            String definition = resultArray.getJSONObject(0).getJSONArray("list").getJSONObject(0).getString("definition");
             embedBuilder.addField("Definition", definition, true);
-
-
-            //EXAMPLES
-            try{
-                StringBuilder examples = new StringBuilder();
-                JSONArray examplesArray = resultArray.getJSONObject(0)
-                        .getJSONArray("lexicalEntries")
-                        .getJSONObject(0)
-                        .getJSONArray("entries")
-                        .getJSONObject(0)
-                        .getJSONArray("senses")
-                        .getJSONObject(0)
-                        .getJSONArray("examples");
-
-
-                for (int i = 0; i < examplesArray.length(); i++) {
-                    examples.append(examplesArray.getJSONObject(i).getString("text")).append(".\n");
-                }
-
-                embedBuilder.addField("Examples",examples.toString(),false);
-
-
-
-            } catch ( Exception e){
-                // no examples
-            }
-
-
-
-            // ORIGIN
-            try {
-                String origin =  resultArray.getJSONObject(0)
-                        .getJSONArray("lexicalEntries")
-                        .getJSONObject(0)
-                        .getJSONArray("entries")
-                        .getJSONObject(0)
-                        .getJSONArray("etymologi" +
-                                "es")
-                        .getString(0);
-                if (origin != null) {
-                    embedBuilder.addField("Origin", origin, true);
-                }
-            } catch (Exception e) {
-                //
-            }
-
-
-
-
-
-
-            StringBuilder derivatives = new StringBuilder();
-            try{
-                for (int i = 0; i < resultArray.getJSONObject(0)
-                        .getJSONArray("lexicalEntries")
-                        .getJSONObject(0)
-                        .getJSONArray("derivatives").length(); i++) {
-
-                    try {
-                        derivatives.append(resultArray.getJSONObject(0)
-                                .getJSONArray("lexicalEntries")
-                                .getJSONObject(0)
-                                .getJSONArray("derivatives")
-                                .getJSONObject(i)
-                                .getString("text") + "\n");
-
-
-
-                    } catch (Exception f){
-                        //
-                    }
-
-                }
-
-                if(!derivatives.toString().isEmpty()){
-                    embedBuilder.addField("Derivatives",derivatives.toString(),false);
-                }
-
-
-
-            } catch (Exception e){
-                //
-            }
-            embedBuilder.setColor(Color.green);
-
-            event.reply(embedBuilder.build());
-            try {
-                String URL = null;
-
-                for (int i = 0; i < resultArray.getJSONObject(0)
-                        .getJSONArray("lexicalEntries")
-                        .getJSONObject(0)
-                        .getJSONArray("pronunciations").length(); i++) {
-                    try {
-
-                        URL = resultArray.getJSONObject(0)
-                                .getJSONArray("lexicalEntries")
-                                .getJSONObject(0)
-                                .getJSONArray("pronunciations")
-                                .getJSONObject(i)
-                                .getString("audioFile");
-
-
-                    } catch (Exception e) {
-                        //
-                    }
-
-
-                }
-
-                if (URL != null) {
-                    FileUtils.copyURLToFile(
-                            new URL(URL),
-                            new File("pronunciation.mp3"),
-                            100000,
-                            100000);
-                }
-
-                File file = new File("pronunciation.mp3");
-                event.getChannel().sendFile(file).queue();
-
-
-            } catch (Exception e) {
-              InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
-            }
-        } catch (Exception | Error e) {
-
-            InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
-            event.reply("Oopsie doopise owie wowie the word was not fownd uwu", x -> x.delete().queueAfter(5, TimeUnit.SECONDS));
-            event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
-
+        } catch (org.json.JSONException e) {
+            event.reply("Word not found :( ");
+            return;
         }
 
+
+        //EXAMPLES
+        try {
+            String example = resultArray.getJSONObject(0).getJSONArray("list").getJSONObject(0).getString("example");
+            embedBuilder.addField("Example", example, false);
+
+
+        } catch (Exception e) {
+            // no examples
+        }
+
+
+        embedBuilder.setColor(Color.blue);
+        event.reply(embedBuilder.build());
+        InoriChan.LOGGER.info("User "+event.getMember().getEffectiveName()+" has used the DEFINE command to look up the word "+wordToDefine);
 
     }
 }
