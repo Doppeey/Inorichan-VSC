@@ -41,7 +41,7 @@ public class FreeCommand extends Command {
         LocalDateTime now = ZonedDateTime.now(Clock.systemUTC()).toLocalDateTime();
 
         List<TextChannel> helpChannels = getHelpChannels(event.getJDA());
-        Map<TextChannel, Message> latestMessage = new HashMap<>();
+        Map<TextChannel, Message> latestMessage = new TreeMap<>();
         AtomicInteger countChannels = new AtomicInteger(0);
 
         helpChannels.forEach(c -> c.getHistory().retrievePast(1).queue(retrieved -> {
