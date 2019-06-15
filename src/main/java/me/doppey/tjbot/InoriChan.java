@@ -8,6 +8,7 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoDatabase;
 import me.doppey.tjbot.commands.utility.AboutCommand;
 import me.doppey.tjbot.commandsystem.CommandLoader;
+import me.doppey.tjbot.utility.ChannelMarkerScheduler;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.Permission;
@@ -64,6 +65,11 @@ public class InoriChan {
 
             CommandLoader<EventListener> listeners = new CommandLoader<>(EventListener.class, DATABASE, CONFIG, waiter);
             listeners.loadClasses().forEach(jda::addEventListener);
+
+            // Scheduler that checks help channels and adds the free icon
+            ChannelMarkerScheduler cm = new ChannelMarkerScheduler(jda.getGuildById("272761734820003841"));
+            cm.checkHelpChannels();
+
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
