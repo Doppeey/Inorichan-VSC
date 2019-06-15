@@ -19,13 +19,6 @@ public class AiTalkEvent extends ListenerAdapter {
     String apiKey;
     String sessionID;
     String chatbotId;
-
-    public AiTalkEvent(Config config){
-        this.apiKey = config.getProperty("CHATBOT_API_KEY");
-        this.chatbotId = config.getProperty("CHATBOT_ID");
-        this.sessionID = config.getProperty("CHATBOT_SESSION_ID");
-        lastRan = LocalDateTime.now();
-    }
     /**
      * Takes the input as a parameters and sends it
      * to an API to get smart responses based on
@@ -33,6 +26,13 @@ public class AiTalkEvent extends ListenerAdapter {
      */
 
     LocalDateTime lastRan;
+
+    public AiTalkEvent(Config config) {
+        this.apiKey = config.getProperty("CHATBOT_API_KEY");
+        this.chatbotId = config.getProperty("CHATBOT_ID");
+        this.sessionID = config.getProperty("CHATBOT_SESSION_ID");
+        lastRan = LocalDateTime.now();
+    }
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
@@ -49,8 +49,7 @@ public class AiTalkEvent extends ListenerAdapter {
                 if (!hasCooldown() || event.getAuthor().getId().equals("332989789936549889")) {
 
 
-
-                    HttpResponse<String> response = null;
+                    final HttpResponse<String>[] response = new HttpResponse[]{null};
                     String message = "";
 
 
@@ -74,22 +73,44 @@ public class AiTalkEvent extends ListenerAdapter {
 
 
                     //Send GET request to Botmakr
-                    try {
-                        response = Unirest.post("https://botmakr.net/api/")
-                                .header("cache-control", "no-cache")
-                                .queryString("key", apiKey)
-                                .queryString("id", chatbotId)
-                                .queryString("sessionid", sessionID)
-                                .queryString("q", message)
-                                .asString();
-                    } catch (Exception e) {
-                        InoriChan.LOGGER.error("Error chatbot ai", e);
-                        eventChannel.sendMessage("Something went wrong, you might be too fast").queue();
+                    event.getChannel().sendTyping().queueAfter(1,TimeUnit.SECONDS);
+                    String finalMessage = message;
+                    Runnable getResponseRunnable = () -> {
+                        try {
+                            response[0] = Unirest.post("https://botmakr.net/api/")
+                                    .header("cache-control", "no-cache")
+                                    .queryString("key", apiKey)
+                                    .queryString("id", chatbotId)
+                                    .queryString("sessionid", sessionID)
+                                    .queryString("q", finalMessage)
+                                    .asString();
+                        } catch (Exception e) {
+                            //
+                        }
+                    };
+
+                    Thread newThread = new Thread(getResponseRunnable);
+                    newThread.start();
+
+                    for (int i = 0; i < 5; i++) {
+                        if (response[0] != null) {
+                            break;
+                        }
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            // fook
+                        }
+                    }
+
+                    if (response[0] == null) {
+                        InoriChan.LOGGER.error("Error chatbot ai");
+                        eventChannel.sendMessage("Couldn't get a response from the AI Server, please try again in a bit").queue();
                         return;
                     }
 
 
-                    JSONObject json = new JSONObject(response.getBody());
+                    JSONObject json = new JSONObject(response[0].getBody());
 
 
                     try {
@@ -98,9 +119,7 @@ public class AiTalkEvent extends ListenerAdapter {
                         eventChannel.sendMessage(botResponse).queue();
                         lastRan = LocalDateTime.now();
                     } catch (Exception e) {
-
-                        eventChannel.sendMessage("Couldn't process your message, sorry.").queue(x -> x.delete().queueAfter(5,TimeUnit.SECONDS));
-
+                        eventChannel.sendMessage("Couldn't process your message, sorry.").queue(x -> x.delete().queueAfter(5, TimeUnit.SECONDS));
                     }
                 } else {
 
