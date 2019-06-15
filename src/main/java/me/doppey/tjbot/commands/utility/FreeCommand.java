@@ -28,7 +28,7 @@ public class FreeCommand extends Command {
 
     private List<TextChannel> getHelpChannels(JDA jda) {
       if (helpChannels == null) {
-        helpChannels = jda.getTextChannels().stream()
+        helpChannels = jda.getGuildById("272761734820003841").getTextChannels().stream()
             .filter(c -> c.getName().toLowerCase().contains("help"))
             .collect(Collectors.toUnmodifiableList());
       }
