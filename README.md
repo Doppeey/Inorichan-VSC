@@ -1,2 +1,2 @@
-# Inorichan-VSC
+# Inorichan-Version Control
 it's getting better ;)
