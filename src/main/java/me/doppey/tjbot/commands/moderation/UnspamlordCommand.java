@@ -9,8 +9,8 @@ import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.managers.GuildController;
 
-public class Unspamlordcommand extends Command {
-    public Unspamlordcommand() {
+public class UnspamlordCommand extends Command {
+    public UnspamlordCommand() {
         this.name = "unspamlord";
         this.help = "removes someone from the spamlord role [MOD COMMAND]";
         this.requiredRole = "Moderator";
