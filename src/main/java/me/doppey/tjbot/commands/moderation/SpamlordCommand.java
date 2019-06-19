@@ -50,6 +50,7 @@ public class SpamlordCommand extends Command {
             final int time = Integer.parseInt(commandEvent.getArgs().split("-")[1].strip());
 
             message.addReaction("✅").queue();
+            commandEvent.getChannel().sendMessage("The user has been locked to the spam channel for " + time + " hour" + ((time > 1) ? "s" : "")).queue();
             gc.addSingleRoleToMember(spammer, spamlord)
                     .queue(muted -> gc.removeSingleRoleFromMember(spammer, spamlord).queueAfter(time, TimeUnit.HOURS));
             spamChannel.sendMessage(spammer.getAsMention() + " you are locked here for " + time
