@@ -16,7 +16,6 @@ import java.awt.*;
 
 
 public class PollCommand extends Command {
-
     private Message message;
     String[] numbers = {":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"};
     private MongoCollection polls;
@@ -31,11 +30,8 @@ public class PollCommand extends Command {
 
     }
 
-
     @Override
     protected void execute(CommandEvent commandEvent) {
-
-
         commandEventChannel = commandEvent.getChannel();
         final Member member = commandEvent.getMember();
 
@@ -49,15 +45,11 @@ public class PollCommand extends Command {
         String question = args[0];
         boolean isYesOrNoQuestion = args.length == 1;
 
-
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setColor(Color.green);
         embedBuilder.setAuthor("Poll by "+commandEvent.getMember().getEffectiveName(),null,commandEvent.getAuthor().getAvatarUrl());
 
-
-
         if (isYesOrNoQuestion) {
-
             embedBuilder.setDescription(question);
             commandEventChannel.sendMessage(embedBuilder.build()).queue(x -> {
 
@@ -66,12 +58,8 @@ public class PollCommand extends Command {
                 message = x;
                 addPollToDb();
                 commandEvent.getMessage().delete().queue();
-
             });
-
-
         } else {
-
             StringBuilder stringBuilder = new StringBuilder();
 
             for (int i = 1; i < args.length; i++) {
@@ -79,30 +67,22 @@ public class PollCommand extends Command {
                         .append(" ")
                         .append(args[i])
                         .append("\n\n");
-
-
             }
 
             embedBuilder.setDescription("**" + question + "**" + "\n\n");
             embedBuilder.appendDescription(stringBuilder.toString());
 
-
             commandEventChannel.sendMessage(embedBuilder.build()).queue(
                     x -> {
                         for (int i = 1; i < args.length; i++) {
                             x.addReaction(i + "\u20E3").queue();
-
                         }
                         message = x;
                         addPollToDb();
                         commandEvent.getMessage().delete().queue();
                     }
             );
-
-
         }
-
-
     }
 
     private void addPollToDb() {
@@ -115,22 +95,15 @@ public class PollCommand extends Command {
     public void countdown(Message message, int time) {
         if (time > 0) {
             message.editMessage("" + time).queue();
-
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
             }
 
             countdown(message, time - 5);
         } else if (time == 0) {
             message.editMessage("0").queue();
         }
-
-
     }
-
-
 }

@@ -23,15 +23,12 @@ public class BrainCommand extends Command {
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         String[] parameters = commandEvent.getArgs().split(";");
 
         if(parameters.length < 4){
             commandEvent.reply("Couldn't get the parameters, make sure you use four sentences split by commas.");
             return;
         }
-
-
 
         String apiUsername = this.config.getProperty("IMGFLIP_USERNAME");
         String apiPassword = this.config.getProperty("IMGFLIP_PASSWORD");
@@ -71,13 +68,10 @@ public class BrainCommand extends Command {
                     .queryString("boxes[3][height]",350)
                     .queryString("boxes[3][width]",400)
 
-
                     .queryString("cache-control", "no-cache")
                     .asString();
         } catch (UnirestException e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
         }
 
         JSONObject json = null;
@@ -89,13 +83,6 @@ public class BrainCommand extends Command {
             str = json.getJSONObject("data").getString("url");
         }
 
-
-
         commandEvent.reply(str);
-
-
-
-
-
     }
 }

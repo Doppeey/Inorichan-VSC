@@ -19,7 +19,6 @@ import java.util.concurrent.TimeUnit;
  * unsplashCommand
  */
 public class unsplashCommand extends Command {
-
     Config config;
     EventWaiter waiter;
 
@@ -36,14 +35,13 @@ public class unsplashCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
 
-        if(!event.getTextChannel().getName().toLowerCase().contains("bot")){
-            event.reply("Due to spam, this command is only available in the bots channel", x -> x.delete().queueAfter(4,TimeUnit.SECONDS));
-            event.getMessage().delete().queueAfter(4,TimeUnit.SECONDS);
+        if (!event.getTextChannel().getName().toLowerCase().contains("bot")) {
+            event.reply("Due to spam, this command is only available in the bots channel", x -> x.delete().queueAfter(4, TimeUnit.SECONDS));
+            event.getMessage().delete().queueAfter(4, TimeUnit.SECONDS);
             return;
         }
 
         final int[] counter = new int[1];
-
         try {
             String searchQuery = URLEncoder.encode(event.getArgs(), "UTF-8");
 
@@ -65,17 +63,12 @@ public class unsplashCommand extends Command {
                 }
             }
 
-            
             counter[0] = 0;
 
             event.reply(imageUrls.get(0), sent -> {
-
                 sent.addReaction("\u2B05").queue(added -> sent.addReaction("\u27A1").queue(reactionsAdded -> {
-
                     extracted(event, counter, imageUrls, sent);
-
                 }));
-
             });
 
         } catch (Exception e) {
@@ -95,13 +88,10 @@ public class unsplashCommand extends Command {
                         if (correct.getReactionEmote().getName().equals("⬅")) {
                             if (counter[0] != 0) {
                                 counter[0] = counter[0] - 1;
-                            }
-
-                        else {
+                            } else {
                                 counter[0] = imageUrls.size() - 1;
                             }
 
-                            
                             sent.editMessage(imageUrls.get(counter[0])).queue();
                             correct.getReaction().removeReaction(event.getAuthor()).queue();
 
@@ -110,11 +100,10 @@ public class unsplashCommand extends Command {
                         }
 
                         // IF THE REACTION IS A RIGHT ARROW
-                    else if (correct.getReactionEmote().getName().equals("➡")) {
+                        else if (correct.getReactionEmote().getName().equals("➡")) {
                             if (counter[0] != imageUrls.size() - 1) {
                                 counter[0] = counter[0] + 1;
                             } else {
-
                                 counter[0] = 0;
                             }
 
@@ -125,8 +114,6 @@ public class unsplashCommand extends Command {
 
                         }
                     }
-
                 }, 30, TimeUnit.SECONDS, null);
     }
-
 }

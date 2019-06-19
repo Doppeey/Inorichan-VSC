@@ -15,24 +15,19 @@ import static com.mongodb.client.model.Sorts.descending;
 import static com.mongodb.client.model.Sorts.orderBy;
 
 public class TopHelpMessages extends Command {
-
     MongoCollection helpMessages;
 
     public TopHelpMessages(MongoDatabase mongodb) {
-
         this.helpMessages = mongodb.getCollection("helpMessages");
         this.name = "tophelpmessages";
         this.help = "Shows the top active people in help channels. Up to 15";
-
     }
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         int amountOfHelpers = 10;
 
         boolean hasRequestedOwnCount = commandEvent.getArgs().toLowerCase().contains("me");
-
         if (hasRequestedOwnCount == false) {
             try {
                 amountOfHelpers = Integer.parseInt(commandEvent.getArgs());
@@ -58,16 +53,12 @@ public class TopHelpMessages extends Command {
         StringBuilder topList = new StringBuilder();
 
         for (int i = 0; i < amountOfHelpers; i++) {
-
             final Member member = commandEvent.getGuild().getMemberById(topHelpMessages.get(i).getString("_id"));
 
             if (member != null) {
-
                 topList.append(member.getUser().getName()).append("#").append(member.getUser().getDiscriminator())
                         .append(" - ").append(topHelpMessages.get(i).get("messageCount")).append("\n");
-
             }
-
         }
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
@@ -75,6 +66,5 @@ public class TopHelpMessages extends Command {
         embedBuilder.addField("Top messagecount in help channels", topList.toString(), false);
 
         commandEvent.getChannel().sendMessage(embedBuilder.build()).queue();
-
     }
 }

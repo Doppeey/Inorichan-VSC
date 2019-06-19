@@ -8,7 +8,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 public class GoogleCommand extends Command {
-
     public GoogleCommand() {
         this.name = "google";
         this.help = "Generates a google search query";
@@ -17,7 +16,6 @@ public class GoogleCommand extends Command {
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         String base = "https://www.google.com/search?q=";
         String searchQuery = commandEvent.getArgs();
 
@@ -31,6 +29,5 @@ public class GoogleCommand extends Command {
                 .append(">");
 
         commandEvent.reply(builder.toString(), success -> commandEvent.getMessage().delete().queue());
-
     }
 }

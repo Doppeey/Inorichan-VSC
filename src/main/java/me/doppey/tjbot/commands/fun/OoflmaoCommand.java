@@ -16,17 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/*
+ * This command will retrieve a random message from the Oofs and lmaos channel
+ * by a specified user, or if no user is specified, then from a random user
+ */
 public class OoflmaoCommand extends Command {
-
-    /*
-     * This command will retrieve a random message from the Oofs and lmaos channel
-     * by a specified user, or if no user is specified, then from a random user
-     */
-
     MongoCollection oofLmaoCollection;
 
     public OoflmaoCommand(MongoDatabase database) {
-
         this.oofLmaoCollection = database.getCollection("oofsAndLmaos");
         this.name = "ooflmao";
         this.help = "retrieves a random oof or lmao message";
@@ -36,13 +33,11 @@ public class OoflmaoCommand extends Command {
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         List<Document> messageDocumentList = new ArrayList<>();
         oofLmaoCollection.find().into(messageDocumentList);
         Document randomDocument = messageDocumentList.get(new Random().nextInt(messageDocumentList.size()));
 
         sendRandomOofOrLmao(commandEvent, randomDocument);
-
     }
 
     private void sendRandomOofOrLmao(CommandEvent commandEvent, Document randomDocument) {
@@ -72,8 +67,6 @@ public class OoflmaoCommand extends Command {
             embed.setAuthor(member.getEffectiveName(), null, message.getAuthor().getEffectiveAvatarUrl());
 
             commandEvent.reply(embed.build());
-
         });
     }
-
 }

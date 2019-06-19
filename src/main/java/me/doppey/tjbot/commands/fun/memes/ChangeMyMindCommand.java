@@ -10,11 +10,9 @@ import me.doppey.tjbot.InoriChan;
 import org.json.JSONObject;
 
 public class ChangeMyMindCommand extends Command {
-
     private final String memeId;
     private HttpResponse<String> response = null;
     private Config config;
-
 
     public ChangeMyMindCommand(Config config){
         this.config = config;
@@ -23,8 +21,6 @@ public class ChangeMyMindCommand extends Command {
         this.category = Categories.Memes;
         this.memeId = "129242436";
     }
-
-
 
     @Override
     protected void execute(CommandEvent commandEvent) {

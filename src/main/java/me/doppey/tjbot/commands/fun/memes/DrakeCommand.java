@@ -15,8 +15,6 @@ public class DrakeCommand extends Command {
     private HttpResponse<String> response = null;
     private Config config;
 
-
-
     public DrakeCommand(Config config) {
         this.config = config;
         this.name = "drake";
@@ -25,12 +23,11 @@ public class DrakeCommand extends Command {
         this.memeId = "172461322";
     }
 
-
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         String text0 = null;
         String text1 = null;
+
         try {
             text0 = commandEvent.getArgs().split(";")[0];
             text1 = commandEvent.getArgs().split(";")[1];
@@ -38,7 +35,6 @@ public class DrakeCommand extends Command {
             commandEvent.getChannel().sendMessage("Usage: >buttons option a ; option b").queue();
             return;
         }
-
 
         try {
             response = com.mashape.unirest.http.Unirest.get("https://api.imgflip.com/caption_image")
@@ -51,21 +47,18 @@ public class DrakeCommand extends Command {
                     .asString();
         } catch (UnirestException e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
         }
 
         JSONObject json = null;
         if (response != null) {
             json = new JSONObject(response.getBody());
         }
+
         String str = null;
         if (json != null) {
             str = json.getJSONObject("data").getString("url");
         }
 
         commandEvent.reply("By " + commandEvent.getMember().getAsMention() + "\n" + str, sent -> commandEvent.getMessage().delete().queue());
-
-
     }
 }

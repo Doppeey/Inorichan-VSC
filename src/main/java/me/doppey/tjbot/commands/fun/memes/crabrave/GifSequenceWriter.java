@@ -33,7 +33,6 @@ import java.util.Iterator;
 @IgnoreCommand //TODO remove later maybe?
 public class GifSequenceWriter extends Command {
 
-
     public GifSequenceWriter() {
         this.name = "crabrave";
     }
@@ -75,7 +74,6 @@ public class GifSequenceWriter extends Command {
         IIOMetadataNode graphicsControlExtensionNode = getNode(
                 root,
                 "GraphicControlExtension");
-
 
         graphicsControlExtensionNode.setAttribute("disposalMethod", "none");
         graphicsControlExtensionNode.setAttribute("userInputFlag", "FALSE");
@@ -217,7 +215,6 @@ public class GifSequenceWriter extends Command {
 //    }
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         String text = commandEvent.getArgs();
         // grab the output image type from the first image in the sequence
         BufferedImage firstImage = null;
@@ -234,8 +231,6 @@ public class GifSequenceWriter extends Command {
             output = new FileImageOutputStream(new File("./crabrave/done.gif"));
         } catch (IOException e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
         }
 
         // create a gif sequence with the type of the first image, 1 second
@@ -246,8 +241,7 @@ public class GifSequenceWriter extends Command {
             writer = new GifSequenceWriter(output, firstImage.getType(), 67, true);
         } catch (IOException e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
+            ;
         }
 
         // write out the first image to our sequence...
@@ -255,9 +249,8 @@ public class GifSequenceWriter extends Command {
             writer.writeToSequence(firstImage);
         } catch (IOException e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
         }
+
         for (int i = 0; i < 51; i++) {
 
             try {
@@ -266,9 +259,8 @@ public class GifSequenceWriter extends Command {
                     nextImage = ImageIO.read(new File("/crabrave/" + i + ".png"));
                 } catch (IOException e) {
                     InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
                 }
+
                 Graphics graphics = null;
                 if (nextImage != null) {
                     graphics = nextImage.getGraphics();
@@ -286,22 +278,18 @@ public class GifSequenceWriter extends Command {
                     writer.writeToSequence(nextImage);
                 } catch (IOException e) {
                     InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
                 }
+
                 InoriChan.LOGGER.info("Wrote {}", i);
             } catch (Exception e) {
                 InoriChan.LOGGER.error("couldn't write to {}", i, e);
             }
-
         }
 
         try {
             writer.close();
         } catch (IOException e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
         }
         try {
             if (output != null) {
@@ -309,11 +297,8 @@ public class GifSequenceWriter extends Command {
             }
         } catch (IOException e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
         }
 
         commandEvent.getChannel().sendFile(new File("/crabrave/done.gif")).queue();
-
     }
 }

@@ -23,7 +23,6 @@ public class ReportCommand extends Command {
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         String args = commandEvent.getArgs();
         boolean hasMessageAttached = args.split(";").length == 2;
         String messageId = args;
@@ -33,13 +32,13 @@ public class ReportCommand extends Command {
         if (hasAMentionedChannel) {
             quoteChannel = commandEvent.getMessage().getMentionedChannels().get(0);
             mention = commandEvent.getMessage().getMentionedChannels().get(0).getAsMention();
+
             if (hasMessageAttached) {
                 messageId = args.split(";")[0].replaceAll(mention, "").strip();
 
             } else {
                 messageId = args.replaceAll(mention, "").strip();
             }
-
         } else {
             if (hasMessageAttached) {
                 messageId = args.split(";")[0];
@@ -48,7 +47,6 @@ public class ReportCommand extends Command {
         }
 
         try {
-
             quoteChannel.getMessageById(messageId).queue(x -> {
 
                 EmbedBuilder embed = new EmbedBuilder();
@@ -75,10 +73,9 @@ public class ReportCommand extends Command {
                     if (hasImage) {
                         embed.setImage(x.getAttachments().get(0).getUrl());
                     }
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                     // Nothing, is not a picture
                 }
-
             });
         } catch (Exception | Error e) {
             commandEvent.getMessage().delete().queue();

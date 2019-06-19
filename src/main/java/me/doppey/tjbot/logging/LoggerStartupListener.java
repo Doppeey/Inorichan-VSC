@@ -11,7 +11,6 @@ import me.doppey.tjbot.Config;
 import me.doppey.tjbot.InoriChan;
 
 public class LoggerStartupListener extends ContextAwareBase implements LoggerContextListener, LifeCycle {
-
     private boolean started = false;
 
     @Override
@@ -21,7 +20,6 @@ public class LoggerStartupListener extends ContextAwareBase implements LoggerCon
         }
 
         Config config = InoriChan.getConfig();
-
         Context context = getContext();
 
         context.putProperty("HOST", config.getProperty("PT_HOST"));
