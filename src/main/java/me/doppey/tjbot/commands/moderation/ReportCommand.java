@@ -3,6 +3,7 @@ package me.doppey.tjbot.commands.moderation;
 import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppey.tjbot.Constants;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageChannel;
 
@@ -28,7 +29,6 @@ public class ReportCommand extends Command {
         boolean hasMessageAttached = args.split(";").length == 2;
         String messageId = args;
         final boolean hasAMentionedChannel = !commandEvent.getMessage().getMentionedChannels().isEmpty();
-        MessageChannel reportChannel = commandEvent.getGuild().getTextChannelById("544565081724289024");
 
         if (hasAMentionedChannel) {
             quoteChannel = commandEvent.getMessage().getMentionedChannels().get(0);
@@ -66,7 +66,7 @@ public class ReportCommand extends Command {
                 embed.addField("Reported by", commandEvent.getMember().getAsMention(), true);
 
                 commandEvent.getMessage().delete().queue();
-                reportChannel.sendMessage(embed.build()).queue();
+                Constants.REPORTS_CHANNEL.sendMessage(embed.build()).queue();
                 commandEvent.getChannel().sendMessage("A report has successfully been submitted")
                         .queue(confirmation -> confirmation.delete().queueAfter(2, TimeUnit.SECONDS));
 

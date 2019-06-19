@@ -3,6 +3,8 @@ package me.doppey.tjbot.commands.utility;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import java.util.stream.Collectors;
+
+import me.doppey.tjbot.Constants;
 import me.doppey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
@@ -28,7 +30,7 @@ public class FreeCommand extends Command {
 
     private List<TextChannel> getHelpChannels(JDA jda) {
       if (helpChannels == null) {
-        helpChannels = jda.getGuildById("272761734820003841").getTextChannels().stream()
+        helpChannels = Constants.TJ_GUILD.getTextChannels().stream()
             .filter(c -> c.getName().toLowerCase().contains("help"))
             .collect(Collectors.toUnmodifiableList());
       }

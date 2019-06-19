@@ -1,6 +1,7 @@
 package me.doppey.tjbot.events.utility;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import me.doppey.tjbot.Constants;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
@@ -46,9 +47,8 @@ public class ReportByPmEvent extends ListenerAdapter {
                         waiter.waitForEvent(event.getClass(), who -> eventAuthor.equals(who.getAuthor()), message -> {
 
                             String messageContent = message.getMessage().getContentRaw();
-                            final Guild togetherJavaGuild = event.getJDA().getGuildById("272761734820003841");
                             try {
-                                togetherJavaGuild.getMembersByName(messageContent.split("#")[0], true).stream()
+                                Constants.TJ_GUILD.getMembersByName(messageContent.split("#")[0], true).stream()
                                         .filter(member -> member.getUser().getDiscriminator()
                                                 .equalsIgnoreCase(messageContent.split("#")[1]))
                                         .forEach(correctMember -> reportedMember[0] = correctMember);
@@ -85,7 +85,7 @@ public class ReportByPmEvent extends ListenerAdapter {
                                                     + eventAuthor.getName() + "#" + eventAuthor.getDiscriminator(),
                                                     true);
                                             embedBuilder.addField("Reported user",
-                                                    togetherJavaGuild.getMemberById(reportedMember[0].getUser().getId())
+                                                    Constants.TJ_GUILD.getMemberById(reportedMember[0].getUser().getId())
                                                             .getAsMention() + "\n"
                                                             + reportedMember[0].getUser().getName() + "#"
                                                             + reportedMember[0].getUser().getDiscriminator(),
@@ -100,7 +100,7 @@ public class ReportByPmEvent extends ListenerAdapter {
                                                 }
                                             }
 
-                                            togetherJavaGuild.getTextChannelById("544565081724289024")
+                                            Constants.REPORTS_CHANNEL
                                                     .sendMessage(embedBuilder.build()).queue();
                                             why.getChannel().sendMessage(
                                                     "Your report has been submitted and will be reviewed by one of our moderators as soon as possible, thank you!")

@@ -29,6 +29,8 @@ public class InoriChan {
     public static final MongoDatabase DATABASE;
     public static final Logger LOGGER = LoggerFactory.getLogger(InoriChan.class);
 
+    private static JDA jda;
+
     static {
         if (getConfig() == null) {
             System.exit(-1);
@@ -49,9 +51,9 @@ public class InoriChan {
             EventWaiter waiter = new EventWaiter();
             CommandClientBuilder builder = new CommandClientBuilder();
 
-            JDA jda = new JDABuilder(getConfig().getProperty("BOT_TOKEN")).build();
-
-            jda.addEventListener(waiter);
+            jda = new JDABuilder(getConfig().getProperty("BOT_TOKEN"))
+                    .addEventListener(waiter)
+                    .build();
 
             builder.setOwnerId(getConfig().getProperty("OWNER_ID"));
             builder.setEmojis("\uD83D\uDE03", "\uD83D\uDE2E", "\uD83D\uDE26");
@@ -67,12 +69,16 @@ public class InoriChan {
             listeners.loadClasses().forEach(jda::addEventListener);
 
             // Scheduler that checks help channels and adds the free icon
-            ChannelMarkerScheduler cm = new ChannelMarkerScheduler(jda.getGuildById("272761734820003841"));
+            ChannelMarkerScheduler cm = new ChannelMarkerScheduler(Constants.TJ_GUILD);
             cm.checkHelpChannels();
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
+    }
+
+    public static JDA getJda() {
+        return jda;
     }
 
     public static Config getConfig() {

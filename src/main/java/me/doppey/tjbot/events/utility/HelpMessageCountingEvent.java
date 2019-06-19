@@ -2,6 +2,7 @@ package me.doppey.tjbot.events.utility;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import me.doppey.tjbot.Constants;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.bson.Document;
@@ -23,7 +24,7 @@ public class HelpMessageCountingEvent extends ListenerAdapter {
         final String channelName = event.getChannel().getName().toLowerCase();
         final String authorID = event.getAuthor().getId();
         final String eventContentRaw = event.getMessage().getContentRaw();
-        final boolean doppeyIsCallingResetCommand = authorID.equalsIgnoreCase("272158112318750720")
+        final boolean doppeyIsCallingResetCommand = authorID.equalsIgnoreCase(Constants.DOPPEY_USER.getId())
                 && eventContentRaw.equalsIgnoreCase(">resethelpermessages");
 
         if (doppeyIsCallingResetCommand) {
