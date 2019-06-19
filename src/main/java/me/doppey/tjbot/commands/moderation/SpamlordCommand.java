@@ -40,7 +40,7 @@ public class SpamlordCommand extends Command {
             embed.setDescription("Gives the spamlord role to a user, limiting them to the spam channel");
             embed.addField("Parameters",
                     "**-t**: t stands for the amount of hours the user will be limited to the spam channel", true);
-            commandEvent.reply(embed.build());
+            commandEvent.getChannel().sendMessage(embed.build()).queue();
             return;
         }
 
