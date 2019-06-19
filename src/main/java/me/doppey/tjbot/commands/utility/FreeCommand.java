@@ -82,12 +82,11 @@ public class FreeCommand extends Command {
     private void appendNameAndTime(StringBuilder description, Message message, String name, LocalDateTime now) {
         Duration between = Duration.between(message.getCreationTime().toLocalDateTime(), now);
         description
-                .append("**")
+                .append("#")
                 .append(name)
-                .append("**")
-                .append(" ----> ")
+                .append(" ----> FREE (")
                 .append(between.getSeconds() / 60)
-                .append("\n");
+                .append(")\n");
     }
 }
 
