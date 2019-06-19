@@ -45,9 +45,7 @@ public class BubbleSortCommand extends Command {
             //cycle wont add anything to it, we know we're done!
             bubbleCounter = 0;
 
-
             for (int i = 0; i < unsorted.size() - 1; i++) {
-
 
                 //If the number we are at, is bigger than the next, you guessed it! We swap em!
                 if (unsorted.get(i) > unsorted.get(i + 1)) {
@@ -71,12 +69,9 @@ public class BubbleSortCommand extends Command {
                 result.append(Arrays.toString(unsorted.toArray()));
                 result.append("\n");
             }
-
-
         }
         result.append("\n```");
 
         event.reply(result.toString());
-
     }
 }

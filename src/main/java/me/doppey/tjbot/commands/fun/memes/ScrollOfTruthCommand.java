@@ -15,7 +15,6 @@ public class ScrollOfTruthCommand extends Command {
     private HttpResponse<String> response = null;
     private Config config;
 
-
     public ScrollOfTruthCommand(Config config){
         this.config = config;
         this.name = "sot";
@@ -24,11 +23,8 @@ public class ScrollOfTruthCommand extends Command {
         this.memeId = "175383256";
     }
 
-
-
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         String memeText = commandEvent.getArgs();
 
         try {
@@ -41,8 +37,6 @@ public class ScrollOfTruthCommand extends Command {
                     .asString();
         } catch (UnirestException e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
         }
 
         JSONObject json = null;
@@ -55,10 +49,5 @@ public class ScrollOfTruthCommand extends Command {
         }
 
         commandEvent.reply("By "+commandEvent.getMember().getAsMention()+"\n"+str);
-
-
-
-
-
     }
 }

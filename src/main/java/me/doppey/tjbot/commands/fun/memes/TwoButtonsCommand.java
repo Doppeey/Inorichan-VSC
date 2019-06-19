@@ -10,12 +10,9 @@ import me.doppey.tjbot.InoriChan;
 import org.json.JSONObject;
 
 public class TwoButtonsCommand extends Command {
-
     private final String memeId;
     private HttpResponse<String> response = null;
     private Config config;
-
-
 
     public TwoButtonsCommand(Config config) {
         this.config = config;
@@ -25,10 +22,8 @@ public class TwoButtonsCommand extends Command {
         this.memeId = "87743020";
     }
 
-
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         String text0 = null;
         String text1 = null;
         try {
@@ -38,7 +33,6 @@ public class TwoButtonsCommand extends Command {
             commandEvent.getChannel().sendMessage("Usage: >buttons option a ; option b").queue();
             return;
         }
-
 
         try {
             response = com.mashape.unirest.http.Unirest.get("https://api.imgflip.com/caption_image")
@@ -51,8 +45,6 @@ public class TwoButtonsCommand extends Command {
                     .asString();
         } catch (UnirestException e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
         }
 
         JSONObject json = null;
@@ -65,7 +57,5 @@ public class TwoButtonsCommand extends Command {
         }
 
         commandEvent.reply("By " + commandEvent.getMember().getAsMention() + "\n" + str, sent -> commandEvent.getMessage().delete().queue());
-
-
     }
 }

@@ -7,11 +7,8 @@ import java.util.concurrent.TimeUnit;
 
 public class SayCommand extends Command {
 
-
-
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         if (!commandEvent.getGuild().getId().equals("272761734820003841")) {
             commandEvent.getMessage().delete().queueAfter(300, TimeUnit.MILLISECONDS);
 
@@ -20,6 +17,5 @@ public class SayCommand extends Command {
         } else {
             commandEvent.reply("Say command disabled on this Server");
         }
-
     }
 }

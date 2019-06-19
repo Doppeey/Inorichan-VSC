@@ -15,7 +15,6 @@ public class PillsCommand extends Command {
     private HttpResponse<String> response = null;
     private Config config;
 
-
     public PillsCommand(Config config){
         this.config = config;
         this.name = "pills";
@@ -24,11 +23,8 @@ public class PillsCommand extends Command {
         this.memeId = "132769734";
     }
 
-
-
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         String memeText = commandEvent.getArgs();
 
         try {
@@ -41,8 +37,6 @@ public class PillsCommand extends Command {
                     .asString();
         } catch (UnirestException e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
         }
 
         JSONObject json = null;
@@ -55,10 +49,5 @@ public class PillsCommand extends Command {
         }
 
         commandEvent.reply("By "+commandEvent.getMember().getAsMention()+"\n"+str);
-
-
-
-
-
     }
 }

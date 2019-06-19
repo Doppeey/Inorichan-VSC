@@ -9,7 +9,6 @@ import java.io.File;
 public class DabCommand extends Command {
 
     public DabCommand() {
-
         this.name = "dab";
         this.help = "dab on dem haters";
         this.category = Categories.Fun;
@@ -17,11 +16,7 @@ public class DabCommand extends Command {
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         File dab = new File("resources/images/dab.png");
-
-       commandEvent.getChannel().sendFile(dab).queue();
-
-
+        commandEvent.getChannel().sendFile(dab).queue();
     }
 }

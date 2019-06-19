@@ -39,20 +39,15 @@ public class QuoteCommand extends Command {
         }
 
         try {
-
-
             quoteChannel.getMessageById(messageId).queue(x -> {
-
                 final OffsetDateTime creationTime = x.getCreationTime();
                 final Member member = x.getMember();
 
                 EmbedBuilder embed = new EmbedBuilder();
 
-
                 embed.setDescription(x.getContentRaw() + "\n \n [[Jump to message]](" + x.getJumpUrl() + ")  ");
                 embed.appendDescription("Creation time:  " + creationTime.toLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE) + "\n[Quoted by " + commandEvent.getMember().getAsMention() + "]");
                 embed.setColor(Color.ORANGE);
-
 
                 try {
                     boolean hasImage = x.getAttachments().get(0).isImage();
@@ -62,16 +57,12 @@ public class QuoteCommand extends Command {
                 } catch (Exception e) {
                     // Nothing, is not a picture
                 }
+
                 embed.setAuthor(member.getEffectiveName(), null, x.getAuthor().getEffectiveAvatarUrl());
-
                 commandEvent.reply(embed.build(), success -> commandEvent.getMessage().delete().queue());
-
-
             });
         } catch (Exception e) {
             commandEvent.reply("Couldn't quote your message, if it's from another channel make sure to mention that channel");
         }
-
-
     }
 }

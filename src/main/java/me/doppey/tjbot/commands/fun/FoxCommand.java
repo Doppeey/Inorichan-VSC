@@ -11,8 +11,6 @@ import org.json.JSONObject;
 
 
 public class FoxCommand extends Command {
-
-
     public FoxCommand() {
         this.name = "fox";
         this.help = "Gets a random fox picture";
@@ -21,34 +19,24 @@ public class FoxCommand extends Command {
         this.cooldown = 10;
     }
 
-
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         HttpResponse<String> response = null;
-
-
         try {
             response = Unirest.get("https://randomfox.ca/floof/").asString();
         } catch (Exception e) {
 
             InoriChan.LOGGER.error(e.getMessage(), e);
-
-
         }
 
         JSONObject json = new JSONObject(response.getBody());
-
         String imageUrl = json.getString("image");
 
         commandEvent.reply(new EmbedBuilder()
                 .setImage(imageUrl)
                 .build()
         );
-
     }
-
-
 }
 
 

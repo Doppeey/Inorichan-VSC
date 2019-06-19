@@ -10,9 +10,7 @@ import net.dv8tion.jda.core.entities.Message;
  * MemberParser
  */
 public abstract class MemberParser {
-
     public static Member getMemberFromArgs(CommandEvent commandEvent)  {
-
         String args = commandEvent.getArgs();
         final Guild guild = commandEvent.getGuild();
         final Message message = commandEvent.getMessage();
@@ -22,10 +20,8 @@ public abstract class MemberParser {
         try {
             name = args.split("#")[0];
             identifier = args.split("#")[1];
-        } catch (Exception e) {
-            // nothing to do
+        } catch (Exception ignored) {
         }
-
 
         // Return the member that called the event if no args are given
         if (args.isBlank()) {
@@ -65,7 +61,5 @@ public abstract class MemberParser {
 
         // No user found, so we return null
         return null;
-
     }
-
 }

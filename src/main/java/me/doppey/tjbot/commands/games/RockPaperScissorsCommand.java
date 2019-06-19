@@ -8,7 +8,6 @@ import java.util.Random;
 
 
 public class RockPaperScissorsCommand extends Command {
-
     public RockPaperScissorsCommand() {
         this.name = "rps";
         this.help = "Rock Paper Scissors, usage: >rps [rock/paper/scissors]";
@@ -16,10 +15,8 @@ public class RockPaperScissorsCommand extends Command {
 
     }
 
-
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         String[] message = commandEvent.getMessage().getContentRaw().split(" ");
 
         if (message.length < 2) {
@@ -29,12 +26,9 @@ public class RockPaperScissorsCommand extends Command {
         String playerGuess = message[1];
 
         commandEvent.reply(gameLogic(playerGuess));
-
-
     }
 
     private String gameLogic(String playerGuess) {
-
         String aiGuess = rockPaperScissorsGuess();
 
         final boolean playerPaper = playerGuess.equalsIgnoreCase("paper");
@@ -44,11 +38,8 @@ public class RockPaperScissorsCommand extends Command {
         final boolean aiRock = aiGuess.equalsIgnoreCase("rock");
         final boolean aiPaper = aiGuess.equalsIgnoreCase("paper");
 
-
-
         //rock
         if (playerRock) {
-
             if (aiScissors) {
                 return "I picked scissors, you win!";
             } else if (aiRock) {
@@ -61,7 +52,6 @@ public class RockPaperScissorsCommand extends Command {
 
         //paper
         if (playerPaper) {
-
             if (aiScissors) {
                 return "I picked scissors, you lose!";
             } else if (aiRock) {
@@ -69,13 +59,11 @@ public class RockPaperScissorsCommand extends Command {
             } else if (aiPaper) {
                 return "I picked paper, it's a draw!";
             }
-
         }
         //paper end
 
         //scissors
         if (playerScissors) {
-
             if (aiScissors) {
                 return "I picked scissors, it's a draw!";
             } else if (aiRock) {
@@ -83,32 +71,23 @@ public class RockPaperScissorsCommand extends Command {
             } else if (aiPaper) {
                 return "I picked paper, you win!";
             }
-
-
         }
 
         return "Error";
-
-
     }
 
     private String rockPaperScissorsGuess() {
-
         int guessID = new Random().nextInt(3);
 
         switch (guessID) {
-
             case 0:
                 return "scissors";
             case 1:
                 return "rock";
             case 2:
                 return "paper";
-
-
         }
 
         return "Error";
-
     }
 }

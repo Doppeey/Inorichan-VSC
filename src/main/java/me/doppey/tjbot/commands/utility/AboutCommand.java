@@ -44,16 +44,6 @@ public class AboutCommand extends Command {
         this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
     }
 
-
-    public void setIsAuthor(boolean value) {
-        this.IS_AUTHOR = value;
-    }
-
-
-    public void setReplacementCharacter(String value) {
-        this.REPLACEMENT_ICON = value;
-    }
-
     @Override
     protected void execute(CommandEvent event) {
         if (oauthLink == null) {
@@ -66,6 +56,7 @@ public class AboutCommand extends Command {
                 oauthLink = "";
             }
         }
+
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(this.color);
         builder.setAuthor("All about " + event.getSelfUser().getName() + "!", null, event.getSelfUser().getAvatarUrl());
@@ -92,6 +83,14 @@ public class AboutCommand extends Command {
         builder.setFooter("Last restart", null);
         builder.setTimestamp(event.getClient().getStartTime());
         event.reply(builder.build());
+    }
+
+    public void setIsAuthor(boolean value) {
+        this.IS_AUTHOR = value;
+    }
+
+    public void setReplacementCharacter(String value) {
+        this.REPLACEMENT_ICON = value;
     }
 
 }
