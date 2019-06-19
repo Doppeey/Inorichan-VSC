@@ -31,7 +31,6 @@ public class SpamlordCommand extends Command {
         final Role spamlord = commandEvent.getGuild().getRolesByName("spamlord", true).get(0);
 
         final Message message = commandEvent.getMessage();
-        final Member spammer = message.getMentionedMembers().get(0);
 
         // IF NO ARGUMENTS ARE GIVEN
         if (commandEvent.getArgs().isEmpty()) {
@@ -43,6 +42,8 @@ public class SpamlordCommand extends Command {
             commandEvent.getChannel().sendMessage(embed.build()).queue();
             return;
         }
+
+        final Member spammer = message.getMentionedMembers().get(0);
 
         // IF TIME ARGUMENTS ARE GIVEN (A user and optionally a time)
         if (message.getContentRaw().contains("-")) {
