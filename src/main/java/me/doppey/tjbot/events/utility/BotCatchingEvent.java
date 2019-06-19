@@ -80,7 +80,6 @@ public class BotCatchingEvent extends ListenerAdapter {
 
         boolean lessThanAWeekOld = OffsetDateTime.now().minus(7, ChronoUnit.DAYS).isBefore(user.getCreationTime());
         boolean matchesNameCriteria = user.getName().matches("^(?=(?:\\D*\\d){2})[a-zA-Z0-9]*$");
-        boolean noProfilePicture = user.getAvatarUrl() == null;
         final OffsetDateTime creationTime = user.getCreationTime();
 
         creationTime.until(OffsetDateTime.now(),ChronoUnit.MINUTES);
@@ -91,7 +90,9 @@ public class BotCatchingEvent extends ListenerAdapter {
         String dayDescriptor = days == 1 ? "Day":"Days";
         String hourDescriptor = hours == 1 ? "Hour":"Hours";
 
-        if (matchesNameCriteria && noProfilePicture) {
+
+        if (matchesNameCriteria) {
+
             EmbedBuilder embedBuilder = new EmbedBuilder();
             embedBuilder.setAuthor(username);
             embedBuilder.addField("Account created", days + " "+dayDescriptor+", "+hours+" "+hourDescriptor+" ago", true);
