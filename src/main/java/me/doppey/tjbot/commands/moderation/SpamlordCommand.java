@@ -29,7 +29,6 @@ public class SpamlordCommand extends Command {
         final Role spamlord = commandEvent.getGuild().getRolesByName("spamlord", true).get(0);
 
         final Message message = commandEvent.getMessage();
-        final Member spammer = message.getMentionedMembers().get(0);
 
         // IF NO ARGUMENTS ARE GIVEN
         if (commandEvent.getArgs().isEmpty()) {
@@ -38,9 +37,11 @@ public class SpamlordCommand extends Command {
             embed.setDescription("Gives the spamlord role to a user, limiting them to the spam channel");
             embed.addField("Parameters",
                     "**-t**: t stands for the amount of hours the user will be limited to the spam channel", true);
-            commandEvent.reply(embed.build());
+            commandEvent.getChannel().sendMessage(embed.build()).queue();
             return;
         }
+
+        final Member spammer = message.getMentionedMembers().get(0);
 
         // IF TIME ARGUMENTS ARE GIVEN (A user and optionally a time)
         if (message.getContentRaw().contains("-")) {
@@ -48,6 +49,7 @@ public class SpamlordCommand extends Command {
             final int time = Integer.parseInt(commandEvent.getArgs().split("-")[1].strip());
 
             message.addReaction("✅").queue();
+            commandEvent.getChannel().sendMessage("The user has been locked to the spam channel for " + time + " hour" + ((time > 1) ? "s" : "")).queue();
             gc.addSingleRoleToMember(spammer, spamlord)
                     .queue(muted -> gc.removeSingleRoleFromMember(spammer, spamlord).queueAfter(time, TimeUnit.HOURS));
             spamChannel.sendMessage(spammer.getAsMention() + " you are locked here for " + time
