@@ -8,6 +8,8 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.managers.GuildController;
 
+import java.awt.*;
+
 public class StagingAreaEvent extends ListenerAdapter {
 
     private GuildController gc = null;
@@ -49,6 +51,8 @@ public class StagingAreaEvent extends ListenerAdapter {
                             .setTitle(event.getAuthor().getName())
                             .addField("Message Sent in Welcome", event.getMessage().getContentRaw(), true)
                             .setFooter("ID: " + event.getAuthor().getId(), null)
+                            .setColor(Color.BLUE)
+                            .setThumbnail(event.getAuthor().getEffectiveAvatarUrl())
                             .build()).queue();
                 }
                 event.getMessage().delete().queue();
