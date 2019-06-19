@@ -13,15 +13,11 @@ import org.json.JSONObject;
 
 
 public class CatCommand extends Command {
-
     private HttpResponse<String> response = null;
-
-
     JSONObject json = null;
     private String url = null;
     private Config config;
     private String apiKey;
-
 
     public CatCommand(Config config) {
 
@@ -30,14 +26,10 @@ public class CatCommand extends Command {
         this.help = "Gets cat pictures, >cat help for a list of categories";
         this.category = Categories.AnimalPictures;
         this.apiKey = config.getProperty("CAT_API_KEY");
-
     }
-
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-
-
         int category = 0;
         String requestedCategory = "";
 
@@ -75,8 +67,6 @@ public class CatCommand extends Command {
                     requestedCategory1 = commandEvent.getArgs();
                     category1 = 7;
                     break;
-
-
             }
 
             if (!commandEvent.getArgs().equalsIgnoreCase("categories") && !commandEvent.getArgs().equalsIgnoreCase("help")) {
@@ -105,7 +95,6 @@ public class CatCommand extends Command {
 
                     url = json.getString("url");
 
-
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.setImage(url);
                     if (!requestedCategory1.isEmpty()) {
@@ -124,9 +113,6 @@ public class CatCommand extends Command {
         };
         Thread thread = new Thread(fetchCat);
         thread.run();
-
     }
-
-
 }
 

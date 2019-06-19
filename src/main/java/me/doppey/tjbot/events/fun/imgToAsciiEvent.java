@@ -11,43 +11,30 @@ import java.io.IOException;
 
 public class imgToAsciiEvent extends ListenerAdapter {
 
-
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         try {
             if (event.getMessage().getAttachments().get(0) != null && event.getMessage().getAttachments().get(0).isImage()) {
-
                 if (event.getMessage().getContentRaw().toLowerCase().contains("imgtoascii")) {
-
-
                     BufferedImage image = null;
 
                     try {
                         image = ImageIO.read(event.getMessage().getAttachments().get(0).getInputStream());
                     } catch (Exception e) {
                         InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
                         return;
                     }
+
                     try {
                         event.getChannel().sendMessage("```\n" + run(image) + "\n```").queue();
                     } catch (Exception e) {
                         InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
                         event.getChannel().sendMessage("Couldn't convert image").queue();
                     }
-
-
                 }
-
-
             }
-        } catch (Exception e) {
-            //nothing
+        } catch (Exception ignored) {
         }
-
     }
 
     boolean negative;
@@ -75,10 +62,8 @@ public class imgToAsciiEvent extends ListenerAdapter {
      * @param g grayscale
      * @return char
      */
-    private char returnStrPos(double g)//takes the grayscale value as parameter
-    {
+    private char returnStrPos(double g) {
         final char str;
-
         if (g >= 230.0) {
             str = ' ';
         } else if (g >= 200.0) {
@@ -98,8 +83,8 @@ public class imgToAsciiEvent extends ListenerAdapter {
         } else {
             str = '@';
         }
-        return str; // return the character
 
+        return str; // return the character
     }
 
     /**
@@ -110,7 +95,6 @@ public class imgToAsciiEvent extends ListenerAdapter {
      */
     private char returnStrNeg(double g) {
         final char str;
-
         if (g >= 230.0) {
             str = '@';
         } else if (g >= 200.0) {
@@ -130,20 +114,15 @@ public class imgToAsciiEvent extends ListenerAdapter {
         } else {
             str = ' ';
         }
-        return str;
 
+        return str;
     }
 
-
     public String run(BufferedImage image) throws IOException {
-
-
         Image tmp = image.getScaledInstance(40, 35, BufferedImage.SCALE_FAST);
         BufferedImage buffered = new BufferedImage(40, 35, BufferedImage.TYPE_INT_RGB);
         buffered.getGraphics().drawImage(tmp, 0, 0, null);
 
-
         return convert(buffered);
-
     }
 }

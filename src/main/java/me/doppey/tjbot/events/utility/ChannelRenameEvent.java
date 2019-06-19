@@ -10,10 +10,8 @@ import java.util.concurrent.TimeUnit;
 
 public class ChannelRenameEvent extends ListenerAdapter {
 
-
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-
         String content = event.getMessage().getContentDisplay();
         TextChannel eventChannel = event.getTextChannel();
         boolean hasCalledFreeCommand = content.toLowerCase().startsWith(">tag free") || content.toLowerCase().startsWith("?tag free");
@@ -21,28 +19,17 @@ public class ChannelRenameEvent extends ListenerAdapter {
         boolean isMarkedFree = eventChannel.getName().toLowerCase().contains("\uD83C\uDD93");
         ChannelManager cm = eventChannel.getManager();
 
-
-        if(isMarkedFree && isHelpChannel && !event.getAuthor().isBot()){
-
-            String newName = eventChannel.getName().replaceAll("\uD83C\uDD93","");
+        if (isMarkedFree && isHelpChannel && !event.getAuthor().isBot()) {
+            String newName = eventChannel.getName().replaceAll("\uD83C\uDD93", "");
             cm.setName(newName).queue();
             return;
         }
 
-
         //Checks if the message marked the channel to be free and if its even a help channel and if it might already be marked free
-        if(!hasCalledFreeCommand || !isHelpChannel ||isMarkedFree){
+        if (!hasCalledFreeCommand || !isHelpChannel || isMarkedFree) {
             return;
         }
 
-        cm.setName(cm.getChannel().getName()+"\uD83C\uDD93").queue();
-
-
-
-
-
-
-
-
+        cm.setName(cm.getChannel().getName() + "\uD83C\uDD93").queue();
     }
 }

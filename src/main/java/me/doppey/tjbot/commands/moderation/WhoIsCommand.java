@@ -12,13 +12,11 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 public class WhoIsCommand extends Command {
-
     public WhoIsCommand() {
         this.name = "whois";
         this.category = Categories.Moderation;
         this.help = "Gets info about a specified user by ID";
     }
-
 
     @Override
     protected void execute(CommandEvent commandEvent) {
@@ -26,7 +24,6 @@ public class WhoIsCommand extends Command {
         Member member;
         final List<Member> mentionedMembers = commandEvent.getMessage().getMentionedMembers();
         final Guild guild = commandEvent.getGuild();
-
 
         try {
             ID = commandEvent.getMessage().getContentRaw().split(">whois ")[1];
@@ -37,15 +34,11 @@ public class WhoIsCommand extends Command {
 
         final List<Member> membersByEffectiveName = guild.getMembersByEffectiveName(ID, true);
 
-
         if (ID.matches("[0-9]+")) {
             member = guild.getMemberById(ID);
         } else {
-
-
             if (!mentionedMembers.isEmpty()) {
                 member = mentionedMembers.get(0);
-
             } else {
                 try {
                     member = membersByEffectiveName.get(0);
@@ -56,11 +49,8 @@ public class WhoIsCommand extends Command {
             }
         }
 
-
-
         final OffsetDateTime joinDate = member.getJoinDate();
         final OffsetDateTime creationTime = member.getUser().getCreationTime();
-
 
         EmbedBuilder whois = new EmbedBuilder();
         whois.setColor(member.getColor());
@@ -74,9 +64,7 @@ public class WhoIsCommand extends Command {
         StringBuilder roles = new StringBuilder();
         int amountOfRoles = 0;
 
-
         for (Role r : roleList) {
-
             if (!r.getName().equalsIgnoreCase("illuminati")) {
                 roles.append(" ").append(r.getAsMention());
                 amountOfRoles++;
@@ -84,12 +72,7 @@ public class WhoIsCommand extends Command {
         }
 
         whois.setFooter("ID: " + member.getUser().getId(), null);
-
         whois.addField("Roles [" + amountOfRoles + "]", roles.toString(), false);
-
-
         commandEvent.reply(whois.build());
-
-
     }
 }

@@ -14,7 +14,6 @@ import net.dv8tion.jda.core.managers.GuildController;
 import java.util.concurrent.TimeUnit;
 
 public class SpamlordCommand extends Command {
-
     public SpamlordCommand() {
         this.name = "spamlord";
         this.help = "gives someone the spamlord role, limiting them to #spam [MOD COMMAND]";
@@ -24,7 +23,6 @@ public class SpamlordCommand extends Command {
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         GuildController gc = new GuildController(commandEvent.getGuild());
 
         final TextChannel spamChannel = gc.getGuild().getTextChannelsByName("spam", true).get(0);

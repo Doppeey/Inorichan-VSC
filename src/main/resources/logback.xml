@@ -1,6 +1,5 @@
 <configuration>
     <turboFilter class="me.doppey.tjbot.logging.InoriFilter"/>
-
     <contextListener class="me.doppey.tjbot.logging.LoggerStartupListener"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -20,5 +19,4 @@
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="PAPERTRAIL"/>
     </root>
-
 </configuration>

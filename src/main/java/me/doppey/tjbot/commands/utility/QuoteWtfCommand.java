@@ -13,7 +13,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 public class QuoteWtfCommand extends Command {
-
     private String mention;
     private String argsTrimmed;
     MessageChannel quoteChannel;
@@ -41,20 +40,15 @@ public class QuoteWtfCommand extends Command {
             quoteChannel = commandEvent.getChannel();
         }
 
-
         quoteChannel.getMessageById(messageId).queue(x -> {
-
             final OffsetDateTime creationTime = x.getCreationTime();
             final Member member = x.getMember();
 
-
             EmbedBuilder embed = new EmbedBuilder();
-
 
             embed.setDescription(x.getContentRaw() + "\n \n [[Jump to message]](" + x.getJumpUrl() + ")  ");
             embed.appendDescription("Creation time:  " + creationTime.toLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE) + "\n[Quoted by " + commandEvent.getMember().getAsMention() + "]");
             embed.setColor(Color.orange);
-
 
             try {
                 boolean hasImage = x.getAttachments().get(0).isImage();
@@ -69,12 +63,6 @@ public class QuoteWtfCommand extends Command {
 
             commandEvent.reply(embed.build());
             commandEvent.getMessage().delete().queueAfter(1, TimeUnit.SECONDS);
-
-
         });
-
-
     }
-
-
 }
