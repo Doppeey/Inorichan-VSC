@@ -8,8 +8,6 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.managers.GuildController;
 
-import java.awt.*;
-
 public class StagingAreaEvent extends ListenerAdapter {
 
     private GuildController gc = null;
@@ -38,22 +36,13 @@ public class StagingAreaEvent extends ListenerAdapter {
                 stagingRole = gc.getGuild().getRolesByName("stagingrole", true).get(0);
             }
 
-            MessageChannel channel = event.getChannel();
-            final boolean isWelcomeChannel = channel.getId().equalsIgnoreCase("513551097449807883");
+            final boolean isWelcomeChannel = event.getChannel().getId().equalsIgnoreCase("513551097449807883");
             final boolean hasAcceptedRules = event.getMessage().getContentRaw().equalsIgnoreCase("accept");
 
 
             if (isWelcomeChannel) {
                 if (hasAcceptedRules) {
                     removeStagingRoleFromUser(event);
-                } else {
-                    event.getGuild().getTextChannelById("546416238922956845").sendMessage(new EmbedBuilder()
-                            .setTitle(event.getAuthor().getName())
-                            .addField("Message Sent in Welcome", event.getMessage().getContentRaw(), true)
-                            .setFooter("ID: " + event.getAuthor().getId(), null)
-                            .setColor(Color.BLUE)
-                            .setThumbnail(event.getAuthor().getEffectiveAvatarUrl())
-                            .build()).queue();
                 }
                 event.getMessage().delete().queue();
             }
