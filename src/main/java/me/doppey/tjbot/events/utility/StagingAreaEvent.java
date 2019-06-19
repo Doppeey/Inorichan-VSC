@@ -45,12 +45,6 @@ public class StagingAreaEvent extends ListenerAdapter {
             if (isWelcomeChannel) {
                 if (hasAcceptedRules) {
                     removeStagingRoleFromUser(event);
-                } else {
-                    Constants.BOT_SUSPICION_CHANNEL.sendMessage(new EmbedBuilder()
-                            .setTitle(event.getAuthor().getName())
-                            .addField("Message Sent in Welcome", event.getMessage().getContentRaw(), true)
-                            .setFooter("ID: " + event.getAuthor().getId(), null)
-                            .build()).queue();
                 }
                 event.getMessage().delete().queue();
             }
