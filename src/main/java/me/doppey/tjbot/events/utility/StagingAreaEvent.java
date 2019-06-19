@@ -33,9 +33,9 @@ public class StagingAreaEvent extends ListenerAdapter {
             if (stagingRole == null) {
                 stagingRole = gc.getGuild().getRolesByName("stagingrole", true).get(0);
             }
-
             final boolean isWelcomeChannel = event.getChannel().getId().equalsIgnoreCase("513551097449807883");
             final boolean hasAcceptedRules = event.getMessage().getContentRaw().equalsIgnoreCase("accept");
+
 
             if (isWelcomeChannel) {
                 if (hasAcceptedRules) {
