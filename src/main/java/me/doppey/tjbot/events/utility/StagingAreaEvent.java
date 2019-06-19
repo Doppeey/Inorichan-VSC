@@ -1,7 +1,5 @@
 package me.doppey.tjbot.events.utility;
 
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -38,7 +36,6 @@ public class StagingAreaEvent extends ListenerAdapter {
 
             final boolean isWelcomeChannel = event.getChannel().getId().equalsIgnoreCase("513551097449807883");
             final boolean hasAcceptedRules = event.getMessage().getContentRaw().equalsIgnoreCase("accept");
-
 
             if (isWelcomeChannel) {
                 if (hasAcceptedRules) {
