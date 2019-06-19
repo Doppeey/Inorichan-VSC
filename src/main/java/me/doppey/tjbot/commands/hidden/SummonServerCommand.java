@@ -21,7 +21,7 @@ public class SummonServerCommand extends Command implements Hiddencommand {
     @Override
     protected void execute(CommandEvent commandEvent) {
 
-        if (commandEvent.getMember().getUser().getId().equalsIgnoreCase("272158112318750720")) {
+        if (commandEvent.getMember().getUser().getId().equalsIgnoreCase(InoriChan.getConfig().getProperty("OWNER_ID"))) {
             if (!commandEvent.getGuild().getId().equalsIgnoreCase("272761734820003841")) {
                 if (!Hiddencommand.isTogetherJavaServer(commandEvent.getGuild().getId())) {
 

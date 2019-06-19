@@ -1,5 +1,6 @@
 package me.doppey.tjbot.events.utility;
 
+import me.doppey.tjbot.Constants;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.Role;
@@ -27,7 +28,7 @@ public class StagingAreaEvent extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        if (event.getGuild().getId().equalsIgnoreCase("272761734820003841")) {
+        if (event.getGuild().getId().equalsIgnoreCase(Constants.TJ_GUILD.getId())) {
             //VARIABLES
             if (gc == null) {
                 this.gc = new GuildController(event.getGuild());
@@ -37,7 +38,7 @@ public class StagingAreaEvent extends ListenerAdapter {
             }
 
             MessageChannel channel = event.getChannel();
-            final boolean isWelcomeChannel = channel.getId().equalsIgnoreCase("513551097449807883");
+            final boolean isWelcomeChannel = channel.getId().equalsIgnoreCase(Constants.WELCOME_CHANNEL.getId());
             final boolean hasAcceptedRules = event.getMessage().getContentRaw().equalsIgnoreCase("accept");
 
 
@@ -45,7 +46,7 @@ public class StagingAreaEvent extends ListenerAdapter {
                 if (hasAcceptedRules) {
                     removeStagingRoleFromUser(event);
                 } else {
-                    event.getGuild().getTextChannelById("546416238922956845").sendMessage(new EmbedBuilder()
+                    Constants.BOT_SUSPICION_CHANNEL.sendMessage(new EmbedBuilder()
                             .setTitle(event.getAuthor().getName())
                             .addField("Message Sent in Welcome", event.getMessage().getContentRaw(), true)
                             .setFooter("ID: " + event.getAuthor().getId(), null)

@@ -4,6 +4,7 @@ import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 
+import me.doppey.tjbot.Constants;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
@@ -17,7 +18,7 @@ public class SpamlordCommand extends Command {
 
     public SpamlordCommand() {
         this.name = "spamlord";
-        this.help = "gives someone the spamlord role, limiting them to #spam [MOD COMMAND]";
+        this.help = "gives someone the spamlord role, limiting them to #" + Constants.SPAM_CHANNEL.getName() + " [MOD COMMAND]";
         this.requiredRole = "Moderator";
         this.category = Categories.Moderation;
     }
@@ -27,7 +28,6 @@ public class SpamlordCommand extends Command {
 
         GuildController gc = new GuildController(commandEvent.getGuild());
 
-        final TextChannel spamChannel = gc.getGuild().getTextChannelsByName("spam", true).get(0);
         final Role spamlord = commandEvent.getGuild().getRolesByName("spamlord", true).get(0);
 
         final Message message = commandEvent.getMessage();
@@ -52,7 +52,7 @@ public class SpamlordCommand extends Command {
             message.addReaction("✅").queue();
             gc.addSingleRoleToMember(spammer, spamlord)
                     .queue(muted -> gc.removeSingleRoleFromMember(spammer, spamlord).queueAfter(time, TimeUnit.HOURS));
-            spamChannel.sendMessage(spammer.getAsMention() + " you are locked here for " + time
+            Constants.SPAM_CHANNEL.sendMessage(spammer.getAsMention() + " you are locked here for " + time
                     + " hour(s), please refrain from spammy behaviour in the future!").queue();
             return;
         }
@@ -62,7 +62,7 @@ public class SpamlordCommand extends Command {
                 .queue(muted -> gc.removeSingleRoleFromMember(spammer, spamlord).queueAfter(1, TimeUnit.HOURS));
         commandEvent.getChannel().sendMessage("The user has been locked to the spam channel for an hour").queue();
         message.addReaction("✅").queue();
-        spamChannel
+        Constants.SPAM_CHANNEL
                 .sendMessage(spammer.getAsMention()
                         + " you are locked here for an hour, please refrain from spammy behaviour in the future!")
                 .queue();

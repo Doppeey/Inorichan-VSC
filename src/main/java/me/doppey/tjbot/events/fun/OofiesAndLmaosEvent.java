@@ -2,6 +2,7 @@ package me.doppey.tjbot.events.fun;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import me.doppey.tjbot.Constants;
 import me.doppey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
@@ -25,7 +26,6 @@ public class OofiesAndLmaosEvent extends ListenerAdapter {
     //Variables
     private final MongoCollection<Document> oofsAndLmaosCollection;
     private final String lmaoID = "521646894431076353";
-    private final String guildID = "272761734820003841";
     private final String oofID = "510948096184680463";
     private HashSet<String> reactedMessages = new HashSet<>();
     private boolean isOofOrLmaoEmote;
@@ -79,7 +79,7 @@ public class OofiesAndLmaosEvent extends ListenerAdapter {
             messageReactionList = message.getReactions();
 
 
-            if (guild.getId().equalsIgnoreCase(guildID)) {
+            if (guild.getId().equalsIgnoreCase(Constants.TJ_GUILD.getId())) {
                 if (!messageReactionList.contains(oof) && !messageReactionList.contains(lmao)) {
 
                     if (isOofOrLmaoEmote) {
@@ -115,9 +115,8 @@ public class OofiesAndLmaosEvent extends ListenerAdapter {
                                 embed.appendDescription("   [Link](" + message.getJumpUrl() + ")");
 
 
-                                String channelID = "521647171871703040";
                                 Message finalMessage = message;
-                                event.getGuild().getTextChannelById(channelID).sendMessage(embed.build()).queue(x -> {
+                                Constants.OOFS_AND_LMAOS_CHANNEL.sendMessage(embed.build()).queue(x -> {
 
                                     x.addReaction(event.getReactionEmote().getEmote()).queue();
 
