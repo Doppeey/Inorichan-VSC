@@ -1,8 +1,5 @@
 package me.doppey.tjbot.events.utility;
 
-import me.doppey.tjbot.Constants;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -28,7 +25,7 @@ public class StagingAreaEvent extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        if (event.getGuild().getId().equalsIgnoreCase(Constants.TJ_GUILD.getId())) {
+        if (event.getGuild().getId().equalsIgnoreCase("272761734820003841")) {
             //VARIABLES
             if (gc == null) {
                 this.gc = new GuildController(event.getGuild());
@@ -36,9 +33,7 @@ public class StagingAreaEvent extends ListenerAdapter {
             if (stagingRole == null) {
                 stagingRole = gc.getGuild().getRolesByName("stagingrole", true).get(0);
             }
-
-            MessageChannel channel = event.getChannel();
-            final boolean isWelcomeChannel = channel.getId().equalsIgnoreCase(Constants.WELCOME_CHANNEL.getId());
+            final boolean isWelcomeChannel = event.getChannel().getId().equalsIgnoreCase("513551097449807883");
             final boolean hasAcceptedRules = event.getMessage().getContentRaw().equalsIgnoreCase("accept");
 
 
