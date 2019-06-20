@@ -3,6 +3,7 @@ package me.doppey.tjbot.events.fun;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import me.doppey.tjbot.InoriChan;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.bson.Document;
@@ -26,6 +27,12 @@ public class JavacoinEvent extends ListenerAdapter {
 
 
         String channelName = event.getChannel().getName().toLowerCase();
+
+        try{
+            event.getMessage();
+        } catch (NullPointerException e){
+            return;
+        }
 
         //Don't count the >coins message
         if(event.getMessage().getContentRaw().strip().toLowerCase().equals(">coins")){
