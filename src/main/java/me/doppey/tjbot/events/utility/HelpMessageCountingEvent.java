@@ -32,6 +32,9 @@ public class HelpMessageCountingEvent extends ListenerAdapter {
         }
 
         if (channelName.contains("help") || channelName.contains("review")) {
+            if(eventContentRaw.contains(">tag free")||eventContentRaw.contains("?tag free")){
+                return;
+            }
             IncrementMessageCounter(event);
         }
 
