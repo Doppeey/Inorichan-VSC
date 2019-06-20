@@ -67,6 +67,8 @@ public class InoriChan {
             listeners.loadClasses().forEach(jda::addEventListener);
 
             // Scheduler that checks help channels and adds the free icon
+
+            Thread.sleep(5000);
             ChannelMarkerScheduler cm = new ChannelMarkerScheduler(jda.getGuildById("272761734820003841"));
             cm.checkHelpChannels();
 
