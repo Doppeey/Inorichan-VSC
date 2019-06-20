@@ -5,14 +5,16 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.managers.ChannelManager;
 
-import java.sql.Time;
-import java.util.concurrent.TimeUnit;
 
 public class ChannelRenameEvent extends ListenerAdapter {
 
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
+
+        if(!event.getGuild().getId().equals("272761734820003841")){
+            return;
+        }
 
         String content = event.getMessage().getContentDisplay();
         TextChannel eventChannel = event.getTextChannel();
