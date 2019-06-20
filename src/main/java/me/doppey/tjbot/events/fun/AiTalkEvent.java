@@ -92,7 +92,7 @@ public class AiTalkEvent extends ListenerAdapter {
                     Thread newThread = new Thread(getResponseRunnable);
                     newThread.start();
 
-                    for (int i = 0; i < 5; i++) {
+                    for (int i = 0; i < 10; i++) {
                         if (response[0] != null) {
                             break;
                         }
