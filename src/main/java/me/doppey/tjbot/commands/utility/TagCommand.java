@@ -16,22 +16,18 @@ import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 public class TagCommand extends Command {
-
     private MongoCollection tagCollection;
     private EventWaiter waiter;
 
     public TagCommand(MongoDatabase db, EventWaiter waiter) {
-
         this.waiter = waiter;
         tagCollection = db.getCollection("tags");
         this.name = "tag";
         this.aliases = new String[]{"tags"};
-
     }
 
     @Override
     protected void execute(CommandEvent event) {
-
         Role tagManagerRole;
 
         try {
@@ -42,7 +38,6 @@ public class TagCommand extends Command {
             return;
         }
 
-
         Runnable runnable = () -> {
             EmbedBuilder embed = new EmbedBuilder();
             embed.setColor(Color.RED);
@@ -50,7 +45,6 @@ public class TagCommand extends Command {
             embed.setDescription("30 seconds have passed without a response, tag creation has timed out");
             event.reply(embed.build());
         };
-
 
         final String contentRaw = event.getMessage().getContentRaw();
 
@@ -60,10 +54,8 @@ public class TagCommand extends Command {
             return;
         }
 
-
         //Creating a tag
         if (contentRaw.toLowerCase().contains("tag create")) {
-
             if (managerRoleMissing(event, tagManagerRole)) {
                 return;
             }
@@ -74,7 +66,6 @@ public class TagCommand extends Command {
 
         //Displaying a tag
         if (contentRaw.split(" ").length == 2 && !contentRaw.contains("create") && !contentRaw.contains("edit") && !contentRaw.contains("delete")) {
-
             displayTag(event, contentRaw);
             return;
         }
@@ -87,7 +78,6 @@ public class TagCommand extends Command {
 
             //Incase user tries to edit in one line
             if (contentRaw.split(" ")[1].equalsIgnoreCase("edit") && contentRaw.split(" ").length >= 4) {
-
                 if (updateTagOneLine(event, contentRaw)) {
                     return;
                 }
@@ -101,14 +91,11 @@ public class TagCommand extends Command {
 
         //Delete a tag
         if (contentRaw.contains("delete")) {
-
             if (managerRoleMissing(event, tagManagerRole)) {
                 return;
             }
             deleteTag(event, runnable);
         }
-
-
     }
 
     private boolean updateTagOneLine(CommandEvent event, String contentRaw) {
@@ -129,19 +116,16 @@ public class TagCommand extends Command {
         embedBuilder.setDescription("The tag " + name + " has successfully been edited!");
         event.reply(embedBuilder.build());
 
-
         Document tag = new Document();
         tag.append("name", name);
         String splitRegex = ">tag edit " + contentRaw.split(" ")[2];
         String content = contentRaw.substring(splitRegex.length() + 1);
-
 
         tagCollection.updateOne(tag, new Document("$set", new Document("content", content)));
         return false;
     }
 
     // METHODS
-
     private void deleteTag(CommandEvent event, Runnable runnable) {
         event.reply("Which tag do you want to delete?");
         waiter.waitForEvent(GuildMessageReceivedEvent.class,
@@ -151,15 +135,13 @@ public class TagCommand extends Command {
                     Document doc = new Document().append("name", name);
 
                     if (tagCollection.find(doc).first() == null) {
-
-                        EmbedBuilder alreadyExistsEmbed = new EmbedBuilder();
-                        alreadyExistsEmbed.setTitle("Error || Not found");
-                        alreadyExistsEmbed.setColor(Color.RED);
-                        alreadyExistsEmbed.setDescription("A tag with that name doesn't exist!");
+                        EmbedBuilder alreadyExistsEmbed = new EmbedBuilder()
+                                .setTitle("Error || Not found")
+                                .setColor(Color.RED)
+                                .setDescription("A tag with that name doesn't exist!");
                         event.reply(alreadyExistsEmbed.build());
                         return;
                     }
-
 
                     tagCollection.deleteOne(doc);
 
@@ -168,8 +150,6 @@ public class TagCommand extends Command {
                     embedBuilder.setTitle("Success || Tag delete");
                     embedBuilder.setDescription("The tag " + name + " has successfully been deleted!");
                     event.reply(embedBuilder.build());
-
-
                 }, 30, TimeUnit.SECONDS, runnable);
     }
 
@@ -178,7 +158,6 @@ public class TagCommand extends Command {
         waiter.waitForEvent(GuildMessageReceivedEvent.class,
                 msg -> event.getChannel().equals(msg.getChannel()) && msg.getAuthor().equals(event.getAuthor()),
                 correct -> {
-
                     String name = correct.getMessage().getContentDisplay().toLowerCase();
 
                     if (tagCollection.find(new Document("name", name)).first() == null) {
@@ -190,9 +169,7 @@ public class TagCommand extends Command {
                         return;
                     }
 
-
                     event.reply("Please tell me the new content.");
-
 
                     waiter.waitForEvent(GuildMessageReceivedEvent.class,
                             message -> event.getChannel().equals(message.getChannel()) && message.getAuthor().equals(event.getAuthor()), success -> {
@@ -202,16 +179,12 @@ public class TagCommand extends Command {
                                 embedBuilder.setDescription("The tag " + name + " has successfully been edited!");
                                 event.reply(embedBuilder.build());
 
-
                                 Document tag = new Document();
                                 tag.append("name", name);
 
                                 tagCollection.updateOne(tag, new Document("$set", new Document("content",
                                         success.getMessage().getContentRaw())));
-
-
                             }, 30, TimeUnit.SECONDS, runnable);
-
                 }, 30, TimeUnit.SECONDS, runnable);
     }
 
@@ -219,10 +192,8 @@ public class TagCommand extends Command {
         Document doc = new Document("name", contentRaw.split(" ")[1].toLowerCase());
         if (tagCollection.find(doc).first() != null) {
 
-
             Document found = (Document) tagCollection.find(doc).first();
             event.reply(found.getString("content"));
-
 
         } else {
             EmbedBuilder noSuchTagEmbed = new EmbedBuilder();
@@ -239,7 +210,6 @@ public class TagCommand extends Command {
         waiter.waitForEvent(GuildMessageReceivedEvent.class,
                 msg -> event.getChannel().equals(msg.getChannel()) && msg.getAuthor().equals(event.getAuthor()),
                 correct -> {
-
                     String name = correct.getMessage().getContentDisplay().toLowerCase();
 
                     if (tagCollection.find(new Document("name", name)).first() != null) {
@@ -251,10 +221,7 @@ public class TagCommand extends Command {
                         return;
                     }
 
-
                     event.reply("Alright, the name will be " + name + ". Please tell me the content now.");
-
-
                     waiter.waitForEvent(GuildMessageReceivedEvent.class,
                             message -> event.getChannel().equals(message.getChannel()) && message.getAuthor().equals(event.getAuthor()), success -> {
                                 EmbedBuilder embedBuilder = new EmbedBuilder();
@@ -268,9 +235,7 @@ public class TagCommand extends Command {
                                 tag.append("creatorId", event.getAuthor().getId());
                                 tag.append("content", success.getMessage().getContentRaw());
                                 tagCollection.insertOne(tag);
-
                             }, 30, TimeUnit.SECONDS, runnable);
-
                 }, 30, TimeUnit.SECONDS, runnable);
     }
 

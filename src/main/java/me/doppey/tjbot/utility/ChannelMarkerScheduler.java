@@ -57,7 +57,6 @@ public class ChannelMarkerScheduler {
 
                 }
             }
-
         };
 
         timer.schedule(checker, 3000, 300000);

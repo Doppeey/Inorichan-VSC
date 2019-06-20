@@ -15,8 +15,6 @@ public class HurensohnCommand extends Command {
     private HttpResponse<String> response = null;
     private Config config;
 
-
-
     public HurensohnCommand(Config config) {
         this.config = config;
         this.name = "hurensohn";
@@ -24,7 +22,6 @@ public class HurensohnCommand extends Command {
         this.category = Categories.Memes;
         this.memeId = "173069250";
     }
-
 
     @Override
     protected void execute(CommandEvent commandEvent) {
@@ -39,7 +36,6 @@ public class HurensohnCommand extends Command {
             return;
         }
 
-
         try {
             response = com.mashape.unirest.http.Unirest.get("https://api.imgflip.com/caption_image")
                     .queryString("username", config.getProperty("IMGFLIP_USERNAME"))
@@ -51,8 +47,6 @@ public class HurensohnCommand extends Command {
                     .asString();
         } catch (UnirestException e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
         }
 
         JSONObject json = null;
@@ -65,7 +59,5 @@ public class HurensohnCommand extends Command {
         }
 
         commandEvent.reply("By " + commandEvent.getMember().getAsMention() + "\n" + str, sent -> commandEvent.getMessage().delete().queue());
-
-
     }
 }

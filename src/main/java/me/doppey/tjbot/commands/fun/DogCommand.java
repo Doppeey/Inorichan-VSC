@@ -17,7 +17,6 @@ import java.util.HashSet;
 
 
 public class DogCommand extends Command {
-
     private HttpResponse<String> response = null;
     private final HashMap<String, Integer> dogIds;
     private String apiKey;
@@ -28,7 +27,6 @@ public class DogCommand extends Command {
         this.help = "Gets dog pictures with extra info about breed etc.";
         this.category = Categories.AnimalPictures;
 
-
         HttpResponse<String> response = null;
 
         try {
@@ -38,10 +36,7 @@ public class DogCommand extends Command {
                     .asString();
         } catch (UnirestException e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
         }
-
 
         JSONArray dogbreeds = null;
         if (response != null) {
@@ -57,18 +52,14 @@ public class DogCommand extends Command {
         }
 
         for (JSONObject dog : dogJsonObjects) {
-
             dogIdMap.put(dog.getString("name").toLowerCase(), dog.getInt("id"));
-
         }
 
         this.dogIds = dogIdMap;
-
     }
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         if (commandEvent.getArgs().isEmpty()) {
             postRandomDog(commandEvent);
         } else if (commandEvent.getArgs().toLowerCase().contains("breed")) {
@@ -115,31 +106,18 @@ public class DogCommand extends Command {
                             final JSONObject breedHeight = breedInfo.getJSONObject("height");
                             embed.addField("Height", "Imperial:   " + breedHeight.getString("imperial") + "\nMetric:      " + breedHeight.getString("metric"), false);
                             break;
-
-
                     }
-
                 }
                 commandEvent.reply(embed.build());
             } catch (Exception e) {
                 commandEvent.reply("Couldn't find breed");
                 InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
-
             }
-
-
         }
-
-
-
     }
-
 
     private void postRandomDog(CommandEvent commandEvent) {
         try {
-
             response = Unirest.get("https://api.thedogapi.com/v1/images/search")
                     .header("Content-Type", "application/json")
                     .header("x-api-key", apiKey)
@@ -154,8 +132,6 @@ public class DogCommand extends Command {
                     .asString();
         } catch (UnirestException e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
         }
 
         JSONArray jsonArray = new JSONArray(response.getBody());
@@ -163,7 +139,6 @@ public class DogCommand extends Command {
         JSONArray breedArray = jsonObject.getJSONArray("breeds");
         String breedName = breedArray.getJSONObject(0).getString("name");
         String url = jsonObject.getString("url");
-
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("Random woofer just for you :dog: The breed is: " + breedName);

@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class AiTalkEvent extends ListenerAdapter {
-
     String apiKey;
     String sessionID;
     String chatbotId;
@@ -36,8 +35,6 @@ public class AiTalkEvent extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-
-
         final List<Member> mentionedMembers = event.getMessage().getMentionedMembers();
         final TextChannel eventChannel = event.getChannel();
 
@@ -47,11 +44,8 @@ public class AiTalkEvent extends ListenerAdapter {
 
                 //Check if it has been at least 5 seconds since the last call
                 if (!hasCooldown() || event.getAuthor().getId().equals("332989789936549889")) {
-
-
                     final HttpResponse<String>[] response = new HttpResponse[]{null};
                     String message = "";
-
 
                     //Make sure there is at leat one word supplied
                     try {
@@ -64,16 +58,12 @@ public class AiTalkEvent extends ListenerAdapter {
                             eventChannel.sendMessage("I can't hear you").queue();
                             return;
                         }
-
                     } catch (Exception e) {
-
                         eventChannel.sendMessage("Error, no message supplied").queue();
-
                     }
 
-
                     //Send GET request to Botmakr
-                    event.getChannel().sendTyping().queueAfter(1,TimeUnit.SECONDS);
+                    event.getChannel().sendTyping().queueAfter(1, TimeUnit.SECONDS);
                     String finalMessage = message;
                     Runnable getResponseRunnable = () -> {
                         try {
@@ -98,8 +88,7 @@ public class AiTalkEvent extends ListenerAdapter {
                         }
                         try {
                             Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            // fook
+                        } catch (InterruptedException ignored) {
                         }
                     }
 
@@ -109,9 +98,7 @@ public class AiTalkEvent extends ListenerAdapter {
                         return;
                     }
 
-
                     JSONObject json = new JSONObject(response[0].getBody());
-
 
                     try {
                         String botResponse = json.getString("response");
@@ -122,15 +109,12 @@ public class AiTalkEvent extends ListenerAdapter {
                         eventChannel.sendMessage("Couldn't process your message, sorry.").queue(x -> x.delete().queueAfter(5, TimeUnit.SECONDS));
                     }
                 } else {
-
                     lastRan = LocalDateTime.now();   // Set lastran to now, because there was a bug where it got stuck in the cooldown system
 
                     eventChannel.sendMessage("You're too fast, wait 5 seconds between messages").queue(x -> x.delete().queueAfter(10, TimeUnit.SECONDS));
                 }
             }
         }
-
-
     }
 
     private boolean hasCooldown() {

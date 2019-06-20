@@ -30,7 +30,6 @@ public class TranslateCommand extends Command {
         }
 
         translate(event, args, from, to);
-
     }
 
     private void translate(CommandEvent event, String args, String from, String to) {
@@ -56,5 +55,4 @@ public class TranslateCommand extends Command {
             event.reply("Could not get response", msg -> msg.delete().queueAfter(3, TimeUnit.SECONDS));
         }
     }
-
 }

@@ -41,11 +41,8 @@ public class BigCommand extends Command {
             return;
         }
 
-
         event.getTextChannel().getWebhooks().queue(hooks -> {
-
             if (hooks.size() > 0) {
-
                 Message message = event.getMessage();
                 List<Emote> emotes = message.getEmotes();
 
@@ -58,7 +55,6 @@ public class BigCommand extends Command {
                     MessageChannel channel = event.getChannel();
 
                     try {
-
                         String imageUrl = emotes.get(0).getImageUrl();
                         InputStream is = new URL(imageUrl).openStream();
 
@@ -76,16 +72,13 @@ public class BigCommand extends Command {
                         client.close();
 
                         message.delete().queue();
-
                     } catch (IOException e) {
                         channel.sendMessage("Oopsie doopsie owie wowie, something went fuckie wuckie uwu")
                                 .queue(x -> x.delete().queueAfter(5, TimeUnit.SECONDS));
                         client.close();
                         return;
                     }
-
                 } else {
-
                     event.reply("no emoji found");
                     client.close();
                     return;
@@ -93,21 +86,13 @@ public class BigCommand extends Command {
 
                 client.close();
             } else {
-
                 EmbedBuilder error = new EmbedBuilder();
                 error.setColor(Color.red);
                 error.setTitle("⚠️ Big Emoji || No Webhook Error!");
                 error.setDescription("This channel does not have a webhook!");
 
                 event.reply(error.build());
-
-
             }
-
-            
-
         });
-
     }
-
 }

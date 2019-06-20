@@ -14,7 +14,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class JavacoinEvent extends ListenerAdapter {
-
     MongoCollection javacoinCollection;
 
     public JavacoinEvent(MongoDatabase db) {
@@ -23,9 +22,6 @@ public class JavacoinEvent extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-
-
-
         String channelName = event.getChannel().getName().toLowerCase();
 
         try{
@@ -35,12 +31,12 @@ public class JavacoinEvent extends ListenerAdapter {
         }
 
         //Don't count the >coins message
-        if(event.getMessage().getContentRaw().strip().toLowerCase().equals(">coins")){
+        if (event.getMessage().getContentRaw().strip().toLowerCase().equals(">coins")) {
             return;
         }
 
         //Don't count messages in testing servers
-        if(!event.getGuild().getId().equalsIgnoreCase("272761734820003841")){
+        if (!event.getGuild().getId().equalsIgnoreCase("272761734820003841")) {
             return;
         }
 
@@ -58,14 +54,12 @@ public class JavacoinEvent extends ListenerAdapter {
                     .append("dailyTime", LocalDateTime.now().toInstant(ZoneOffset.UTC))
                     .append("lastMessageTime", LocalDateTime.now().toInstant(ZoneOffset.UTC));
 
-            InoriChan.LOGGER.info("User "+event.getMember().getEffectiveName()+" has received their 25 daily javacoins!");
+            InoriChan.LOGGER.info("User " + event.getMember().getEffectiveName() + " has received their 25 daily javacoins!");
             javacoinCollection.insertOne(doc);
             return;
         }
 
-
         // If the name is found in the database, check if its been 24h since last message (if yes they get 25 coins for first message of the day)
-
         Document searchDoc = new Document().append("userId", userId);
         Document userDoc = (Document) javacoinCollection.find(searchDoc).first();
         LocalDateTime userDateTime = LocalDateTime.from(((Date) userDoc.get("dailyTime")).toInstant().atZone(ZoneOffset.UTC));
@@ -75,7 +69,7 @@ public class JavacoinEvent extends ListenerAdapter {
         if (ChronoUnit.DAYS.between(userDateTime, LocalDateTime.now().atZone(ZoneOffset.UTC)) >= 1) {
             javacoinCollection.updateOne(searchDoc, new Document("$set", new Document("dailyTime", LocalDateTime.now().toInstant(ZoneOffset.UTC))));
             javacoinCollection.updateOne(searchDoc, new Document("$set", new Document("javacoins", userDoc.getInteger("javacoins") + 25)));
-            InoriChan.LOGGER.info("User "+event.getMember().getEffectiveName()+" has received their 25 daily javacoins!");
+            InoriChan.LOGGER.info("User " + event.getMember().getEffectiveName() + " has received their 25 daily javacoins!");
             return;
         }
 
@@ -85,6 +79,5 @@ public class JavacoinEvent extends ListenerAdapter {
             javacoinCollection.updateOne(searchDoc, new Document("$set", new Document("lastMessageTime", LocalDateTime.now().toInstant(ZoneOffset.UTC))));
             return;
         }
-
     }
 }

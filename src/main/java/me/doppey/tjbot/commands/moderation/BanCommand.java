@@ -12,7 +12,6 @@ import java.awt.*;
 import java.util.Optional;
 
 public class BanCommand extends Command {
-
     public BanCommand() {
         this.name = "ban";
         this.category = Categories.Moderation;
@@ -22,30 +21,21 @@ public class BanCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-
-
-
         try {
-
             event.getGuild().getController().ban(event.getArgs(),5).queue( banned -> {
                  event.getGuild().getBanList().queue( banList -> {
-
                      User bannedUser = null;
-
                      for(Guild.Ban ban : banList){
 
                          if(ban.getUser().getId().equals(event.getArgs())){
                              bannedUser = ban.getUser();
                              break;
                          }
-
                      }
 
                      if(bannedUser == null){
                          throw new IllegalArgumentException();
                      }
-
-
 
                      EmbedBuilder successEmbed = new EmbedBuilder();
                      successEmbed.setColor(Color.GREEN);
@@ -54,14 +44,7 @@ public class BanCommand extends Command {
                      successEmbed.setThumbnail(bannedUser.getAvatarUrl());
                      event.reply(successEmbed.build());
                  });
-
             });
-
-
-
-
-
-
         } catch (Exception e) {
             // Member not found
             EmbedBuilder failEmbed = new EmbedBuilder();
@@ -71,7 +54,5 @@ public class BanCommand extends Command {
 
             event.reply(failEmbed.build());
         }
-
-
     }
 }

@@ -18,7 +18,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class FreeCommand extends Command {
-
     private List<TextChannel> helpChannels;
 
     public FreeCommand() {
@@ -49,7 +48,6 @@ public class FreeCommand extends Command {
             countChannels.getAndIncrement();
         }));
 
-
         while (true) {
             if (countChannels.get() == helpChannels.size()) {
                 break;
@@ -57,8 +55,6 @@ public class FreeCommand extends Command {
         }
 
         countChannels.set(0);
-
-
 
         latestMessage.forEach((c, m) -> {
             appendNameAndTime(description, m, c.getName(), now);
@@ -77,7 +73,6 @@ public class FreeCommand extends Command {
                 .setDescription(description.toString());
         event.reply(embed.build());
     }
-
 
     private void appendNameAndTime(StringBuilder description, Message message, String name, LocalDateTime now) {
         Duration between = Duration.between(message.getCreationTime().toLocalDateTime(), now);

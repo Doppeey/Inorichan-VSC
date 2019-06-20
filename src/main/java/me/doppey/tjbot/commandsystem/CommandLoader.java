@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
  * @param <T> The superclass whose subclasses should be loaded.
  */
 public class CommandLoader<T> {
-
     private Set<T> loadedClasses = Set.of();
     private Class<T> token;
     private MongoDatabase database;

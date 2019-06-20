@@ -16,11 +16,9 @@ import java.util.HashSet;
 import java.util.Random;
 
 public class Hangman2Command extends Command {
-
     MongoCollection hangmanDb;
 
     public Hangman2Command(MongoDatabase db) {
-
         this.name = "hangman2";
         this.hangmanDb = db.getCollection("hangman");
     }
@@ -44,11 +42,9 @@ public class Hangman2Command extends Command {
                 hiddenword += "_ ";
             }
 
-
             HashSet<Character> guessedLetters = new HashSet<>();
 
             hiddenword = hiddenword.stripTrailing();
-
 
             EmbedBuilder hangmanEmbed = new EmbedBuilder();
             hangmanEmbed.setColor(Color.blue);
@@ -57,19 +53,13 @@ public class Hangman2Command extends Command {
             hangmanEmbed.addField("Lives left: ", "5", true);
             hangmanEmbed.setFooter("React with an emoji letter to make a guess", null);
 
-
             event.getChannel().sendMessage(hangmanEmbed.build()).queue(
                     sent -> {
-
                         String playerId = event.getAuthor().getId();
 
                         if (!event.getMessage().getMentionedMembers().isEmpty()) {
-
-
-
                             playerId = event.getMessage().getMentionedMembers().get(0).getUser().getId();
                             if (event.getMessage().getContentRaw().split(" ").length > 2) {
-
 
                                 String wordDirty = event.getMessage().getContentRaw().split(" ")[1];
                                 StringBuilder wordClean = new StringBuilder();
@@ -84,8 +74,6 @@ public class Hangman2Command extends Command {
                                 for (char c : wordClean.toString().toCharArray()) {
                                     hiddenCustom.append("_ ");
                                 }
-
-
 
                                 EmbedBuilder hangmanEmbedCustom = new EmbedBuilder();
                                 hangmanEmbedCustom.setColor(Color.blue);
@@ -104,16 +92,12 @@ public class Hangman2Command extends Command {
                                         .append("word", wordClean.toString())
                                         .append("guessedLetters", guessedLetters);
 
-
                                 hangmanDb.insertOne(hangmanDoc);
 
                                 InoriChan.LOGGER.info(event.getMember().getEffectiveName() + " has started a hangman game!");
                                 return;
-
-
                             }
                         }
-
 
                         Document hangmanDoc = new Document()
                                 .append("lives", 5)
@@ -122,18 +106,14 @@ public class Hangman2Command extends Command {
                                 .append("word", word)
                                 .append("guessedLetters", guessedLetters);
 
-
                         hangmanDb.insertOne(hangmanDoc);
 
                         InoriChan.LOGGER.info(event.getMember().getEffectiveName() + " has started a hangman game!");
                     }
             );
 
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 }

@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class InoriChan {
-
     public static final String CONFIG_FILENAME = "tjbot.config";
     private static final Config CONFIG = loadConfig(CONFIG_FILENAME);
     public static final MongoDatabase DATABASE;

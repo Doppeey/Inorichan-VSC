@@ -13,7 +13,6 @@ import org.json.JSONObject;
 import java.awt.Color;
 
 public class SpongebobCommand extends Command {
-
     private Config config;
 
     public SpongebobCommand(Config config){
@@ -26,12 +25,10 @@ public class SpongebobCommand extends Command {
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         StringBuilder memeText = new StringBuilder();
         int counter = 0;
 
         for (char c : commandEvent.getArgs().toCharArray()) {
-
             counter++;
             if (counter == 2) {
                 memeText.append(Character.toUpperCase(c));
@@ -39,7 +36,6 @@ public class SpongebobCommand extends Command {
             } else {
                 memeText.append(Character.toLowerCase(c));
             }
-
         }
 
         String apiUsername = this.config.getProperty("IMGFLIP_USERNAME");
@@ -75,6 +71,5 @@ public class SpongebobCommand extends Command {
             embedBuilder.setColor(Color.yellow);
             commandEvent.getChannel().sendMessage(embedBuilder.build()).queue();
         } else InoriChan.LOGGER.warn("Spongebob exception");
-
     }
 }

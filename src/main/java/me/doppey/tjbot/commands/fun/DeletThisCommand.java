@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.Random;
 
 public class DeletThisCommand extends Command {
+    private File file;
 
     public DeletThisCommand() {
         this.name = "delet";
@@ -16,23 +17,16 @@ public class DeletThisCommand extends Command {
         this.help = "Sends random delet this picture";
     }
 
-    private File file;
-
-    
-
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         try {
             String fileName = "delet/" + (new Random().nextInt(21) + 1) + ".jpg";
             file = new File(fileName);
-                        
         } catch (Exception e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
             return;
         }
 
         commandEvent.getChannel().sendFile(file).queue();
-
     }
 }

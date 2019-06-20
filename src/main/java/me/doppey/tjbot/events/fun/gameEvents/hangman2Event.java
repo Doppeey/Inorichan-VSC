@@ -15,7 +15,6 @@ import java.util.HashSet;
 
 
 public class hangman2Event extends ListenerAdapter {
-
     private static HashMap<String, Character> emoteMap = new HashMap<>();
     MongoCollection hangman;
 
@@ -47,17 +46,10 @@ public class hangman2Event extends ListenerAdapter {
         emoteMap.put("\uD83C\uDDFD", 'x');
         emoteMap.put("\uD83C\uDDFE", 'y');
         emoteMap.put("\uD83C\uDDFF", 'z');
-
-
     }
-
 
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
-
-
-
-
         event.getChannel().getMessageById(event.getMessageId()).queue(message -> {
 
             //First check if its even by Arch btw
@@ -67,8 +59,6 @@ public class hangman2Event extends ListenerAdapter {
 
             //If the game exists
             if (hangman.find(new Document("gameId", message.getId())).first() != null) {
-
-
                 String guessedLetter =""+ emoteMap.get(event.getReactionEmote().getName());
 
                 Document hangmanDoc = (Document) hangman.find(new Document("gameId", message.getId())).first();
@@ -77,11 +67,7 @@ public class hangman2Event extends ListenerAdapter {
                     return;
                 }
 
-
                 String word = hangmanDoc.getString("word");
-
-
-
 
                 //Putting all guessed letters in a list so we can draw the word
                 ArrayList<String> guessedLettersArray = (ArrayList<String>) hangmanDoc.get("guessedLetters");
@@ -96,7 +82,6 @@ public class hangman2Event extends ListenerAdapter {
                     return;
                 }
 
-
                 //redraw the word and lives
                 String hiddenword = "";
 
@@ -108,15 +93,12 @@ public class hangman2Event extends ListenerAdapter {
                     }
                 }
 
-
                 int lives = hangmanDoc.getInteger("lives");
                 hiddenword = hiddenword.stripTrailing();
-
 
                 if(!word.contains(""+guessedLetter)){
                     lives--;
                     if(lives < 1){
-
                         MessageEmbed embed = message.getEmbeds().get(0);
                         EmbedBuilder newEmbed = new EmbedBuilder();
                         newEmbed.setTitle(embed.getTitle()+" || Lost");
@@ -133,7 +115,6 @@ public class hangman2Event extends ListenerAdapter {
                     }
                 }
 
-
                 MessageEmbed embed = message.getEmbeds().get(0);
                 EmbedBuilder newEmbed = new EmbedBuilder();
                 newEmbed.setTitle(embed.getTitle());
@@ -148,8 +129,6 @@ public class hangman2Event extends ListenerAdapter {
                 hangman.updateOne(new Document("gameId",hangmanDoc.getString("gameId")),new Document("$set",new Document("lives",lives)));
 
                 if(!hiddenword.contains("_")){
-
-
                     EmbedBuilder newEmbedWin = new EmbedBuilder();
                     newEmbedWin.setTitle(embed.getTitle()+ " || Win");
                     newEmbedWin.setColor(Color.green);
@@ -161,13 +140,7 @@ public class hangman2Event extends ListenerAdapter {
 
                     hangman.deleteOne(new Document("gameId",hangmanDoc.getString("gameId")));
                 }
-
-
             }
-
-
         });
-
-
     }
 }

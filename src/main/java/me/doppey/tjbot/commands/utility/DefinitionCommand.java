@@ -18,8 +18,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 public class DefinitionCommand extends Command {
-
-
     public DefinitionCommand() {
         this.name = "define";
         this.help = "Finds the definition of a word";
@@ -28,9 +26,7 @@ public class DefinitionCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-
         String wordToDefine = URLEncoder.encode(event.getArgs(), StandardCharsets.UTF_8);
-
         HttpResponse<JsonNode> response;
 
         try {
@@ -45,13 +41,10 @@ public class DefinitionCommand extends Command {
         }
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
-
-
         JSONObject responseJson = new JSONObject(response.getBody());
         JSONArray resultArray = responseJson.getJSONArray("array");
 
         try {
-
             //DEFINITION
             String definition = resultArray.getJSONObject(0).getJSONArray("list").getJSONObject(0).getString("definition");
             embedBuilder.addField("Definition", definition, true);
@@ -60,17 +53,13 @@ public class DefinitionCommand extends Command {
             return;
         }
 
-
         //EXAMPLES
         try {
             String example = resultArray.getJSONObject(0).getJSONArray("list").getJSONObject(0).getString("example");
             embedBuilder.addField("Example", example, false);
-
-
         } catch (Exception e) {
             // no examples
         }
-
 
         embedBuilder.setColor(Color.blue);
         event.reply(embedBuilder.build());

@@ -15,8 +15,6 @@ public class DistractedBoyfriendCommand extends Command {
     private HttpResponse<String> response = null;
     private Config config;
 
-
-
     public DistractedBoyfriendCommand(Config config) {
         this.config = config;
         this.name = "distractedbf";
@@ -24,7 +22,6 @@ public class DistractedBoyfriendCommand extends Command {
         this.category = Categories.Memes;
         this.memeId = "112126428";
     }
-
 
     @Override
     protected void execute(CommandEvent commandEvent) {
@@ -44,7 +41,6 @@ public class DistractedBoyfriendCommand extends Command {
             return;
         }
 
-
         try {
             response = com.mashape.unirest.http.Unirest.get("https://api.imgflip.com/caption_image")
                     .queryString("username", config.getProperty("IMGFLIP_USERNAME"))
@@ -57,8 +53,6 @@ public class DistractedBoyfriendCommand extends Command {
                     .asString();
         } catch (UnirestException e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
         }
 
         JSONObject json = null;
@@ -71,7 +65,5 @@ public class DistractedBoyfriendCommand extends Command {
         }
 
         commandEvent.reply("By " + commandEvent.getMember().getAsMention() + "\n" + str, sent -> commandEvent.getMessage().delete().queue());
-
-
     }
 }
