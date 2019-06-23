@@ -6,6 +6,7 @@ import me.doppey.tjbot.Categories;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
 import java.awt.*;
@@ -21,29 +22,41 @@ public class BanCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
+        String args = event.getArgs();
+
+        if (!args.contains(",")) {
+            banId(event.getGuild(), event.getChannel(), args);
+        } else {
+            for (String id : args.split(",")) {
+                banId(event.getGuild(), event.getChannel(), id);
+            }
+        }
+    }
+
+    private void banId(Guild guild, MessageChannel channel, String id) {
         try {
-            event.getGuild().getController().ban(event.getArgs(),5).queue( banned -> {
-                 event.getGuild().getBanList().queue( banList -> {
-                     User bannedUser = null;
-                     for(Guild.Ban ban : banList){
+            guild.getController().ban(id, 5).queue(banned -> {
+                guild.getBanList().queue(banList -> {
+                    User bannedUser = null;
+                    for (Guild.Ban ban : banList) {
 
-                         if(ban.getUser().getId().equals(event.getArgs())){
-                             bannedUser = ban.getUser();
-                             break;
-                         }
-                     }
+                        if (ban.getUser().getId().equals(id)) {
+                            bannedUser = ban.getUser();
+                            break;
+                        }
+                    }
 
-                     if(bannedUser == null){
-                         throw new IllegalArgumentException();
-                     }
+                    if (bannedUser == null) {
+                        throw new IllegalArgumentException();
+                    }
 
-                     EmbedBuilder successEmbed = new EmbedBuilder();
-                     successEmbed.setColor(Color.GREEN);
-                     successEmbed.setTitle("Member ban || Success");
-                     successEmbed.setDescription("Successfully banned the user "+bannedUser.getName()+"#"+bannedUser.getDiscriminator());
-                     successEmbed.setThumbnail(bannedUser.getAvatarUrl());
-                     event.reply(successEmbed.build());
-                 });
+                    EmbedBuilder successEmbed = new EmbedBuilder();
+                    successEmbed.setColor(Color.GREEN);
+                    successEmbed.setTitle("Member ban || Success");
+                    successEmbed.setDescription("Successfully banned the user " + bannedUser.getName() + "#" + bannedUser.getDiscriminator());
+                    successEmbed.setThumbnail(bannedUser.getAvatarUrl());
+                    channel.sendMessage(successEmbed.build()).queue();
+                });
             });
         } catch (Exception e) {
             // Member not found
@@ -52,7 +65,7 @@ public class BanCommand extends Command {
             failEmbed.setTitle("Member ban || Failed");
             failEmbed.setDescription("No user was found under the specified ID");
 
-            event.reply(failEmbed.build());
+            channel.sendMessage(failEmbed.build()).queue();
         }
     }
 }
