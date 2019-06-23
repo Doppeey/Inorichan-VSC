@@ -1,6 +1,8 @@
 package me.doppey.tjbot.events.utility;
 
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -40,6 +42,13 @@ public class StagingAreaEvent extends ListenerAdapter {
             if (isWelcomeChannel) {
                 if (hasAcceptedRules) {
                     removeStagingRoleFromUser(event);
+                } else {
+                    User user = event.getAuthor();
+                    event.getGuild().getTextChannelById("546416238922956845").sendMessage(new EmbedBuilder()
+                            .setTitle("Message Sent in Welcome")
+                            .addField("Message", event.getMessage().getContentRaw(), true)
+                            .addField("User", user.getAsMention() + " (`" + user.getId() + "`)", true)
+                            .build()).queue();
                 }
                 event.getMessage().delete().queue();
             }
