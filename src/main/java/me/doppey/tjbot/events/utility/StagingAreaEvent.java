@@ -1,16 +1,25 @@
 package me.doppey.tjbot.events.utility;
 
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.managers.GuildController;
+import org.bson.Document;
 
 public class StagingAreaEvent extends ListenerAdapter {
+    private final MongoCollection<Document> botSuspicionCollection;
     private GuildController gc = null;
     private Role stagingRole = null;
+
+    public StagingAreaEvent(MongoDatabase database) {
+        this.botSuspicionCollection = database.getCollection("botSuspicion");
+    }
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
@@ -48,7 +57,15 @@ public class StagingAreaEvent extends ListenerAdapter {
                             .setTitle("Message Sent in Welcome")
                             .addField("Message", event.getMessage().getContentRaw(), true)
                             .addField("User", user.getAsMention() + " (`" + user.getId() + "`)", true)
-                            .build()).queue();
+                            .build()).queue(messageSent -> {
+                        messageSent.addReaction("\uD83D\uDD25").queue(reactionAdded -> {
+                            Document report = new Document();
+                            report.put("messageId", messageSent.getId());
+                            report.put("userId", user.getId());
+
+                            botSuspicionCollection.insertOne(report);
+                        });
+                    });
                 }
                 event.getMessage().delete().queue();
             }
