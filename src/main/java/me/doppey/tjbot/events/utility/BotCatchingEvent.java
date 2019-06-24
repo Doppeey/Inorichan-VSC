@@ -43,6 +43,7 @@ public class BotCatchingEvent extends ListenerAdapter {
                         embedBuilder.addField("Account created", days + " "+dayDescriptor+", "+hours+" Hours, "+minutes+" Minutes ago", true);
                         embedBuilder.addField("User as Mention", member.getUser().getAsMention(), true);
                         embedBuilder.setFooter("ID: " + member.getUser().getId(), null);
+                        embedBuilder.setThumbnail(member.getUser().getEffectiveAvatarUrl())
                         embedBuilder.setColor(Color.red);
 
                         event.getGuild().getTextChannelById(botSuspicionChannelId).sendMessage(embedBuilder.build()).queue(messageSent -> {
