@@ -55,6 +55,7 @@ public class StagingAreaEvent extends ListenerAdapter {
                     User user = event.getAuthor();
                     event.getGuild().getTextChannelById("546416238922956845").sendMessage(new EmbedBuilder()
                             .setTitle("Message Sent in Welcome")
+                            .setThumbnail(user.getEffectiveAvatarUrl())
                             .addField("Message", event.getMessage().getContentRaw(), true)
                             .addField("User", user.getAsMention() + " (`" + user.getId() + "`)", true)
                             .build()).queue(messageSent -> {
