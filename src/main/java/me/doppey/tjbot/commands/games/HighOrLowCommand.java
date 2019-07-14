@@ -12,8 +12,6 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class HighOrLowCommand extends Command {
-
-
     private final EventWaiter waiter;
 
     public HighOrLowCommand(EventWaiter waiter) {
@@ -22,10 +20,8 @@ public class HighOrLowCommand extends Command {
         this.category = Categories.Games;
     }
 
-
     @Override
     protected void execute(CommandEvent commandEvent) {
-
         TextChannel eventChannel = commandEvent.getTextChannel();
         Member member = commandEvent.getMember();
         AtomicInteger points = new AtomicInteger();
@@ -35,22 +31,11 @@ public class HighOrLowCommand extends Command {
                 " Each correct guess gets you one point. One wrong guess and all points are lost. You can enter \"end\" at any time to quit.").queue(x -> {
 
             eventChannel.sendMessage("Type a command: ").queue(command -> {
-
                 waiter.waitForEvent(MessageReceivedEvent.class, y -> y.getMember().equals(member), y -> {
-
-
                     playGame(y, new AtomicInteger(0));
-
-
                 });
-
-
             });
-
-
         });
-
-
     }
 
     private void playGame(MessageReceivedEvent y, AtomicInteger pointso) {
@@ -70,7 +55,6 @@ public class HighOrLowCommand extends Command {
         }
 
         switch (result) {
-
             case "low":
                 if (guess.equalsIgnoreCase("low")) {
                     pointso.getAndIncrement();
@@ -104,18 +88,13 @@ public class HighOrLowCommand extends Command {
                     hasLost = true;
                     break;
                 }
-
-
         }
 
         if (!hasLost) {
-
             y.getChannel().sendMessage("Next Command: ").queue();
             waiter.waitForEvent(MessageReceivedEvent.class, x -> y.getMember().equals(x.getMember()), x -> {
                 playGame(x, pointso);
             });
-
-
         }
     }
 }

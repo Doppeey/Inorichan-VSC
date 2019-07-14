@@ -12,44 +12,29 @@ import java.io.IOException;
 
 public class imgToAscii extends Command {
 
-
-    public imgToAscii(){
-
+    public imgToAscii() {
         this.name = "imgtoascii";
         this.category = Categories.Fun;
-
-
     }
 
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-
-
-
-                BufferedImage image = null;
+        BufferedImage image = null;
 
         try {
             image = ImageIO.read(commandEvent.getMessage().getAttachments().get(0).getInputStream());
         } catch (Exception e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
             return;
         }
+
         try {
-                    commandEvent.reply("```\n"+run(image)+"\n```");
-                } catch (Exception e) {
-                    InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
-                    commandEvent.reply("Couldn't convert image");
-                }
-
-
-
-
-
+            commandEvent.reply("```\n" + run(image) + "\n```");
+        } catch (Exception e) {
+            InoriChan.LOGGER.error(e.getMessage(), e);
+            commandEvent.reply("Couldn't convert image");
+        }
     }
 
     boolean negative;
@@ -77,8 +62,7 @@ public class imgToAscii extends Command {
      * @param g grayscale
      * @return char
      */
-    private char returnStrPos(double g)//takes the grayscale value as parameter
-    {
+    private char returnStrPos(double g) {
         final char str;
 
         if (g >= 230.0) {
@@ -100,8 +84,8 @@ public class imgToAscii extends Command {
         } else {
             str = '@';
         }
-        return str; // return the character
 
+        return str;
     }
 
     /**
@@ -133,21 +117,15 @@ public class imgToAscii extends Command {
             str = ' ';
         }
         return str;
-
     }
 
 
     public String run(BufferedImage image) throws IOException {
-
-
         Image tmp = image.getScaledInstance(40, 35, BufferedImage.SCALE_FAST);
         BufferedImage buffered = new BufferedImage(40, 35, BufferedImage.TYPE_INT_RGB);
         buffered.getGraphics().drawImage(tmp, 0, 0, null);
 
-
-
         return convert(buffered);
 
     }
-
 }

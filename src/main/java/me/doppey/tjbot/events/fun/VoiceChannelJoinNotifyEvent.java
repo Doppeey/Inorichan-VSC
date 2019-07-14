@@ -9,11 +9,8 @@ import java.util.concurrent.TimeUnit;
 
 public class VoiceChannelJoinNotifyEvent extends ListenerAdapter {
 
-
     @Override
     public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
-
-
         final String id = event.getMember().getUser().getId();
         final TextChannel lobby = event.getGuild().getTextChannelById("150599648019611648");
         final String joinedUser = event.getMember().getEffectiveName();
@@ -27,9 +24,7 @@ public class VoiceChannelJoinNotifyEvent extends ListenerAdapter {
         final boolean isDoppey = id.equalsIgnoreCase("272158112318750720");
         final boolean isKurisu = id.equalsIgnoreCase("171680368926261248");
 
-
         if (isFoxServer) {
-
             if (isFox) {
                 notifyKelseyLukas(lobby, joinedUser, doppey, kurisu);
             } else if (isDoppey) {
@@ -39,7 +34,6 @@ public class VoiceChannelJoinNotifyEvent extends ListenerAdapter {
             }
         }
     }
-
 
     private void notifyKelseyLukas(TextChannel lobby, String joinedUser, Member doppey, Member kelsey) {
         lobby.sendMessage(joinedUser
@@ -52,7 +46,6 @@ public class VoiceChannelJoinNotifyEvent extends ListenerAdapter {
 
     private void notifyFox(TextChannel lobby, String joinedUser, Member fox) {
         fox.getUser().openPrivateChannel().queue(x -> x.sendMessage(joinedUser + " has joined a voicechannel!").queue(y -> y.getPrivateChannel().close().queue()));
-
     }
 }
 

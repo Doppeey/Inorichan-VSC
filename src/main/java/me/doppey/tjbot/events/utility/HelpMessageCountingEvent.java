@@ -7,19 +7,14 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.bson.Document;
 
 public class HelpMessageCountingEvent extends ListenerAdapter {
-
     private MongoCollection<Document> helpMessages;
 
     public HelpMessageCountingEvent(MongoDatabase database) {
-
         this.helpMessages = database.getCollection("helpMessages");
-
     }
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-
-        // Variables
         final String channelName = event.getChannel().getName().toLowerCase();
         final String authorID = event.getAuthor().getId();
         final String eventContentRaw = event.getMessage().getContentRaw();
@@ -32,9 +27,11 @@ public class HelpMessageCountingEvent extends ListenerAdapter {
         }
 
         if (channelName.contains("help") || channelName.contains("review")) {
+            if(eventContentRaw.contains(">tag free")||eventContentRaw.contains("?tag free")){
+                return;
+            }
             IncrementMessageCounter(event);
         }
-
     }
 
     private void resetHelpMessageDatabase(GuildMessageReceivedEvent event) {
@@ -47,20 +44,15 @@ public class HelpMessageCountingEvent extends ListenerAdapter {
         searchTarget.put("_id", event.getAuthor().getId());
 
         if (helpMessages.find(searchTarget).first() == null) {
-
             helpMessages.insertOne(new Document().append("_id", event.getAuthor().getId())
                     .append("username", event.getAuthor().getName()).append("messageCount", 1)
 
             );
-
         } else {
-
             Document searchCondition = new Document().append("_id", event.getAuthor().getId());
-
             Document updatedValue = new Document().append("$inc", new Document().append("messageCount", 1));
 
             helpMessages.updateOne(searchCondition, updatedValue);
-
         }
     }
 }

@@ -16,7 +16,6 @@ public class DecryptCommand extends Command {
         this.category = Categories.Fun;
     }
 
-
     @Override
     protected void execute(CommandEvent commandEvent) {
         try {
@@ -38,7 +37,5 @@ public class DecryptCommand extends Command {
         } catch (Exception e) {
             commandEvent.reply("Could not decrypt message");
         }
-
-
     }
 }

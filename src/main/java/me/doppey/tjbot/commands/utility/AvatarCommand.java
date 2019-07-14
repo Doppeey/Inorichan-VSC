@@ -18,10 +18,7 @@ public class AvatarCommand extends Command {
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-
-        Member memberToGetAvatarFrom = null;
-
-        memberToGetAvatarFrom = MemberParser.getMemberFromArgs(commandEvent);
+        Member memberToGetAvatarFrom = MemberParser.getMemberFromArgs(commandEvent);
 
         if (memberToGetAvatarFrom != null) {
 
@@ -32,12 +29,8 @@ public class AvatarCommand extends Command {
             }
 
             commandEvent.reply(avatarUrl + "?size=512");
-
         } else {
             commandEvent.reply("Could not find user");
         }
-
     }
-
-    
 }

@@ -10,9 +10,6 @@ import java.awt.Color;
 
 
 public class YoutubeToMp3Command extends Command {
-
-
-
     private Config config;
 
     public YoutubeToMp3Command(Config config) {
@@ -20,10 +17,7 @@ public class YoutubeToMp3Command extends Command {
         this.name = "youtubetomp3";
         this.help = "Will post a link to download your mp3";
         this.category = Categories.Utility;
-
-
     }
-
 
     @Override
     protected void execute(CommandEvent commandEvent) {
@@ -37,9 +31,6 @@ public class YoutubeToMp3Command extends Command {
                 .addField("Disclaimer", "Provided by download-mp3-youtube.com, please adhere to their ToS which you can find [here](https://www.download-mp3-youtube.com/terms.php)", false)
                 .setColor(Color.red);
 
-
         commandEvent.reply(embed.build(), x -> commandEvent.getMessage().delete().queue());
-
-
     }
 }

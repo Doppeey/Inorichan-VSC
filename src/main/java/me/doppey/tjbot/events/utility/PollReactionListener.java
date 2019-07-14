@@ -9,30 +9,20 @@ import org.bson.Document;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PollReactionListener extends ListenerAdapter {
-
-
     MongoCollection polls;
 
     public PollReactionListener(MongoDatabase db) {
         this.polls = db.getCollection("polls");
     }
 
-
-
     @Override
     public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event) {
-
-
         if (!event.getUser().isBot()) {
-
             AtomicInteger counter = new AtomicInteger(0);
 
             boolean isReactionToAPoll = polls.find(new Document("_id", event.getMessageId())).first() != null;
 
             if (isReactionToAPoll) {
-
-
-
                 event.getChannel().getMessageById(event.getMessageId()).queue(message -> {
 
                     for (int i = 0; i < message.getReactions().size(); i++) {
@@ -46,13 +36,8 @@ public class PollReactionListener extends ListenerAdapter {
                         });
                     }
                 });
-
-
             }
-
         }
-
-
     }
 }
 

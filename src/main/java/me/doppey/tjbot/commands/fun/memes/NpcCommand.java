@@ -10,11 +10,9 @@ import me.doppey.tjbot.InoriChan;
 import org.json.JSONObject;
 
 public class NpcCommand extends Command {
-
     private final String memeId;
     private HttpResponse<String> response = null;
     private Config config;
-
 
     public NpcCommand(Config config){
         this.config = config;
@@ -23,8 +21,6 @@ public class NpcCommand extends Command {
         this.category = Categories.Memes;
         this.memeId = "166384716";
     }
-
-
 
     @Override
     protected void execute(CommandEvent commandEvent) {
@@ -46,8 +42,6 @@ public class NpcCommand extends Command {
                     .asString();
         } catch (UnirestException e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
-
-;
         }
 
         JSONObject json = null;
@@ -60,10 +54,5 @@ public class NpcCommand extends Command {
         }
 
         commandEvent.reply("By "+commandEvent.getMember().getAsMention()+"\n"+str);
-
-
-
-
-
     }
 }

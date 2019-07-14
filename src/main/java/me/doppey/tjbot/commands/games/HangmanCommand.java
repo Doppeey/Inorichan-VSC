@@ -1,29 +1,36 @@
 package me.doppey.tjbot.commands.games;
 
-import me.doppey.tjbot.Categories;
-
-import java.util.concurrent.TimeUnit;
-
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import me.doppey.tjbot.Categories;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class HangmanCommand extends Command {
-
     private final EventWaiter waiter;
+    private final int startingLives = 5;
+    boolean hasWon = false;
     private char currentGuess;
     private char[] tempWord;
     private boolean hasGuessed = false;
-    private final String word = "doppey is the best";
-    private String hiddenword = "------------------";
-    private final String hiddenwordPermanent = "------------------";
-    private final int startingLives = 5;
-    boolean hasWon = false;
     private Member member;
     private int livesLeft = 5;
+    String word = "doppey is the best";
+    String hiddenword = "------------------";
+    String hiddenwordPermanent = "------------------";
 
     public HangmanCommand(EventWaiter waiter) {
 
@@ -35,6 +42,22 @@ public class HangmanCommand extends Command {
 
     @Override
     protected void execute(CommandEvent commandEvent) {
+        int lineNumber = new Random().nextInt(852);
+
+        try {
+            word = Files.readAllLines(Paths.get("resources/words.txt")).get(lineNumber);
+        } catch (IOException e) {
+            e.printStackTrace();
+            commandEvent.reply("Error reading the hangman words file");
+            return;
+        }
+
+        hiddenword = "";
+        hiddenwordPermanent = "";
+        for (int i = 0; i < word.toCharArray().length; i++) {
+            hiddenword += "-";
+            hiddenwordPermanent += "-";
+        }
 
         member = commandEvent.getMember();
 
@@ -53,7 +76,6 @@ public class HangmanCommand extends Command {
                         commandEvent.reply("No reply in 30 seconds, game has timed out.");
                     }
                 });
-
     }
 
     private void guess(MessageChannel channel, char[] tempWord, MessageReceivedEvent e) {
@@ -63,7 +85,6 @@ public class HangmanCommand extends Command {
 
         if (messageLength == 1) {
             final char currentGuess = contentRaw.charAt(0);
-
             setCurrentGuess(currentGuess);
 
             for (int i = 0; i < word.length(); i++) {
@@ -72,7 +93,6 @@ public class HangmanCommand extends Command {
                     this.tempWord[i] = this.currentGuess;
                     correctGuesses++;
                 }
-
             }
         } else {
             if (foundWord(e)) {
@@ -82,6 +102,7 @@ public class HangmanCommand extends Command {
                 return;
             }
         }
+
         setHiddenword(new String(tempWord));
         if (correctGuesses == 0) {
             this.livesLeft--;
@@ -89,12 +110,15 @@ public class HangmanCommand extends Command {
                 channel.sendMessage("No correct guesses, you lost a life, lives left: " + livesLeft).queue();
             }
         }
+
         if (livesLeft == 0) {
             channel.sendMessage("No lives left, you lost!").queue();
+            channel.sendMessage("The word was " + word).queue();
             this.setHiddenword(hiddenwordPermanent);
             this.livesLeft = startingLives;
             return;
         }
+
         channel.sendMessage(hiddenword).queue();
 
         if (!this.word.equalsIgnoreCase(new String(this.tempWord))) {
@@ -104,9 +128,7 @@ public class HangmanCommand extends Command {
             channel.sendMessage("You guessed it! Gratz!").queue();
             this.setHiddenword(hiddenwordPermanent);
             this.livesLeft = startingLives;
-
         }
-
     }
 
     private boolean foundWord(MessageReceivedEvent e) {
@@ -127,7 +149,6 @@ public class HangmanCommand extends Command {
     }
 
     private void setCurrentGuess(char currentGuess) {
-
         this.currentGuess = currentGuess;
     }
 

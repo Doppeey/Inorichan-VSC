@@ -12,7 +12,6 @@ import java.awt.*;
 import java.util.concurrent.TimeUnit;
 
 public class ReportByPmEvent extends ListenerAdapter {
-
     private EventWaiter waiter;
 
     public ReportByPmEvent(EventWaiter waiter) {
@@ -22,14 +21,11 @@ public class ReportByPmEvent extends ListenerAdapter {
 
     @Override
     public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
-
         if (!event.getAuthor().isBot()) {
-
             Runnable timeOut = () -> event.getChannel()
                     .sendMessage("Your report has timed out because you haven't replied in 5 minutes").queue();
 
             Runnable reportRunnable = new Runnable() {
-
                 private final Member[] reportedMember = new Member[1];
 
                 @Override
@@ -69,7 +65,6 @@ public class ReportByPmEvent extends ListenerAdapter {
                             event.getChannel().sendMessage("What did they do ?").queue();
 
                             waiter.waitForEvent(event.getClass(), why -> eventAuthor.equals(why.getAuthor()), why -> {
-
                                 reportReason[0] = why.getMessage().getContentRaw();
                                 event.getChannel().sendMessage(
                                         "Please upload evidence in the form of a screenshot, or type anything to report without evidence")
@@ -82,7 +77,7 @@ public class ReportByPmEvent extends ListenerAdapter {
                                             embedBuilder.setTitle("Report reason");
                                             embedBuilder.setDescription(reportReason[0]);
                                             embedBuilder.addField("Reported by", eventAuthor.getAsMention() + "\n"
-                                                    + eventAuthor.getName() + "#" + eventAuthor.getDiscriminator(),
+                                                            + eventAuthor.getName() + "#" + eventAuthor.getDiscriminator(),
                                                     true);
                                             embedBuilder.addField("Reported user",
                                                     togetherJavaGuild.getMemberById(reportedMember[0].getUser().getId())
@@ -109,16 +104,13 @@ public class ReportByPmEvent extends ListenerAdapter {
                                         }, 5, TimeUnit.MINUTES, timeOut);
 
                             }, 5, TimeUnit.MINUTES, timeOut);
-
                         }, 5, TimeUnit.MINUTES, timeOut);
-
                     }
                 }
             };
+
             Thread reportThread = new Thread(reportRunnable);
             reportThread.start();
-
         }
-
     }
 }

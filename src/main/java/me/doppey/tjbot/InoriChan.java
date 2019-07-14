@@ -8,6 +8,7 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoDatabase;
 import me.doppey.tjbot.commands.utility.AboutCommand;
 import me.doppey.tjbot.commandsystem.CommandLoader;
+import me.doppey.tjbot.utility.ChannelMarkerScheduler;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.Permission;
@@ -22,7 +23,6 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class InoriChan {
-
     public static final String CONFIG_FILENAME = "tjbot.config";
     private static final Config CONFIG = loadConfig(CONFIG_FILENAME);
     public static final MongoDatabase DATABASE;
@@ -64,6 +64,13 @@ public class InoriChan {
 
             CommandLoader<EventListener> listeners = new CommandLoader<>(EventListener.class, DATABASE, CONFIG, waiter);
             listeners.loadClasses().forEach(jda::addEventListener);
+
+            // Scheduler that checks help channels and adds the free icon
+
+            Thread.sleep(5000);
+            ChannelMarkerScheduler cm = new ChannelMarkerScheduler(jda.getGuildById("272761734820003841"));
+            cm.checkHelpChannels();
+
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
