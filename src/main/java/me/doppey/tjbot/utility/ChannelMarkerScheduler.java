@@ -88,6 +88,7 @@ public class ChannelMarkerScheduler {
 
                                 if (between.toHours() >= 2) {
 
+                                    System.out.println(between.toMinutes()+" Minutes for channel "+channel.getName());
                                     ChannelManager cm = channel.getManager();
                                     cm.setName(cm.getChannel().getName() + "\uD83C\uDD93").queue();
 
