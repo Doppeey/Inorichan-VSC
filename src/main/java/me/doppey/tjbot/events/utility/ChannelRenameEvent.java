@@ -17,7 +17,7 @@ public class ChannelRenameEvent extends ListenerAdapter {
 
         String content = event.getMessage().getContentDisplay();
         TextChannel eventChannel = event.getTextChannel();
-        boolean hasCalledFreeCommand = content.toLowerCase().startsWith(">tag free") || content.toLowerCase().startsWith("?tag free");
+        boolean hasCalledFreeCommand = content.equalsIgnoreCase(">tag free") || content.equalsIgnoreCase("?tag free");
         boolean isHelpChannel = eventChannel.getName().toLowerCase().contains("help");
         boolean isMarkedFree = eventChannel.getName().toLowerCase().contains("\uD83C\uDD93");
         ChannelManager cm = eventChannel.getManager();

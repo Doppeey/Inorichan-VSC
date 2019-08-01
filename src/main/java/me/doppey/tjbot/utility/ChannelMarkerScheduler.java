@@ -4,102 +4,66 @@ import me.doppey.tjbot.InoriChan;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.managers.ChannelManager;
 import net.dv8tion.jda.core.utils.MiscUtil;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class ChannelMarkerScheduler {
 
-    Timer timer = new Timer();
+    private Duration waitTime;
     private Guild guild;
 
     public ChannelMarkerScheduler(Guild guild) {
         this.guild = guild;
+        waitTime = Duration.ofHours(Long.valueOf(InoriChan.getConfig().getProperty("WAIT_TIME", "6")));
     }
 
-    public void checkHelpChannels() {
+    public void start() {
+        List<TextChannel> helpChannels = guild.getTextChannels().stream()
+                .filter(c -> c.getName().contains("help"))
+                .collect(Collectors.toList());
+        Runnable runnable = () -> {
 
+            for (TextChannel channel : helpChannels) {
 
-        TimerTask checker = new TimerTask() {
-            @Override
-            public void run() {
-
-                List<TextChannel> channelList = guild.getTextChannels();
-                ArrayList<TextChannel> filteredList = new ArrayList<>();
-                for (TextChannel channel : channelList) {
-                    if (channel.getName().toLowerCase().contains("help")) {
-                        filteredList.add(channel);
-                    }
+                if (channel.getName().contains("\uD83C\uDD93")) {
+                    continue;
                 }
 
-                for (TextChannel channel : filteredList) {
 
-                    if (channel.getName().contains("\uD83C\uDD93")) {
-                        continue;
-                    }
-
-
-                    if (channel.hasLatestMessage()) {
-                        markChannel(channel, channel.getLatestMessageId());
-                    } else {
-                        channel.getHistoryBefore(MiscUtil.getDiscordTimestamp(System.currentTimeMillis()), 1).queue(history -> {
-
-                            markChannel(channel, history.getRetrievedHistory().get(0).getId());
-                        });
-                    }
-
-
+                if (channel.hasLatestMessage()) {
+                    markChannel(channel, channel.getLatestMessageId());
+                } else {
+                    channel.getHistoryBefore(MiscUtil.getDiscordTimestamp(System.currentTimeMillis()), 1)
+                            .queue(history -> markChannel(channel, history.getRetrievedHistory().get(0).getId()));
                 }
             }
         };
-
-        timer.schedule(checker, 3000, 300000);
-
-
+        Executors.newSingleThreadScheduledExecutor()
+                .scheduleAtFixedRate(runnable, 3, TimeUnit.MINUTES.toSeconds(5) /* 5 minutes */, TimeUnit.SECONDS);
     }
 
     private void markChannel(TextChannel channel, String messageId) {
-        channel.getMessageById(messageId).queue(
-                message -> {
+        channel.getMessageById(messageId).queue(message -> execute(channel, message),
+                failed -> channel.getHistoryBefore(MiscUtil.getDiscordTimestamp(System.currentTimeMillis()), 1).queue(
+                        messageHistory -> execute(channel, messageHistory.getRetrievedHistory().get(0)),
+                        failedAgain -> InoriChan.LOGGER.error("Failed to get last msg from %s", channel.getName())
+                ));
+    }
 
+    private void execute(TextChannel channel, Message message) {
+        Duration between = Duration.between(message.getCreationTime().toLocalTime(),
+                ZonedDateTime.now(ZoneOffset.UTC).toLocalTime());
 
-                    Duration between = Duration.between(message.getCreationTime().toLocalDateTime(), LocalDateTime.now().minusHours(2));
-
-                    if (between.toHours() >= 2) {
-
-                        ChannelManager cm = channel.getManager();
-                        cm.setName(cm.getChannel().getName() + "\uD83C\uDD93").queue();
-
-                    }
-
-                }
-                , failed -> {
-                    channel.getHistoryBefore(MiscUtil.getDiscordTimestamp(System.currentTimeMillis()), 1).queue(
-                            messageHistory -> {
-
-                                Message msg = messageHistory.getRetrievedHistory().get(0);
-                                Duration between = Duration.between(msg.getCreationTime().toLocalDateTime(), LocalDateTime.now().minusHours(2));
-
-                                if (between.toHours() >= 2) {
-
-                                    System.out.println(between.toMinutes()+" Minutes for channel "+channel.getName());
-                                    ChannelManager cm = channel.getManager();
-                                    cm.setName(cm.getChannel().getName() + "\uD83C\uDD93").queue();
-
-                                }
-
-
-                            }, failedAgain -> {
-                                InoriChan.LOGGER.error("Failed to get last msg from " + channel.getName());
-                            }
-                    );
-                });
+        if (waitTime.minus(between).toMinutes() <= 0) {
+            channel.getManager().setName(channel.getName() + "\uD83C\uDD93").queue();
+        }
     }
 }
 

@@ -3,112 +3,100 @@ package me.doppey.tjbot.events.utility;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.ISnowflake;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.managers.GuildController;
 import org.bson.Document;
 
-import java.awt.*;
+import java.awt.Color;
+import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
 
 public class BotCatchingEvent extends ListenerAdapter {
+
     private final MongoCollection<Document> botSuspicionCollection;
-    private String botSuspicionChannelId = "546416238922956845";
+    private static final String FIRE_EMOJI = "\uD83D\uDD25";
+    private static final String TRASHCAN_EMOJI = "\uD83D\uDDD1";
+    private static final String BOT_SUSPICION_CHANNEL_ID = "546416238922956845";
 
     public BotCatchingEvent(MongoDatabase database) {
         this.botSuspicionCollection = database.getCollection("botSuspicion");
     }
 
     @Override
-    public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        if(event.getMessage().getContentRaw().equalsIgnoreCase("loadzebotz")){
-            event.getGuild().getMembers().forEach( member -> {
-                if(member.getUser().getName().matches("^(?=(?:\\D*\\d){2})[a-zA-Z0-9]*$")) {
-                    final OffsetDateTime creationTime = member.getUser().getCreationTime();
-
-                    long days = creationTime.until(OffsetDateTime.now(), ChronoUnit.DAYS);
-                    long hours = creationTime.until(OffsetDateTime.now(), ChronoUnit.HOURS);
-                    long minutes = creationTime.until(OffsetDateTime.now(),ChronoUnit.MINUTES);
-
-                    String dayDescriptor = days == 1 ? "Day":"Days";
-
-                    if (days <= 30) {
-                        EmbedBuilder embedBuilder = new EmbedBuilder();
-                        embedBuilder.setAuthor(member.getUser().getName());
-                        embedBuilder.addField("Account created", days + " "+dayDescriptor+", "+hours+" Hours, "+minutes+" Minutes ago", true);
-                        embedBuilder.addField("User as Mention", member.getUser().getAsMention(), true);
-                        embedBuilder.setFooter("ID: " + member.getUser().getId(), null);
-                        embedBuilder.setThumbnail(member.getUser().getEffectiveAvatarUrl());
-                        embedBuilder.setColor(Color.red);
-
-                        event.getGuild().getTextChannelById(botSuspicionChannelId).sendMessage(embedBuilder.build()).queue(messageSent -> {
-                            messageSent.addReaction("\uD83D\uDD25").queue(reactionAdded -> {
-                                Document report = new Document();
-                                report.put("messageId", messageSent.getId());
-                                report.put("userId", member.getUser().getId());
-
-                                botSuspicionCollection.insertOne(report);
-                            });
-                        });
-                    }
-                }
-            });
+    public void onMessageReactionAdd(MessageReactionAddEvent event) {
+        if (!event.getUser().isBot() && event.getTextChannel().getId().equalsIgnoreCase(BOT_SUSPICION_CHANNEL_ID)) {
+            if (event.getReactionEmote().getName().equals(FIRE_EMOJI)) {
+                runBotSuspicionReact(event, true);
+            } else if (event.getReactionEmote().getName().equals(TRASHCAN_EMOJI)) {
+                runBotSuspicionReact(event, false);
+            }
         }
     }
 
-    @Override
-    public void onMessageReactionAdd(MessageReactionAddEvent event) {
-        if (!event.getUser().isBot()) {
-            if (event.getTextChannel().getId().equalsIgnoreCase(botSuspicionChannelId))
-                if (botSuspicionCollection.find(new Document("messageId", event.getMessageId())).first() != null) {
-                    Document userDoc = botSuspicionCollection.find(new Document("messageId", event.getMessageId())).first();
-                    GuildController gc = new GuildController(event.getGuild());
-                    gc.ban(userDoc.getString("userId"), 0).queue();
-                    event.getTextChannel().getMessageById(event.getMessageId()).queue(received -> received.delete().queue());
-                }
+    private void runBotSuspicionReact(MessageReactionAddEvent event, boolean ban) {
+        event.getTextChannel().getMessageById(event.getMessageId()).queue(received -> received.delete().queue());
+        Document userDoc = botSuspicionCollection.find(new Document("messageId", event.getMessageId())).first();
+        if (userDoc != null) {
+            if (ban) {
+                GuildController gc = new GuildController(event.getGuild());
+                gc.ban(userDoc.getString("userId"), 0).queue();
+            }
+            botSuspicionCollection.deleteOne(userDoc);
         }
     }
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         User user = event.getUser();
-        String username = user.getName();
 
-        boolean lessThanAWeekOld = OffsetDateTime.now().minus(7, ChronoUnit.DAYS).isBefore(user.getCreationTime());
+        boolean lessThanAWeekOld =
+                OffsetDateTime.now(ZoneOffset.UTC).minus(1, ChronoUnit.WEEKS).isBefore(user.getCreationTime());
         boolean matchesNameCriteria = user.getName().matches("^(?=(?:\\D*\\d){2})[a-zA-Z0-9]*$");
-        final OffsetDateTime creationTime = user.getCreationTime();
 
-        creationTime.until(OffsetDateTime.now(),ChronoUnit.MINUTES);
-
-        long days = creationTime.until(OffsetDateTime.now(), ChronoUnit.DAYS);
-        long hours = creationTime.until(OffsetDateTime.now(), ChronoUnit.HOURS) - (days * 24);
-
-        String dayDescriptor = days == 1 ? "Day":"Days";
-        String hourDescriptor = hours == 1 ? "Hour":"Hours";
-
-
-        if (matchesNameCriteria) {
-
+        if (matchesNameCriteria && lessThanAWeekOld) {
             EmbedBuilder embedBuilder = new EmbedBuilder();
-            embedBuilder.setAuthor(username);
-            embedBuilder.addField("Account created", days + " "+dayDescriptor+", "+hours+" "+hourDescriptor+" ago", true);
+            embedBuilder.setAuthor(user.getName());
+            embedBuilder.addField("Account created", getPrettyCreationTime(user), true);
             embedBuilder.setFooter("ID: " + user.getId(), null);
-            embedBuilder.setColor(Color.red);
+            embedBuilder.setColor(Color.RED);
 
-            event.getGuild().getTextChannelById(botSuspicionChannelId).sendMessage(embedBuilder.build()).queue(messageSent -> {
-                messageSent.addReaction("\uD83D\uDD25").queue(reactionAdded -> {
-                    Document report = new Document();
-                    report.put("messageId", messageSent.getId());
-                    report.put("userId", user.getId());
+            event.getGuild().getTextChannelById(BOT_SUSPICION_CHANNEL_ID).sendMessage(embedBuilder.build()).queue(messageSent -> {
+                messageSent.addReaction(FIRE_EMOJI).queue();
+                messageSent.addReaction(TRASHCAN_EMOJI).queue();
 
-                    botSuspicionCollection.insertOne(report);
-                });
+                Document report = new Document();
+                report.put("messageId", messageSent.getId());
+                report.put("userId", user.getId());
+
+                botSuspicionCollection.insertOne(report);
             });
         }
+    }
+
+    private String getPrettyCreationTime(ISnowflake id) {
+        OffsetDateTime creationTime = id.getCreationTime();
+        Duration accountAge = Duration.between(creationTime, OffsetDateTime.now(ZoneOffset.UTC));
+
+        StringBuilder result = new StringBuilder();
+
+        if (accountAge.toDays() > 0) {
+            long days = accountAge.toDays();
+            result.append(days).append(days == 1 ? " Day, " : " Days, ");
+            accountAge = accountAge.minusDays(days);
+        }
+
+        long hours = accountAge.toHours();
+        result.append(hours)
+                .append(hours == 1 ? " Hour" : " Hours")
+                .append(" ago");
+
+        return result.toString();
     }
 }

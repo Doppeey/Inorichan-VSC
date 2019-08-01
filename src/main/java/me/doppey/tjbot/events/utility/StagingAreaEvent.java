@@ -3,7 +3,6 @@ package me.doppey.tjbot.events.utility;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
@@ -57,7 +56,7 @@ public class StagingAreaEvent extends ListenerAdapter {
                             .setTitle("Message Sent in Welcome")
                             .setThumbnail(user.getEffectiveAvatarUrl())
                             .addField("Message", event.getMessage().getContentRaw(), true)
-                            .addField("User", user.getAsMention() + " (`" + user.getId() + "`)", true)
+                            .addField("User", user.getAsTag() + " (`" + user.getId() + "`)", false)
                             .build()).queue(messageSent -> {
                         messageSent.addReaction("\uD83D\uDD25").queue(reactionAdded -> {
                             Document report = new Document();
