@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Properties;
 
 public class Config {
+
     private Map<String, String> map = new HashMap<>();
 
     public Config(Properties properties) {
@@ -15,12 +16,12 @@ public class Config {
         });
     }
 
-    public String getProperty(String key) {
-        return map.get(key);
-    }
-
     public String getProperty(String key, String defaultValue) {
         String value = getProperty(key);
         return value == null ? defaultValue : value;
+    }
+
+    public String getProperty(String key) {
+        return map.get(key);
     }
 }

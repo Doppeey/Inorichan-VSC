@@ -1,14 +1,15 @@
 package me.doppey.tjbot.commands.fun;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppey.tjbot.Categories;
 import me.doppey.tjbot.InoriChan;
 
 import java.io.File;
 import java.util.Random;
 
 public class DeletThisCommand extends Command {
+
     private File file;
 
     public DeletThisCommand() {

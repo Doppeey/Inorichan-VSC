@@ -1,9 +1,9 @@
 package me.doppey.tjbot.commands.games;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import me.doppey.tjbot.Categories;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class HighOrLowCommand extends Command {
+
     private final EventWaiter waiter;
 
     public HighOrLowCommand(EventWaiter waiter) {
@@ -27,8 +28,10 @@ public class HighOrLowCommand extends Command {
         AtomicInteger points = new AtomicInteger();
         points.set(0);
 
-        eventChannel.sendMessage("A random percentage from 0 to 100% will be generated, you can type \"high\" to guess 51-100 or \"low\" for 0-49. 50% is always a loss." +
-                " Each correct guess gets you one point. One wrong guess and all points are lost. You can enter \"end\" at any time to quit.").queue(x -> {
+        eventChannel.sendMessage("A random percentage from 0 to 100% will be generated, you can type \"high\" to " +
+                "guess 51-100 or \"low\" for 0-49. 50% is always a loss." +
+                " Each correct guess gets you one point. One wrong guess and all points are lost. You can enter " +
+                "\"end\" at any time to quit.").queue(x -> {
 
             eventChannel.sendMessage("Type a command: ").queue(command -> {
                 waiter.waitForEvent(MessageReceivedEvent.class, y -> y.getMember().equals(member), y -> {

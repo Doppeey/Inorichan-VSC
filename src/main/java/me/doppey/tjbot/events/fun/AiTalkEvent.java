@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class AiTalkEvent extends ListenerAdapter {
+
     String apiKey;
     String sessionID;
     String chatbotId;
@@ -94,7 +95,8 @@ public class AiTalkEvent extends ListenerAdapter {
 
                     if (response[0] == null) {
                         InoriChan.LOGGER.error("Error chatbot ai");
-                        eventChannel.sendMessage("Couldn't get a response from the AI Server, please try again in a bit").queue();
+                        eventChannel.sendMessage("Couldn't get a response from the AI Server, please try again in a " +
+                                "bit").queue();
                         return;
                     }
 
@@ -109,7 +111,8 @@ public class AiTalkEvent extends ListenerAdapter {
                         eventChannel.sendMessage("Couldn't process your message, sorry.").queue(x -> x.delete().queueAfter(5, TimeUnit.SECONDS));
                     }
                 } else {
-                    lastRan = LocalDateTime.now();   // Set lastran to now, because there was a bug where it got stuck in the cooldown system
+                    lastRan = LocalDateTime.now();   // Set lastran to now, because there was a bug where it got
+                    // stuck in the cooldown system
 
                     eventChannel.sendMessage("You're too fast, wait 5 seconds between messages").queue(x -> x.delete().queueAfter(10, TimeUnit.SECONDS));
                 }

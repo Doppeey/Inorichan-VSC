@@ -13,9 +13,10 @@ import org.json.JSONObject;
 import java.awt.Color;
 
 public class SpongebobCommand extends Command {
+
     private Config config;
 
-    public SpongebobCommand(Config config){
+    public SpongebobCommand(Config config) {
         this.config = config;
         this.name = "spongebob";
         this.category = Categories.Memes;
@@ -65,11 +66,12 @@ public class SpongebobCommand extends Command {
             str = json.getJSONObject("data").getString("url");
         }
 
-        if(str != null) {
+        if (str != null) {
             EmbedBuilder embedBuilder = new EmbedBuilder();
             embedBuilder.setImage(str);
             embedBuilder.setColor(Color.yellow);
             commandEvent.getChannel().sendMessage(embedBuilder.build()).queue();
-        } else InoriChan.LOGGER.warn("Spongebob exception");
+        } else
+            InoriChan.LOGGER.warn("Spongebob exception");
     }
 }

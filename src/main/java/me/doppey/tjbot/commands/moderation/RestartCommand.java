@@ -4,11 +4,12 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.doppey.tjbot.InoriChan;
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 
 public class RestartCommand extends Command {
+
     public RestartCommand() {
         this.name = "Restart";
         this.ownerCommand = true;

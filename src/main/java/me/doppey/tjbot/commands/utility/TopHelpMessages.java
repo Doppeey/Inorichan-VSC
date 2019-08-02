@@ -8,13 +8,14 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import org.bson.Document;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 
 import static com.mongodb.client.model.Sorts.descending;
 import static com.mongodb.client.model.Sorts.orderBy;
 
 public class TopHelpMessages extends Command {
+
     MongoCollection helpMessages;
 
     public TopHelpMessages(MongoDatabase mongodb) {
@@ -34,10 +35,11 @@ public class TopHelpMessages extends Command {
             } catch (Exception e) {
                 commandEvent.getChannel().sendMessage("Showing the top 10..").queue();
             }
-//            if (amountOfHelpers > 15) {
-//                amountOfHelpers = 15;
-//                commandEvent.getChannel().sendMessage("Max amount is 15, setting parameter to 15...").queue();
-//            }
+            //            if (amountOfHelpers > 15) {
+            //                amountOfHelpers = 15;
+            //                commandEvent.getChannel().sendMessage("Max amount is 15, setting parameter to 15...")
+            //                .queue();
+            //            }
         } else {
             Document doc = new Document();
             doc.put("_id", commandEvent.getMember().getUser().getId());

@@ -1,10 +1,10 @@
 package me.doppey.tjbot.commands.utility;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import me.doppey.tjbot.Categories;
 import me.doppey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
@@ -12,12 +12,14 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import org.bson.Document;
 
-import java.awt.*;
+import java.awt.Color;
 
 
 public class PollCommand extends Command {
+
+    String[] numbers = {":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:",
+            ":nine:"};
     private Message message;
-    String[] numbers = {":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"};
     private MongoCollection polls;
     private MessageChannel commandEventChannel;
 
@@ -25,7 +27,8 @@ public class PollCommand extends Command {
 
         this.polls = database.getCollection("polls");
         this.name = "poll";
-        this.help = "Command for starting polls. [usage: question;option;option;option ...] without options a yes or no poll will be created";
+        this.help = "Command for starting polls. [usage: question;option;option;option ...] without options a yes or " +
+                "no poll will be created";
         this.category = Categories.Utility;
 
     }
@@ -47,7 +50,8 @@ public class PollCommand extends Command {
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setColor(Color.green);
-        embedBuilder.setAuthor("Poll by "+commandEvent.getMember().getEffectiveName(),null,commandEvent.getAuthor().getAvatarUrl());
+        embedBuilder.setAuthor("Poll by " + commandEvent.getMember().getEffectiveName(), null,
+                commandEvent.getAuthor().getAvatarUrl());
 
         if (isYesOrNoQuestion) {
             embedBuilder.setDescription(question);

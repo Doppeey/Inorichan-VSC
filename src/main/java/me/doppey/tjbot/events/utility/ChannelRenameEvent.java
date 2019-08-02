@@ -10,11 +10,6 @@ public class ChannelRenameEvent extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-
-        if(!event.getGuild().getId().equals("272761734820003841")){
-            return;
-        }
-
         String content = event.getMessage().getContentDisplay();
         TextChannel eventChannel = event.getTextChannel();
         boolean hasCalledFreeCommand = content.equalsIgnoreCase(">tag free") || content.equalsIgnoreCase("?tag free");
@@ -28,7 +23,8 @@ public class ChannelRenameEvent extends ListenerAdapter {
             return;
         }
 
-        //Checks if the message marked the channel to be free and if its even a help channel and if it might already be marked free
+        //Checks if the message marked the channel to be free and if its even a help channel and if it might already
+        // be marked free
         if (!hasCalledFreeCommand || !isHelpChannel || isMarkedFree) {
             return;
         }

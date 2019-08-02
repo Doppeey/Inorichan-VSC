@@ -17,8 +17,9 @@ import java.util.HashSet;
 
 
 public class DogCommand extends Command {
-    private HttpResponse<String> response = null;
+
     private final HashMap<String, Integer> dogIds;
+    private HttpResponse<String> response = null;
     private String apiKey;
 
     public DogCommand(Config config) {
@@ -100,11 +101,13 @@ public class DogCommand extends Command {
                             break;
                         case "weight":
                             final JSONObject breedWeight = breedInfo.getJSONObject("weight");
-                            embed.addField("Weight", "Imperial:   " + breedWeight.getString("imperial") + "\n" + "Metric:      " + breedWeight.getString("metric"), false);
+                            embed.addField("Weight", "Imperial:   " + breedWeight.getString("imperial") + "\n" +
+                                    "Metric:      " + breedWeight.getString("metric"), false);
                             break;
                         case "height":
                             final JSONObject breedHeight = breedInfo.getJSONObject("height");
-                            embed.addField("Height", "Imperial:   " + breedHeight.getString("imperial") + "\nMetric:      " + breedHeight.getString("metric"), false);
+                            embed.addField("Height", "Imperial:   " + breedHeight.getString("imperial") + "\nMetric: " +
+                                    "     " + breedHeight.getString("metric"), false);
                             break;
                     }
                 }

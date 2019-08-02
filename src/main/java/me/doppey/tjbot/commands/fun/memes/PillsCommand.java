@@ -15,7 +15,7 @@ public class PillsCommand extends Command {
     private HttpResponse<String> response = null;
     private Config config;
 
-    public PillsCommand(Config config){
+    public PillsCommand(Config config) {
         this.config = config;
         this.name = "pills";
         this.help = "pills, usage: >pills [text here]";
@@ -32,7 +32,7 @@ public class PillsCommand extends Command {
                     .queryString("username", config.getProperty("IMGFLIP_USERNAME"))
                     .queryString("template_id", this.memeId)
                     .queryString("password", config.getProperty("IMGFLIP_PASSWORD"))
-                     .queryString("text0",memeText)
+                    .queryString("text0", memeText)
                     .queryString("cache-control", "no-cache")
                     .asString();
         } catch (UnirestException e) {
@@ -48,6 +48,6 @@ public class PillsCommand extends Command {
             str = json.getJSONObject("data").getString("url");
         }
 
-        commandEvent.reply("By "+commandEvent.getMember().getAsMention()+"\n"+str);
+        commandEvent.reply("By " + commandEvent.getMember().getAsMention() + "\n" + str);
     }
 }

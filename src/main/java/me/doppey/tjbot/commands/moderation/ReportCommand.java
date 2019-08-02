@@ -1,23 +1,24 @@
 package me.doppey.tjbot.commands.moderation;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppey.tjbot.Categories;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageChannel;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.concurrent.TimeUnit;
 
 public class ReportCommand extends Command {
 
+    MessageChannel quoteChannel;
     private String mention;
     private String argsTrimmed;
-    MessageChannel quoteChannel;
 
     public ReportCommand() {
         this.name = "report";
-        this.help = "used to report a message. Usage >report [messageID], you have to mention the channel if you report a message from a different channel";
+        this.help = "used to report a message. Usage >report [messageID], you have to mention the channel if you " +
+                "report a message from a different channel";
         this.category = Categories.Moderation;
     }
 
@@ -80,7 +81,8 @@ public class ReportCommand extends Command {
         } catch (Exception | Error e) {
             commandEvent.getMessage().delete().queue();
             commandEvent.reply(
-                    "Could not submit report, make sure you mention the channel of the reported message if this command isn't called in the same channel",
+                    "Could not submit report, make sure you mention the channel of the reported message if this " +
+                            "command isn't called in the same channel",
                     confirmation -> confirmation.delete().queueAfter(3, TimeUnit.SECONDS));
         }
     }

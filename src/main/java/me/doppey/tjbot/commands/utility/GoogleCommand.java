@@ -1,13 +1,14 @@
 package me.doppey.tjbot.commands.utility;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppey.tjbot.Categories;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 public class GoogleCommand extends Command {
+
     public GoogleCommand() {
         this.name = "google";
         this.help = "Generates a google search query";

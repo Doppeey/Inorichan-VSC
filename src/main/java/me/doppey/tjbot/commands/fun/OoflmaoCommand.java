@@ -1,15 +1,15 @@
 package me.doppey.tjbot.commands.fun;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import me.doppey.tjbot.Categories;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import org.bson.Document;
 
-import java.awt.*;
+import java.awt.Color;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -21,6 +21,7 @@ import java.util.Random;
  * by a specified user, or if no user is specified, then from a random user
  */
 public class OoflmaoCommand extends Command {
+
     MongoCollection oofLmaoCollection;
 
     public OoflmaoCommand(MongoDatabase database) {

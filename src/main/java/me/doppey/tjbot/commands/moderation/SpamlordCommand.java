@@ -1,9 +1,8 @@
 package me.doppey.tjbot.commands.moderation;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-
+import me.doppey.tjbot.Categories;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
@@ -14,6 +13,7 @@ import net.dv8tion.jda.core.managers.GuildController;
 import java.util.concurrent.TimeUnit;
 
 public class SpamlordCommand extends Command {
+
     public SpamlordCommand() {
         this.name = "spamlord";
         this.help = "gives someone the spamlord role, limiting them to #spam [MOD COMMAND]";
@@ -49,7 +49,8 @@ public class SpamlordCommand extends Command {
             final int time = Integer.parseInt(commandEvent.getArgs().split("-")[1].strip());
 
             message.addReaction("✅").queue();
-            commandEvent.getChannel().sendMessage("The user has been locked to the spam channel for " + time + " hour" + ((time > 1) ? "s" : "")).queue();
+            commandEvent.getChannel().sendMessage("The user has been locked to the spam channel for " + time + " hour"
+                    + ((time > 1) ? "s" : "")).queue();
             gc.addSingleRoleToMember(spammer, spamlord)
                     .queue(muted -> gc.removeSingleRoleFromMember(spammer, spamlord).queueAfter(time, TimeUnit.HOURS));
             spamChannel.sendMessage(spammer.getAsMention() + " you are locked here for " + time

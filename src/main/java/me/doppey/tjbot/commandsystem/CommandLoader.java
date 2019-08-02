@@ -7,7 +7,12 @@ import me.doppey.tjbot.InoriChan;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -17,6 +22,7 @@ import java.util.stream.Collectors;
  * @param <T> The superclass whose subclasses should be loaded.
  */
 public class CommandLoader<T> {
+
     private Set<T> loadedClasses = Set.of();
     private Class<T> token;
     private MongoDatabase database;

@@ -1,16 +1,17 @@
 package me.doppey.tjbot.commands.fun;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
+import me.doppey.tjbot.Categories;
 import me.doppey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
 import org.json.JSONObject;
 
 
 public class FoxCommand extends Command {
+
     public FoxCommand() {
         this.name = "fox";
         this.help = "Gets a random fox picture";

@@ -1,15 +1,7 @@
 package me.doppey.tjbot.commands.utility;
 
-import java.awt.Color;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-
 import me.doppey.tjbot.Categories;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Emote;
@@ -20,6 +12,13 @@ import net.dv8tion.jda.webhook.WebhookClient;
 import net.dv8tion.jda.webhook.WebhookClientBuilder;
 import net.dv8tion.jda.webhook.WebhookMessage;
 import net.dv8tion.jda.webhook.WebhookMessageBuilder;
+
+import java.awt.Color;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * BigCommand
@@ -36,7 +35,7 @@ public class BigCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
 
-        if(event.getArgs().isEmpty()){
+        if (event.getArgs().isEmpty()) {
             event.reply("Usage: >big + emoji");
             return;
         }

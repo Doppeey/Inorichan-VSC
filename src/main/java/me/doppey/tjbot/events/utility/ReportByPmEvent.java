@@ -8,10 +8,11 @@ import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.concurrent.TimeUnit;
 
 public class ReportByPmEvent extends ListenerAdapter {
+
     private EventWaiter waiter;
 
     public ReportByPmEvent(EventWaiter waiter) {
@@ -36,7 +37,8 @@ public class ReportByPmEvent extends ListenerAdapter {
 
                         final User eventAuthor = event.getAuthor();
                         eventAuthor.openPrivateChannel().queue(channel -> channel.sendMessage(
-                                "Please supply the name and discriminator of the person you'd like to report \nExample: \"JungleMan#1325\"")
+                                "Please supply the name and discriminator of the person you'd like to report " +
+                                        "\nExample: \"JungleMan#1325\"")
                                 .queue());
 
                         waiter.waitForEvent(event.getClass(), who -> eventAuthor.equals(who.getAuthor()), message -> {
@@ -50,14 +52,16 @@ public class ReportByPmEvent extends ListenerAdapter {
                                         .forEach(correctMember -> reportedMember[0] = correctMember);
                             } catch (Exception | Error e) {
                                 event.getChannel().sendMessage(
-                                        "Sorry, can't find that user, please contact a moderator for further assistance.")
+                                        "Sorry, can't find that user, please contact a moderator for further " +
+                                                "assistance.")
                                         .queue();
                                 return;
                             }
 
                             if (reportedMember[0] == null) {
                                 event.getChannel().sendMessage(
-                                        "Sorry, can't find that user, please contact a moderator for further assistance.")
+                                        "Sorry, can't find that user, please contact a moderator for further " +
+                                                "assistance.")
                                         .queue();
                                 return;
                             }
@@ -67,7 +71,8 @@ public class ReportByPmEvent extends ListenerAdapter {
                             waiter.waitForEvent(event.getClass(), why -> eventAuthor.equals(why.getAuthor()), why -> {
                                 reportReason[0] = why.getMessage().getContentRaw();
                                 event.getChannel().sendMessage(
-                                        "Please upload evidence in the form of a screenshot, or type anything to report without evidence")
+                                        "Please upload evidence in the form of a screenshot, or type anything to " +
+                                                "report without evidence")
                                         .queue();
 
                                 waiter.waitForEvent(event.getClass(),
@@ -98,7 +103,8 @@ public class ReportByPmEvent extends ListenerAdapter {
                                             togetherJavaGuild.getTextChannelById("544565081724289024")
                                                     .sendMessage(embedBuilder.build()).queue();
                                             why.getChannel().sendMessage(
-                                                    "Your report has been submitted and will be reviewed by one of our moderators as soon as possible, thank you!")
+                                                    "Your report has been submitted and will be reviewed by one of " +
+                                                            "our moderators as soon as possible, thank you!")
                                                     .queue();
 
                                         }, 5, TimeUnit.MINUTES, timeOut);

@@ -25,13 +25,14 @@ import java.awt.Color;
 @Author("John Grosh (jagrosh)")
 @IgnoreCommand
 public class AboutCommand extends Command {
-    private boolean IS_AUTHOR = true;
-    private String REPLACEMENT_ICON = "+";
+
     private final Color color;
     private final String description;
     private final Permission[] perms;
-    private String oauthLink;
     private final String[] features;
+    private boolean IS_AUTHOR = true;
+    private String REPLACEMENT_ICON = "+";
+    private String oauthLink;
 
     public AboutCommand(String description, String[] features, Permission... perms) {
         this.color = new Color(232, 140, 13);
@@ -60,25 +61,36 @@ public class AboutCommand extends Command {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(this.color);
         builder.setAuthor("All about " + event.getSelfUser().getName() + "!", null, event.getSelfUser().getAvatarUrl());
-        String author = event.getJDA().getUserById(event.getClient().getOwnerId()) == null ? "<@" + event.getClient().getOwnerId() + ">"
+        String author = event.getJDA().getUserById(event.getClient().getOwnerId()) == null ?
+                "<@" + event.getClient().getOwnerId() + ">"
                 : event.getJDA().getUserById(event.getClient().getOwnerId()).getName();
-        StringBuilder descr = new StringBuilder().append("Hello! I am **").append(event.getSelfUser().getName()).append("**, ")
-                .append(description).append("\nI ").append(IS_AUTHOR ? "was written in Java" : "am owned").append(" by **")
+        StringBuilder descr =
+                new StringBuilder().append("Hello! I am **").append(event.getSelfUser().getName()).append("**, ")
+                .append(description).append("\nI ").append(IS_AUTHOR ? "was written in Java" : "am owned").append(" " +
+                        "by **")
                 .append(author).append("**, using JDA").append("\nType ").append(event.getClient().getTextualPrefix()).append(event.getClient().getHelpWord()).append(" to get a PM with the commands.")
                 .append("\n\nSome of my features include: ```css");
         for (String feature : features)
-            descr.append("\n").append(event.getClient().getSuccess().startsWith("<") ? REPLACEMENT_ICON : event.getClient().getSuccess()).append(" ").append(feature);
+            descr.append("\n").append(event.getClient().getSuccess().startsWith("<") ? REPLACEMENT_ICON :
+                    event.getClient().getSuccess()).append(" ").append(feature);
         descr.append(" ```");
         builder.setDescription(descr);
         if (event.getJDA().getShardInfo() == null) {
             builder.addField("Stats", event.getJDA().getGuilds().size() + " servers\n1 shard", true);
-            builder.addField("Users", event.getJDA().getUsers().size() + " unique\n" + event.getJDA().getGuilds().stream().mapToInt(g -> g.getMembers().size()).sum() + " total", true);
-            builder.addField("Channels", event.getJDA().getTextChannels().size() + " Text\n" + event.getJDA().getVoiceChannels().size() + " Voice", true);
+            builder.addField("Users",
+                    event.getJDA().getUsers().size() + " unique\n" + event.getJDA().getGuilds().stream().mapToInt(g -> g.getMembers().size()).sum() + " total", true);
+            builder.addField("Channels",
+                    event.getJDA().getTextChannels().size() + " Text\n" + event.getJDA().getVoiceChannels().size() +
+                            " Voice", true);
         } else {
-            builder.addField("Stats", (event.getClient()).getTotalGuilds() + " Servers\nShard " + (event.getJDA().getShardInfo().getShardId() + 1)
+            builder.addField("Stats",
+                    (event.getClient()).getTotalGuilds() + " Servers\nShard " + (event.getJDA().getShardInfo().getShardId() + 1)
                     + "/" + event.getJDA().getShardInfo().getShardTotal(), true);
-            builder.addField("This shard", event.getJDA().getUsers().size() + " Users\n" + event.getJDA().getGuilds().size() + " Servers", true);
-            builder.addField("", event.getJDA().getTextChannels().size() + " Text Channels\n" + event.getJDA().getVoiceChannels().size() + " Voice Channels", true);
+            builder.addField("This shard",
+                    event.getJDA().getUsers().size() + " Users\n" + event.getJDA().getGuilds().size() + " Servers",
+                    true);
+            builder.addField("",
+                    event.getJDA().getTextChannels().size() + " Text Channels\n" + event.getJDA().getVoiceChannels().size() + " Voice Channels", true);
         }
         builder.setFooter("Last restart", null);
         builder.setTimestamp(event.getClient().getStartTime());

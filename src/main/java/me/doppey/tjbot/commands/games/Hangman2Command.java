@@ -8,7 +8,7 @@ import me.doppey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
 import org.bson.Document;
 
-import java.awt.*;
+import java.awt.Color;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Random;
 
 public class Hangman2Command extends Command {
+
     MongoCollection hangmanDb;
 
     public Hangman2Command(MongoDatabase db) {
@@ -78,7 +79,8 @@ public class Hangman2Command extends Command {
                                 EmbedBuilder hangmanEmbedCustom = new EmbedBuilder();
                                 hangmanEmbedCustom.setColor(Color.blue);
                                 hangmanEmbedCustom.setTitle(event.getMessage().getMentionedMembers().get(0).getEffectiveName() + "'s Game");
-                                hangmanEmbedCustom.addField("Word:", "`" + hiddenCustom.toString().stripTrailing() + "`", true);
+                                hangmanEmbedCustom.addField("Word:", "`" + hiddenCustom.toString().stripTrailing() +
+                                        "`", true);
                                 hangmanEmbedCustom.addField("Lives left: ", "5", true);
                                 hangmanEmbedCustom.setFooter("React with an emoji letter to make a guess", null);
 
@@ -94,7 +96,8 @@ public class Hangman2Command extends Command {
 
                                 hangmanDb.insertOne(hangmanDoc);
 
-                                InoriChan.LOGGER.info(event.getMember().getEffectiveName() + " has started a hangman game!");
+                                InoriChan.LOGGER.info(event.getMember().getEffectiveName() + " has started a hangman " +
+                                        "game!");
                                 return;
                             }
                         }

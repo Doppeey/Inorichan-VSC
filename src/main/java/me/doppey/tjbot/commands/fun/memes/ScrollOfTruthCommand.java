@@ -15,7 +15,7 @@ public class ScrollOfTruthCommand extends Command {
     private HttpResponse<String> response = null;
     private Config config;
 
-    public ScrollOfTruthCommand(Config config){
+    public ScrollOfTruthCommand(Config config) {
         this.config = config;
         this.name = "sot";
         this.help = "scroll of truth meme, usage: >sot [text here]";
@@ -32,7 +32,7 @@ public class ScrollOfTruthCommand extends Command {
                     .queryString("username", config.getProperty("IMGFLIP_USERNAME"))
                     .queryString("template_id", this.memeId)
                     .queryString("password", config.getProperty("IMGFLIP_PASSWORD"))
-                    .queryString("boxes[0][text]",memeText)
+                    .queryString("boxes[0][text]", memeText)
                     .queryString("cache-control", "no-cache")
                     .asString();
         } catch (UnirestException e) {
@@ -48,6 +48,6 @@ public class ScrollOfTruthCommand extends Command {
             str = json.getJSONObject("data").getString("url");
         }
 
-        commandEvent.reply("By "+commandEvent.getMember().getAsMention()+"\n"+str);
+        commandEvent.reply("By " + commandEvent.getMember().getAsMention() + "\n" + str);
     }
 }

@@ -1,15 +1,15 @@
 package me.doppey.tjbot.commands.fun;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
+import me.doppey.tjbot.Categories;
 import me.doppey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
 import org.json.JSONArray;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class DogeCommand extends Command {
 
@@ -26,7 +26,7 @@ public class DogeCommand extends Command {
         try {
             response = Unirest.get("http://shibe.online/api/shibes?count=1&urls=true").asString();
         } catch (Exception e) {
-          InoriChan.LOGGER.error(e.getMessage(), e);
+            InoriChan.LOGGER.error(e.getMessage(), e);
         }
 
         JSONArray json = new JSONArray(response.getBody());

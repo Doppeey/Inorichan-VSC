@@ -8,13 +8,14 @@ import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.bson.Document;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
 
 public class hangman2Event extends ListenerAdapter {
+
     private static HashMap<String, Character> emoteMap = new HashMap<>();
     MongoCollection hangman;
 
@@ -59,11 +60,11 @@ public class hangman2Event extends ListenerAdapter {
 
             //If the game exists
             if (hangman.find(new Document("gameId", message.getId())).first() != null) {
-                String guessedLetter =""+ emoteMap.get(event.getReactionEmote().getName());
+                String guessedLetter = "" + emoteMap.get(event.getReactionEmote().getName());
 
                 Document hangmanDoc = (Document) hangman.find(new Document("gameId", message.getId())).first();
 
-                if(!hangmanDoc.getString("playerId").equals(event.getUser().getId())){
+                if (!hangmanDoc.getString("playerId").equals(event.getUser().getId())) {
                     return;
                 }
 
@@ -85,32 +86,32 @@ public class hangman2Event extends ListenerAdapter {
                 //redraw the word and lives
                 String hiddenword = "";
 
-                for(char c : word.toCharArray()) {
-                    if(guessedLettersSet.contains(""+c)){
-                        hiddenword+= ""+c+" ";
+                for (char c : word.toCharArray()) {
+                    if (guessedLettersSet.contains("" + c)) {
+                        hiddenword += "" + c + " ";
                     } else {
-                        hiddenword+= "_ ";
+                        hiddenword += "_ ";
                     }
                 }
 
                 int lives = hangmanDoc.getInteger("lives");
                 hiddenword = hiddenword.stripTrailing();
 
-                if(!word.contains(""+guessedLetter)){
+                if (!word.contains("" + guessedLetter)) {
                     lives--;
-                    if(lives < 1){
+                    if (lives < 1) {
                         MessageEmbed embed = message.getEmbeds().get(0);
                         EmbedBuilder newEmbed = new EmbedBuilder();
-                        newEmbed.setTitle(embed.getTitle()+" || Lost");
+                        newEmbed.setTitle(embed.getTitle() + " || Lost");
                         newEmbed.setColor(Color.red);
-                        newEmbed.addField("Word:","`"+hiddenword+"`",true);
-                        newEmbed.addField("Lives left:",""+lives,true);
-                        newEmbed.setFooter(embed.getFooter().getText(),null);
-                        newEmbed.addField("Solution",word,true);
+                        newEmbed.addField("Word:", "`" + hiddenword + "`", true);
+                        newEmbed.addField("Lives left:", "" + lives, true);
+                        newEmbed.setFooter(embed.getFooter().getText(), null);
+                        newEmbed.addField("Solution", word, true);
 
                         message.editMessage(newEmbed.build()).queue();
 
-                        hangman.deleteOne(new Document("gameId",hangmanDoc.getString("gameId")));
+                        hangman.deleteOne(new Document("gameId", hangmanDoc.getString("gameId")));
                         return;
                     }
                 }
@@ -119,26 +120,28 @@ public class hangman2Event extends ListenerAdapter {
                 EmbedBuilder newEmbed = new EmbedBuilder();
                 newEmbed.setTitle(embed.getTitle());
                 newEmbed.setColor(embed.getColor());
-                newEmbed.addField("Word:","`"+hiddenword+"`",true);
-                newEmbed.addField("Lives left:",""+lives,true);
-                newEmbed.setFooter(embed.getFooter().getText(),null);
+                newEmbed.addField("Word:", "`" + hiddenword + "`", true);
+                newEmbed.addField("Lives left:", "" + lives, true);
+                newEmbed.setFooter(embed.getFooter().getText(), null);
 
                 message.editMessage(newEmbed.build()).queue();
 
-                hangman.updateOne(new Document("gameId",hangmanDoc.getString("gameId")),new Document("$set",new Document("guessedLetters",guessedLettersSet)));
-                hangman.updateOne(new Document("gameId",hangmanDoc.getString("gameId")),new Document("$set",new Document("lives",lives)));
+                hangman.updateOne(new Document("gameId", hangmanDoc.getString("gameId")), new Document("$set",
+                        new Document("guessedLetters", guessedLettersSet)));
+                hangman.updateOne(new Document("gameId", hangmanDoc.getString("gameId")), new Document("$set",
+                        new Document("lives", lives)));
 
-                if(!hiddenword.contains("_")){
+                if (!hiddenword.contains("_")) {
                     EmbedBuilder newEmbedWin = new EmbedBuilder();
-                    newEmbedWin.setTitle(embed.getTitle()+ " || Win");
+                    newEmbedWin.setTitle(embed.getTitle() + " || Win");
                     newEmbedWin.setColor(Color.green);
-                    newEmbedWin.addField("Word:","`"+hiddenword+"`",true);
-                    newEmbedWin.addField("Lives left:",""+lives,true);
-                    newEmbedWin.setFooter(embed.getFooter().getText(),null);
+                    newEmbedWin.addField("Word:", "`" + hiddenword + "`", true);
+                    newEmbedWin.addField("Lives left:", "" + lives, true);
+                    newEmbedWin.setFooter(embed.getFooter().getText(), null);
 
                     message.editMessage(newEmbedWin.build()).queue();
 
-                    hangman.deleteOne(new Document("gameId",hangmanDoc.getString("gameId")));
+                    hangman.deleteOne(new Document("gameId", hangmanDoc.getString("gameId")));
                 }
             }
         });

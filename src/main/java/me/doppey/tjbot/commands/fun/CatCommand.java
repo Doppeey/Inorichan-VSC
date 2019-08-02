@@ -13,15 +13,16 @@ import org.json.JSONObject;
 
 
 public class CatCommand extends Command {
-    private HttpResponse<String> response = null;
+
     JSONObject json = null;
+    private HttpResponse<String> response = null;
     private String url = null;
     private Config config;
     private String apiKey;
 
     public CatCommand(Config config) {
 
-        this.config=config;
+        this.config = config;
         this.name = "cat";
         this.help = "Gets cat pictures, >cat help for a list of categories";
         this.category = Categories.AnimalPictures;
@@ -69,7 +70,8 @@ public class CatCommand extends Command {
                     break;
             }
 
-            if (!commandEvent.getArgs().equalsIgnoreCase("categories") && !commandEvent.getArgs().equalsIgnoreCase("help")) {
+            if (!commandEvent.getArgs().equalsIgnoreCase("categories") && !commandEvent.getArgs().equalsIgnoreCase(
+                    "help")) {
                 try {
                     if (category1 != 0) {
                         response = com.mashape.unirest.http.Unirest.get("https://api.thecatapi.com/v1/images/search?")
@@ -98,7 +100,8 @@ public class CatCommand extends Command {
                     EmbedBuilder embed = new EmbedBuilder();
                     embed.setImage(url);
                     if (!requestedCategory1.isEmpty()) {
-                        embed.setTitle("You requested one of our cats in " + requestedCategory1 + ". Here you go! :cat:");
+                        embed.setTitle("You requested one of our cats in " + requestedCategory1 + ". Here you go! " +
+                                ":cat:");
                     } else {
                         embed.setTitle("A random kitty, it's all yours! :cat:");
                     }
@@ -107,7 +110,8 @@ public class CatCommand extends Command {
                     commandEvent.reply("Couldn't fetch a kitty, try again later :(");
                 }
             } else {
-                commandEvent.reply(new EmbedBuilder().setTitle("Cat Command").setDescription("Use **>cat [category]** to get a cat of that category or just **>cat** to get a random cat.")
+                commandEvent.reply(new EmbedBuilder().setTitle("Cat Command").setDescription("Use **>cat [category]**" +
+                        " to get a cat of that category or just **>cat** to get a random cat.")
                         .addField("Categories", "Hats\nSpace\nSinks\nTies\nBoxes\nClothes\nSunglasses", false).build());
             }
         };

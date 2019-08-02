@@ -1,17 +1,17 @@
 package me.doppey.tjbot.events.utility;
 
-import java.util.concurrent.TimeUnit;
-
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * UnspoilEvent
  */
 public class UnspoilEvent extends ListenerAdapter {
+
     private final EventWaiter waiter;
 
     public UnspoilEvent(EventWaiter waiter) {
@@ -21,7 +21,8 @@ public class UnspoilEvent extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         final String contentRaw = event.getMessage().getContentRaw();
-        final String replyMessage = "I have detected a message with more than 3 spoilers, react with the magnifying glass to reveal it";
+        final String replyMessage = "I have detected a message with more than 3 spoilers, react with the magnifying " +
+                "glass to reveal it";
         boolean hasABunchOfSpoilers;
 
         // Only check the message if it contains at least one spoiler symbol.
