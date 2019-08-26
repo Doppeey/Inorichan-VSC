@@ -11,6 +11,7 @@ import me.doppey.tjbot.Config;
 import me.doppey.tjbot.InoriChan;
 
 public class LoggerStartupListener extends ContextAwareBase implements LoggerContextListener, LifeCycle {
+
     private boolean started = false;
 
     @Override

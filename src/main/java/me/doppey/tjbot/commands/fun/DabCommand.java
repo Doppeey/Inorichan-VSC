@@ -1,8 +1,8 @@
 package me.doppey.tjbot.commands.fun;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppey.tjbot.Categories;
 
 import java.io.File;
 

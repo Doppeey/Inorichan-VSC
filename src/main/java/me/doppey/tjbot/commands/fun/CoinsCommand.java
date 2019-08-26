@@ -9,11 +9,12 @@ import me.doppey.tjbot.Categories;
 import org.bson.Document;
 
 public class CoinsCommand extends Command {
+
     MongoCollection javacoinsDb;
 
     public CoinsCommand(MongoDatabase db) {
         this.name = "coins";
-        this.help =  "Together Javas \"Javacoins\". Use `>Coins help`";
+        this.help = "Together Javas \"Javacoins\". Use `>Coins help`";
         this.category = Categories.Fun;
         this.javacoinsDb = db.getCollection("javacoins");
     }
@@ -23,15 +24,15 @@ public class CoinsCommand extends Command {
         String userId = event.getAuthor().getId();
 
         //Only works on TJ
-        if(!event.getGuild().getId().equalsIgnoreCase("272761734820003841")){
+        if (!event.getGuild().getId().equalsIgnoreCase("272761734820003841")) {
             event.reply("This only works on together java");
             return;
         }
 
-        if(event.getArgs().isEmpty()){
+        if (event.getArgs().isEmpty()) {
             final FindIterable userIterable = javacoinsDb.find(new Document("userId", userId));
 
-            if(userIterable.first() != null) {
+            if (userIterable.first() != null) {
 
                 if (!event.getChannel().getName().toLowerCase().contains("bots")) {
                     event.getMessage().delete().queue();
@@ -39,7 +40,8 @@ public class CoinsCommand extends Command {
                     return;
                 }
 
-                event.reply("You have " + "`" + ((Document) userIterable.first()).getInteger("javacoins") + "` javacoins.");
+                event.reply("You have " + "`" + ((Document) userIterable.first()).getInteger("javacoins") + "` " +
+                        "javacoins.");
             }
         }
     }

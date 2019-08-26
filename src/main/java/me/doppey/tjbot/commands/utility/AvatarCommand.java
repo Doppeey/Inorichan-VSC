@@ -1,10 +1,9 @@
 package me.doppey.tjbot.commands.utility;
 
-import me.doppey.tjbot.Categories;
-import me.doppey.tjbot.MemberParser;
-
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppey.tjbot.Categories;
+import me.doppey.tjbot.MemberParser;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.User;
 

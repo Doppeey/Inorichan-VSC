@@ -1,13 +1,14 @@
 package me.doppey.tjbot.commands.games;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppey.tjbot.Categories;
 
 import java.util.Random;
 
 
 public class RockPaperScissorsCommand extends Command {
+
     public RockPaperScissorsCommand() {
         this.name = "rps";
         this.help = "Rock Paper Scissors, usage: >rps [rock/paper/scissors]";

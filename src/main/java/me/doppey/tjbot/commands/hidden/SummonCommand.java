@@ -10,6 +10,7 @@ import net.dv8tion.jda.core.entities.User;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SummonCommand extends Command implements Hiddencommand {
+
     public SummonCommand() {
         this.name = "summon";
         this.hidden = true;

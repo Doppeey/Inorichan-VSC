@@ -4,21 +4,21 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import me.doppey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.entities.Emote;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.MessageReaction;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.bson.Document;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class OofiesAndLmaosEvent extends ListenerAdapter {
-    public OofiesAndLmaosEvent(MongoDatabase database) {
-        this.oofsAndLmaosCollection = database.getCollection("oofsAndLmaos");
-
-    }
+public class OofLmaoEvent extends ListenerAdapter {
 
     private final MongoCollection<Document> oofsAndLmaosCollection;
     private final String lmaoID = "521646894431076353";
@@ -26,6 +26,9 @@ public class OofiesAndLmaosEvent extends ListenerAdapter {
     private final String oofID = "510948096184680463";
     private HashSet<String> reactedMessages = new HashSet<>();
     private boolean isOofOrLmaoEmote;
+    public OofLmaoEvent(MongoDatabase database) {
+        this.oofsAndLmaosCollection = database.getCollection("oofsAndLmaos");
+    }
 
     @Override
     public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event) {
@@ -47,7 +50,8 @@ public class OofiesAndLmaosEvent extends ListenerAdapter {
         }
 
         // Don't react to reactions in the broadcast channel
-        if (!eventChannel.getId().equalsIgnoreCase("521647171871703040") && !eventChannel.getId().equalsIgnoreCase("361222066789154826")) {
+        if (!eventChannel.getId().equalsIgnoreCase("521647171871703040") && !eventChannel.getId().equalsIgnoreCase(
+                "361222066789154826")) {
             try {
                 if (event.getReactionEmote().getId().equalsIgnoreCase(lmaoID) || event.getReactionEmote().getId().equalsIgnoreCase(oofID)) {
                     isOofOrLmaoEmote = true;
@@ -87,7 +91,8 @@ public class OofiesAndLmaosEvent extends ListenerAdapter {
                                     embed.setImage(attachment.getUrl());
                                 }
 
-                                embed.setAuthor(message.getAuthor().getName(), message.getAuthor().getAvatarUrl(), message.getAuthor().getEffectiveAvatarUrl());
+                                embed.setAuthor(message.getAuthor().getName(), message.getAuthor().getAvatarUrl(),
+                                        message.getAuthor().getEffectiveAvatarUrl());
                                 embed.setDescription(message.getContentRaw()).setColor(Color.ORANGE);
                                 embed.appendDescription("   [Link](" + message.getJumpUrl() + ")");
 
@@ -102,7 +107,8 @@ public class OofiesAndLmaosEvent extends ListenerAdapter {
                                     oofsAndLmaosCollection.insertOne(document);
                                 });
 
-                                InoriChan.LOGGER.info("Added a message [ID: {}] to the offsAndLmao channel.", message.getId());
+                                InoriChan.LOGGER.info("Added a message [ID: {}] to the offsAndLmao channel.",
+                                        message.getId());
                             }
                         }
                     }

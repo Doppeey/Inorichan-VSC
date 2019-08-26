@@ -1,8 +1,8 @@
 package me.doppey.tjbot.commands.moderation;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppey.tjbot.Categories;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
@@ -12,6 +12,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 public class WhoIsCommand extends Command {
+
     public WhoIsCommand() {
         this.name = "whois";
         this.category = Categories.Moderation;
@@ -57,8 +58,12 @@ public class WhoIsCommand extends Command {
         whois.setTitle("Information about " + member.getEffectiveName());
         whois.setThumbnail(member.getUser().getAvatarUrl());
         whois.setDescription("Member as mention: " + member.getAsMention() + "\n" + "Currently *" + member.getOnlineStatus().toString() + "*\n" + "\u200B");
-        whois.addField("Join Date", joinDate.getMonth().toString() + " " + joinDate.getDayOfMonth() + " (" + joinDate.getYear() + ")", true);
-        whois.addField("Register Date", creationTime.getMonth() + " " + creationTime.getDayOfMonth() + " (" + creationTime.getYear() + ")", true);
+        whois.addField("Join Date",
+                joinDate.getMonth().toString() + " " + joinDate.getDayOfMonth() + " (" + joinDate.getYear() + ")",
+                true);
+        whois.addField("Register Date",
+                creationTime.getMonth() + " " + creationTime.getDayOfMonth() + " (" + creationTime.getYear() + ")",
+                true);
 
         List<Role> roleList = member.getRoles();
         StringBuilder roles = new StringBuilder();

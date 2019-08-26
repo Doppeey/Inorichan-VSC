@@ -1,11 +1,11 @@
 package me.doppey.tjbot.commands.fun.encryption;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppey.tjbot.Categories;
 import net.dv8tion.jda.core.EmbedBuilder;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Arrays;
 
 public class DecryptCommand extends Command {
@@ -19,7 +19,8 @@ public class DecryptCommand extends Command {
     @Override
     protected void execute(CommandEvent commandEvent) {
         try {
-            int[] charNumberRepresentations = Arrays.stream(commandEvent.getArgs().split(" ")).mapToInt(Integer::parseInt).toArray();
+            int[] charNumberRepresentations =
+                    Arrays.stream(commandEvent.getArgs().split(" ")).mapToInt(Integer::parseInt).toArray();
 
             StringBuilder decryptedMessage = new StringBuilder();
 

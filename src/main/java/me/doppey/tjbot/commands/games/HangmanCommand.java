@@ -3,15 +3,10 @@ package me.doppey.tjbot.commands.games;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import me.doppey.tjbot.Categories;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,17 +15,18 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class HangmanCommand extends Command {
+
     private final EventWaiter waiter;
     private final int startingLives = 5;
     boolean hasWon = false;
+    String word = "doppey is the best";
+    String hiddenword = "------------------";
+    String hiddenwordPermanent = "------------------";
     private char currentGuess;
     private char[] tempWord;
     private boolean hasGuessed = false;
     private Member member;
     private int livesLeft = 5;
-    String word = "doppey is the best";
-    String hiddenword = "------------------";
-    String hiddenwordPermanent = "------------------";
 
     public HangmanCommand(EventWaiter waiter) {
 

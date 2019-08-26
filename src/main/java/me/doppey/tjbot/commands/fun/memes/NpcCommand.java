@@ -5,17 +5,15 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import me.doppey.tjbot.Categories;
-import me.doppey.tjbot.Config;
 import me.doppey.tjbot.InoriChan;
 import org.json.JSONObject;
 
 public class NpcCommand extends Command {
+
     private final String memeId;
     private HttpResponse<String> response = null;
-    private Config config;
 
-    public NpcCommand(Config config){
-        this.config = config;
+    public NpcCommand() {
         this.name = "npc";
         this.help = "npc, usage: >npc [text here]";
         this.category = Categories.Memes;
@@ -29,15 +27,15 @@ public class NpcCommand extends Command {
 
         try {
             response = com.mashape.unirest.http.Unirest.get("https://api.imgflip.com/caption_image")
-                    .queryString("username", config.getProperty("IMGFLIP_USERNAME"))
+                    .queryString("username", InoriChan.getConfig().getProperty("IMGFLIP_USERNAME"))
                     .queryString("template_id", this.memeId)
-                    .queryString("password", config.getProperty("IMGFLIP_PASSWORD"))
+                    .queryString("password", InoriChan.getConfig().getProperty("IMGFLIP_PASSWORD"))
                     .queryString("boxes[0][type]", "text")
-                    .queryString("boxes[0][text]",memeText)
-                    .queryString("boxes[0][x]",155)
-                    .queryString("boxes[0][y]",125)
-                    .queryString("boxes[0][width]",850)
-                    .queryString("boxes[0][height]",250)
+                    .queryString("boxes[0][text]", memeText)
+                    .queryString("boxes[0][x]", 155)
+                    .queryString("boxes[0][y]", 125)
+                    .queryString("boxes[0][width]", 850)
+                    .queryString("boxes[0][height]", 250)
                     .queryString("cache-control", "no-cache")
                     .asString();
         } catch (UnirestException e) {
@@ -53,6 +51,6 @@ public class NpcCommand extends Command {
             str = json.getJSONObject("data").getString("url");
         }
 
-        commandEvent.reply("By "+commandEvent.getMember().getAsMention()+"\n"+str);
+        commandEvent.reply("By " + commandEvent.getMember().getAsMention() + "\n" + str);
     }
 }

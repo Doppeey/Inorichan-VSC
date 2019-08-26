@@ -1,7 +1,6 @@
 package me.doppey.tjbot;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
@@ -10,7 +9,8 @@ import net.dv8tion.jda.core.entities.Message;
  * MemberParser
  */
 public abstract class MemberParser {
-    public static Member getMemberFromArgs(CommandEvent commandEvent)  {
+
+    public static Member getMemberFromArgs(CommandEvent commandEvent) {
         String args = commandEvent.getArgs();
         final Guild guild = commandEvent.getGuild();
         final Message message = commandEvent.getMessage();
@@ -27,7 +27,7 @@ public abstract class MemberParser {
         if (args.isBlank()) {
             return commandEvent.getMember();
         }
-        
+
         // Try by mention
         if (!message.getMentionedMembers().isEmpty()) {
             return message.getMentionedMembers().get(0);

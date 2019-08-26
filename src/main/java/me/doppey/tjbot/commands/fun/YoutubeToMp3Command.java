@@ -10,6 +10,7 @@ import java.awt.Color;
 
 
 public class YoutubeToMp3Command extends Command {
+
     private Config config;
 
     public YoutubeToMp3Command(Config config) {
@@ -21,14 +22,17 @@ public class YoutubeToMp3Command extends Command {
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-        final String baseURL = "https://www.download-mp3-youtube.com/api/?api_key="+config.getProperty("YOUTUBE_TO_MP3_API_KEY")+"&format=mp3&video_id=";
+        final String baseURL = "https://www.download-mp3-youtube.com/api/?api_key=" + config.getProperty(
+                "YOUTUBE_TO_MP3_API_KEY") + "&format=mp3&video_id=";
 
         String args = commandEvent.getArgs();
         String videoId = args.split("v=")[1];
         EmbedBuilder embed = new EmbedBuilder();
-        embed.addField(commandEvent.getMember().getEffectiveName() + " your MP3 is ready!", "[This link](" + baseURL + videoId + ") will redirect you to the download page!", false)
+        embed.addField(commandEvent.getMember().getEffectiveName() + " your MP3 is ready!",
+                "[This link](" + baseURL + videoId + ") will redirect you to the download page!", false)
                 .addField("The requested video was", args, false)
-                .addField("Disclaimer", "Provided by download-mp3-youtube.com, please adhere to their ToS which you can find [here](https://www.download-mp3-youtube.com/terms.php)", false)
+                .addField("Disclaimer", "Provided by download-mp3-youtube.com, please adhere to their ToS which you " +
+                        "can find [here](https://www.download-mp3-youtube.com/terms.php)", false)
                 .setColor(Color.red);
 
         commandEvent.reply(embed.build(), x -> commandEvent.getMessage().delete().queue());

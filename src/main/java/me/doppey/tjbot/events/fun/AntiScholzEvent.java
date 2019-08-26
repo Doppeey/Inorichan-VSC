@@ -4,8 +4,9 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 public class AntiScholzEvent extends ListenerAdapter {
+
     private String scholzID = "431542303346262039";
-    private String[] bannedWords = { "opop", "xd", "lmao", "lol", "rofl", "eksd", "dx" };
+    private String[] bannedWords = {"opop", "xd", "lmao", "lol", "rofl", "eksd", "dx"};
     private boolean filterIsOn = false;
 
     @Override

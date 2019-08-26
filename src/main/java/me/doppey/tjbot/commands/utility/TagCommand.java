@@ -10,12 +10,13 @@ import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.bson.Document;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 public class TagCommand extends Command {
+
     private MongoCollection tagCollection;
     private EventWaiter waiter;
 

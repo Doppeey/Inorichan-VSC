@@ -12,12 +12,13 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.awt.*;
+import java.awt.Color;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 public class DefinitionCommand extends Command {
+
     public DefinitionCommand() {
         this.name = "define";
         this.help = "Finds the definition of a word";
@@ -36,7 +37,8 @@ public class DefinitionCommand extends Command {
                     .asJson();
 
         } catch (UnirestException e) {
-            event.reply("Oopsie doopsie I did an ouchie wouchie uwu, something went wrong!", x -> x.delete().queueAfter(5, TimeUnit.SECONDS));
+            event.reply("Oopsie doopsie I did an ouchie wouchie uwu, something went wrong!",
+                    x -> x.delete().queueAfter(5, TimeUnit.SECONDS));
             return;
         }
 
@@ -46,7 +48,8 @@ public class DefinitionCommand extends Command {
 
         try {
             //DEFINITION
-            String definition = resultArray.getJSONObject(0).getJSONArray("list").getJSONObject(0).getString("definition");
+            String definition = resultArray.getJSONObject(0).getJSONArray("list").getJSONObject(0).getString(
+                    "definition");
             embedBuilder.addField("Definition", definition, true);
         } catch (org.json.JSONException e) {
             event.reply("Word not found :( ");
@@ -63,7 +66,8 @@ public class DefinitionCommand extends Command {
 
         embedBuilder.setColor(Color.blue);
         event.reply(embedBuilder.build());
-        InoriChan.LOGGER.info("User "+event.getMember().getEffectiveName()+" has used the DEFINE command to look up the word "+wordToDefine);
+        InoriChan.LOGGER.info("User " + event.getMember().getEffectiveName() + " has used the DEFINE command to look " +
+                "up the word " + wordToDefine);
 
     }
 }

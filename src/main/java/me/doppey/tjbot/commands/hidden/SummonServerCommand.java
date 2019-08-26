@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SummonServerCommand extends Command implements Hiddencommand {
+
     public SummonServerCommand() {
         this.name = "summonserver";
         this.hidden = true;
@@ -29,7 +30,8 @@ public class SummonServerCommand extends Command implements Hiddencommand {
                     embed.setImage("https://i.imgur.com/9796NI2.gif");
 
                     final List<Member> memberList = commandEvent.getGuild().getMembers(); // List of all members
-                    final List<Member> filteredList = memberList.stream().filter(member -> !member.getUser().isBot()).collect(Collectors.toList()); // List of all members without bots
+                    final List<Member> filteredList =
+                            memberList.stream().filter(member -> !member.getUser().isBot()).collect(Collectors.toList()); // List of all members without bots
 
                     Runnable summonAll = () -> {
                         int howManyMembersHadPmOff = 0;
@@ -55,7 +57,8 @@ public class SummonServerCommand extends Command implements Hiddencommand {
                         for (int i = 0; i < 5; i++) {
                             commandEvent.getChannel().sendMessage("@everyone").queue(x -> x.delete().queue());
                         }
-                        commandEvent.reply("I contacted everyone, " + howManyMembersHadPmOff + " members had their PM's off");
+                        commandEvent.reply("I contacted everyone, " + howManyMembersHadPmOff + " members had their " +
+                                "PM's off");
 
                     };
                     Thread summonThread = new Thread(summonAll);

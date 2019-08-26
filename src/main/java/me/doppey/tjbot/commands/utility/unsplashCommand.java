@@ -12,6 +12,7 @@ import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import org.json.JSONObject;
 
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeUnit;
  * unsplashCommand
  */
 public class unsplashCommand extends Command {
+
     Config config;
     EventWaiter waiter;
 
@@ -36,14 +38,15 @@ public class unsplashCommand extends Command {
     protected void execute(CommandEvent event) {
 
         if (!event.getTextChannel().getName().toLowerCase().contains("bot")) {
-            event.reply("Due to spam, this command is only available in the bots channel", x -> x.delete().queueAfter(4, TimeUnit.SECONDS));
+            event.reply("Due to spam, this command is only available in the bots channel",
+                    x -> x.delete().queueAfter(4, TimeUnit.SECONDS));
             event.getMessage().delete().queueAfter(4, TimeUnit.SECONDS);
             return;
         }
 
         final int[] counter = new int[1];
         try {
-            String searchQuery = URLEncoder.encode(event.getArgs(), "UTF-8");
+            String searchQuery = URLEncoder.encode(event.getArgs(), StandardCharsets.UTF_8);
 
             HttpResponse<String> response = Unirest.get("https://api.unsplash.com/search/photos/")
                     .header("Accept-Version", "v1").header("cache-control", "no-cache")

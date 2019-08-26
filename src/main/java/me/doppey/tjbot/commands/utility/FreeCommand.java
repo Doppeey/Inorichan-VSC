@@ -2,8 +2,6 @@ package me.doppey.tjbot.commands.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import java.util.stream.Collectors;
-import me.doppey.tjbot.InoriChan;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Message;
@@ -14,24 +12,19 @@ import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class FreeCommand extends Command {
+
     private List<TextChannel> helpChannels;
 
     public FreeCommand() {
         this.name = "free";
         this.help = "Shows the times any given help channel has been idle for";
-    }
-
-    private List<TextChannel> getHelpChannels(JDA jda) {
-      if (helpChannels == null) {
-        helpChannels = jda.getGuildById("272761734820003841").getTextChannels().stream()
-            .filter(c -> c.getName().toLowerCase().contains("help"))
-            .collect(Collectors.toUnmodifiableList());
-      }
-      return helpChannels;
     }
 
     @Override
@@ -72,6 +65,15 @@ public class FreeCommand extends Command {
                 .setColor(Color.GREEN)
                 .setDescription(description.toString());
         event.reply(embed.build());
+    }
+
+    private List<TextChannel> getHelpChannels(JDA jda) {
+        if (helpChannels == null) {
+            helpChannels = jda.getTextChannels().stream()
+                    .filter(c -> c.getName().toLowerCase().contains("help"))
+                    .collect(Collectors.toUnmodifiableList());
+        }
+        return helpChannels;
     }
 
     private void appendNameAndTime(StringBuilder description, Message message, String name, LocalDateTime now) {

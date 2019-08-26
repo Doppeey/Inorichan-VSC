@@ -9,10 +9,10 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
-import java.awt.*;
-import java.util.Optional;
+import java.awt.Color;
 
 public class BanCommand extends Command {
+
     public BanCommand() {
         this.name = "ban";
         this.category = Categories.Moderation;

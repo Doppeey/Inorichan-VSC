@@ -1,14 +1,15 @@
 package me.doppey.tjbot.commands.fun;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppey.tjbot.Categories;
 import net.dv8tion.jda.core.entities.Message;
 
 import java.util.concurrent.TimeUnit;
 
 
 public class TextAnimation extends Command {
+
     public TextAnimation() {
         this.name = "textanimation";
         this.category = Categories.Fun;
@@ -19,7 +20,8 @@ public class TextAnimation extends Command {
     protected void execute(CommandEvent commandEvent) {
         String[] test = {" ┬─┬ノ( º _ ºノ)", "(ﾉಥ益ಥ）ﾉ ┻━┻", "(ノಠ益ಠ)ノ彡┻━┻", "(ノಠ益ಠ)ノ彡彡┻━┻", "(ノಠ益ಠ)ノ彡彡彡┻━┻", "(ノಠ益ಠ)ノ"};
 
-        commandEvent.getChannel().sendMessage("Welcome").queueAfter(1, TimeUnit.SECONDS, x -> animate(commandEvent, 0, test, x));
+        commandEvent.getChannel().sendMessage("Welcome").queueAfter(1, TimeUnit.SECONDS, x -> animate(commandEvent, 0
+                , test, x));
     }
 
     private void animate(CommandEvent event, int counter, String[] array, Message message) {

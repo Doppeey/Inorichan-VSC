@@ -10,6 +10,7 @@ import me.doppey.tjbot.InoriChan;
 import org.json.JSONObject;
 
 public class TwoButtonsCommand extends Command {
+
     private final String memeId;
     private HttpResponse<String> response = null;
     private Config config;
@@ -56,6 +57,7 @@ public class TwoButtonsCommand extends Command {
             str = json.getJSONObject("data").getString("url");
         }
 
-        commandEvent.reply("By " + commandEvent.getMember().getAsMention() + "\n" + str, sent -> commandEvent.getMessage().delete().queue());
+        commandEvent.reply("By " + commandEvent.getMember().getAsMention() + "\n" + str,
+                sent -> commandEvent.getMessage().delete().queue());
     }
 }

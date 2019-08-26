@@ -20,10 +20,10 @@ import java.time.temporal.ChronoUnit;
 
 public class BotCatchingEvent extends ListenerAdapter {
 
-    private final MongoCollection<Document> botSuspicionCollection;
     private static final String FIRE_EMOJI = "\uD83D\uDD25";
     private static final String TRASHCAN_EMOJI = "\uD83D\uDDD1";
     private static final String BOT_SUSPICION_CHANNEL_ID = "546416238922956845";
+    private final MongoCollection<Document> botSuspicionCollection;
 
     public BotCatchingEvent(MongoDatabase database) {
         this.botSuspicionCollection = database.getCollection("botSuspicion");

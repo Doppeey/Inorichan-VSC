@@ -16,6 +16,7 @@ public class InoriFilter extends TurboFilter {
             return FilterReply.ACCEPT;
         } else if (logger.getName().contains("mongodb")) {
             return FilterReply.DENY;
-        } else return FilterReply.NEUTRAL;
+        } else
+            return FilterReply.NEUTRAL;
     }
 }

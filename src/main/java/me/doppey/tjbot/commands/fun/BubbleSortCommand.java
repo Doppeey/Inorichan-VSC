@@ -1,11 +1,11 @@
 package me.doppey.tjbot.commands.fun;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppey.tjbot.Categories;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * BubbleSortCommand
@@ -14,7 +14,8 @@ public class BubbleSortCommand extends Command {
 
     public BubbleSortCommand() {
         this.name = "bubblesort";
-        this.help = "sorts numbers using the bubblesort algorithm, supplies numbers split by commas, a max of 10 numbers can be supplied";
+        this.help = "sorts numbers using the bubblesort algorithm, supplies numbers split by commas, a max of 10 " +
+                "numbers can be supplied";
         this.category = Categories.Fun;
     }
 
@@ -23,7 +24,7 @@ public class BubbleSortCommand extends Command {
         ArrayList<Integer> unsorted = new ArrayList<Integer>();
         try {
             Arrays.stream(event.getArgs().trim().split(",")).mapToInt(Integer::parseInt).forEach(unsorted::add);
-        } catch (Exception e){
+        } catch (Exception e) {
             event.reply("Only use numbers and separate them with commas");
         }
 

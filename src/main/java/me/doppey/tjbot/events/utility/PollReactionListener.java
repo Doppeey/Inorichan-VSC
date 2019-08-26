@@ -9,6 +9,7 @@ import org.bson.Document;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PollReactionListener extends ListenerAdapter {
+
     MongoCollection polls;
 
     public PollReactionListener(MongoDatabase db) {

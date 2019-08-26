@@ -1,13 +1,14 @@
 package me.doppey.tjbot.commands.utility;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppey.tjbot.Categories;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class CodeCommand extends Command {
+
     public CodeCommand() {
         this.name = "code";
         this.help = "Formats code with java syntax highlighting";
@@ -36,7 +37,9 @@ public class CodeCommand extends Command {
             });
 
             final String effectiveName = commandEvent.getMember().getEffectiveName();
-            commandEvent.reply("Posted by " + "**" + effectiveName + "**", x -> commandEvent.reply(formatStep1 + finalMessage + "```", y -> commandEvent.getMessage().delete().queue()));
+            commandEvent.reply("Posted by " + "**" + effectiveName + "**",
+                    x -> commandEvent.reply(formatStep1 + finalMessage + "```",
+                            y -> commandEvent.getMessage().delete().queue()));
         } else {
             commandEvent.reply("Usage: >code [code here].");
         }

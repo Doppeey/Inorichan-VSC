@@ -1,20 +1,21 @@
 package me.doppey.tjbot.commands.utility;
 
-import me.doppey.tjbot.Categories;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import me.doppey.tjbot.Categories;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.MessageChannel;
 
-import java.awt.*;
+import java.awt.Color;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class QuoteCommand extends Command {
+
+    MessageChannel quoteChannel;
     private String mention;
     private String argsTrimmed;
-    MessageChannel quoteChannel;
 
     public QuoteCommand() {
         this.name = "quote";
@@ -62,7 +63,8 @@ public class QuoteCommand extends Command {
                 commandEvent.reply(embed.build(), success -> commandEvent.getMessage().delete().queue());
             });
         } catch (Exception e) {
-            commandEvent.reply("Couldn't quote your message, if it's from another channel make sure to mention that channel");
+            commandEvent.reply("Couldn't quote your message, if it's from another channel make sure to mention that " +
+                    "channel");
         }
     }
 }

@@ -3,18 +3,19 @@ package EventsAndCommands.FunEvents;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class UserFilteringAdapter extends ListenerAdapter {
 
-    private Map<String, Boolean> userIDs;
-    private Set<String> bannedWords;
-
     private final static String FILTER_ON = ">spamfilter on";
     private final static String FILTER_OFF = ">spamfilter off";
-
     private final static String FILTER_MESSAGE = "Anti spam measures are now: ";
-
+    private Map<String, Boolean> userIDs;
+    private Set<String> bannedWords;
     private boolean filterIsOn = false;
 
     public UserFilteringAdapter() {
@@ -42,6 +43,7 @@ public class UserFilteringAdapter extends ListenerAdapter {
 
     /**
      * This function checks to see if there is any banend word in the message.
+     *
      * @param messageToCheck the message you want to check.
      * @return returns true if the message contains a banned word
      */
@@ -52,6 +54,7 @@ public class UserFilteringAdapter extends ListenerAdapter {
 
     /**
      * Checks to see if the message is equal to one of the commands and sets the filter accordingly.
+     *
      * @param messageToCompare the message to check
      * @return returns true if the filter status was changed; false if it remains equal
      */

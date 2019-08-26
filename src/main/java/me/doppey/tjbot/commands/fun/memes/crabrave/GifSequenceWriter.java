@@ -16,7 +16,12 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import me.doppey.tjbot.InoriChan;
 import me.doppey.tjbot.commandsystem.IgnoreCommand;
 
-import javax.imageio.*;
+import javax.imageio.IIOException;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageTypeSpecifier;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.FileImageOutputStream;
@@ -33,23 +38,21 @@ import java.util.Iterator;
 @IgnoreCommand //TODO remove later maybe?
 public class GifSequenceWriter extends Command {
 
+    protected ImageWriter gifWriter;
+    protected ImageWriteParam imageWriteParam;
+    protected IIOMetadata imageMetaData;
     public GifSequenceWriter() {
         this.name = "crabrave";
     }
 
-    protected ImageWriter gifWriter;
-    protected ImageWriteParam imageWriteParam;
-    protected IIOMetadata imageMetaData;
-
     /**
      * Creates a new GifSequenceWriter
      *
-     * @param outputStream        the ImageOutputStream to be written to
-     * @param imageType           one of the imageTypes specified in BufferedImage
+     * @param outputStream the ImageOutputStream to be written to
+     * @param imageType one of the imageTypes specified in BufferedImage
      * @param timeBetweenFramesMS the time between frames in miliseconds
-     * @param loopContinuously    wether the gif should loop repeatedly
+     * @param loopContinuously wether the gif should loop repeatedly
      * @throws IIOException if no gif ImageWriters are found
-     * @author Elliot Kroo (elliot[at]kroo[dot]net)
      */
     public GifSequenceWriter(
             ImageOutputStream outputStream,
@@ -112,23 +115,6 @@ public class GifSequenceWriter extends Command {
         gifWriter.prepareWriteSequence(null);
     }
 
-    public void writeToSequence(RenderedImage img) throws IOException {
-        gifWriter.writeToSequence(
-                new IIOImage(
-                        img,
-                        null,
-                        imageMetaData),
-                imageWriteParam);
-    }
-
-    /**
-     * Close this GifSequenceWriter object. This does not close the underlying
-     * stream, just finishes off the GIF.
-     */
-    public void close() throws IOException {
-        gifWriter.endWriteSequence();
-    }
-
     /**
      * Returns the first available GIF ImageWriter using
      * ImageIO.getImageWritersBySuffix("gif").
@@ -176,43 +162,49 @@ public class GifSequenceWriter extends Command {
      * boolean loopContinuously) {
      */
 
-//    public  {
-//
-//
-//
-//
-//
-//            // grab the output image type from the first image in the sequence
-//            BufferedImage firstImage = ImageIO.read(new File("C:\\Users\\rolli\\IdeaProjects\\tjbot\\src\\main\\java\\EventsAndCommands\\FunCommands\\MemeCommands\\CrabRaveMeme\\CrabRaveSingleImages\\rave.gif"));
-//
-//            // create a new BufferedOutputStream with the last argument
-//            ImageOutputStream output =
-//                    new FileImageOutputStream(new File("C:\\Users\\rolli\\IdeaProjects\\tjbot\\src\\main\\java\\EventsAndCommands\\FunCommands\\MemeCommands\\CrabRaveMeme\\CrabRaveSingleImages\\done.gif"));
-//
-//            // create a gif sequence with the type of the first image, 1 second
-//            // between frames, which loops continuously
-//            GifSequenceWriter writer =
-//                    new GifSequenceWriter(output, firstImage.getType(), 67, true);
-//
-//            // write out the first image to our sequence...
-//            writer.writeToSequence(firstImage);
-//            for(int i=1; i < 52; i++) {
-//
-//
-//                    BufferedImage nextImage = ImageIO.read(new File("C:\\Users\\rolli\\IdeaProjects\\tjbot\\src\\main\\java\\EventsAndCommands\\FunCommands\\MemeCommands\\CrabRaveMeme\\CrabRaveSingleImages\\"+i+".gif"));
-//                    Graphics graphics = nextImage.getGraphics();
-//                    graphics.setColor(Color.BLACK);
-//                    graphics.setFont(new Font("Arial Black", Font.BOLD, 35));
-//                    graphics.drawString("My code works",100,80);
-//                    writer.writeToSequence(nextImage);
-//                    System.out.println("Wrote "+i);
-//
-//            }
-//
-//            writer.close();
-//            output.close();
-//
-//    }
+    //    public  {
+    //
+    //
+    //
+    //
+    //
+    //            // grab the output image type from the first image in the sequence
+    //            BufferedImage firstImage = ImageIO.read(new File
+    //            ("C:\\Users\\rolli\\IdeaProjects\\tjbot\\src\\main\\java\\EventsAndCommands\\FunCommands
+    //            \\MemeCommands\\CrabRaveMeme\\CrabRaveSingleImages\\rave.gif"));
+    //
+    //            // create a new BufferedOutputStream with the last argument
+    //            ImageOutputStream output =
+    //                    new FileImageOutputStream(new File
+    //                    ("C:\\Users\\rolli\\IdeaProjects\\tjbot\\src\\main\\java\\EventsAndCommands\\FunCommands
+    //                    \\MemeCommands\\CrabRaveMeme\\CrabRaveSingleImages\\done.gif"));
+    //
+    //            // create a gif sequence with the type of the first image, 1 second
+    //            // between frames, which loops continuously
+    //            GifSequenceWriter writer =
+    //                    new GifSequenceWriter(output, firstImage.getType(), 67, true);
+    //
+    //            // write out the first image to our sequence...
+    //            writer.writeToSequence(firstImage);
+    //            for(int i=1; i < 52; i++) {
+    //
+    //
+    //                    BufferedImage nextImage = ImageIO.read(new File
+    //                    ("C:\\Users\\rolli\\IdeaProjects\\tjbot\\src\\main\\java\\EventsAndCommands\\FunCommands
+    //                    \\MemeCommands\\CrabRaveMeme\\CrabRaveSingleImages\\"+i+".gif"));
+    //                    Graphics graphics = nextImage.getGraphics();
+    //                    graphics.setColor(Color.BLACK);
+    //                    graphics.setFont(new Font("Arial Black", Font.BOLD, 35));
+    //                    graphics.drawString("My code works",100,80);
+    //                    writer.writeToSequence(nextImage);
+    //                    System.out.println("Wrote "+i);
+    //
+    //            }
+    //
+    //            writer.close();
+    //            output.close();
+    //
+    //    }
     @Override
     protected void execute(CommandEvent commandEvent) {
         String text = commandEvent.getArgs();
@@ -241,7 +233,6 @@ public class GifSequenceWriter extends Command {
             writer = new GifSequenceWriter(output, firstImage.getType(), 67, true);
         } catch (IOException e) {
             InoriChan.LOGGER.error(e.getMessage(), e);
-            ;
         }
 
         // write out the first image to our sequence...
@@ -300,5 +291,22 @@ public class GifSequenceWriter extends Command {
         }
 
         commandEvent.getChannel().sendFile(new File("/crabrave/done.gif")).queue();
+    }
+
+    public void writeToSequence(RenderedImage img) throws IOException {
+        gifWriter.writeToSequence(
+                new IIOImage(
+                        img,
+                        null,
+                        imageMetaData),
+                imageWriteParam);
+    }
+
+    /**
+     * Close this GifSequenceWriter object. This does not close the underlying
+     * stream, just finishes off the GIF.
+     */
+    public void close() throws IOException {
+        gifWriter.endWriteSequence();
     }
 }

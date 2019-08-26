@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 
 
 public abstract class Categories {
+
     public static final Command.Category AnimalPictures = new Command.Category("Animal Pictures");
     public static final Command.Category Memes = new Command.Category("Memes");
     public static final Command.Category Moderation = new Command.Category("Moderation");

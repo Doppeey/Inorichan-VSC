@@ -7,6 +7,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.bson.Document;
 
 public class HelpMessageCountingEvent extends ListenerAdapter {
+
     private MongoCollection<Document> helpMessages;
 
     public HelpMessageCountingEvent(MongoDatabase database) {
@@ -27,7 +28,7 @@ public class HelpMessageCountingEvent extends ListenerAdapter {
         }
 
         if (channelName.contains("help") || channelName.contains("review")) {
-            if(eventContentRaw.contains(">tag free")||eventContentRaw.contains("?tag free")){
+            if (eventContentRaw.contains(">tag free") || eventContentRaw.contains("?tag free")) {
                 return;
             }
             IncrementMessageCounter(event);
