@@ -14,6 +14,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+
+
 public class ChannelMarkerScheduler {
 
     private Duration waitTime;
@@ -24,6 +26,7 @@ public class ChannelMarkerScheduler {
         waitTime = Duration.ofHours(Long.valueOf(InoriChan.getConfig().getProperty("WAIT_TIME", "6")));
     }
 
+    /*
     public void start() {
         List<TextChannel> helpChannels = guild.getTextChannels().stream()
                 .filter(c -> c.getName().contains("help"))
@@ -47,6 +50,8 @@ public class ChannelMarkerScheduler {
         };
         Executors.newSingleThreadScheduledExecutor()
                 .scheduleAtFixedRate(runnable, 3, TimeUnit.MINUTES.toSeconds(5) /* 5 minutes */, TimeUnit.SECONDS);
+    */
+        
     }
 
     private void markChannel(TextChannel channel, String messageId) {
